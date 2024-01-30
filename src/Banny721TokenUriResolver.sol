@@ -4,6 +4,7 @@ pragma solidity 0.8.23;
 import {Ownable} from "lib/openzeppelin-contracts/contracts/access/Ownable.sol";
 import {IJB721TokenUriResolver} from "lib/juice-721-hook/src/interfaces/IJB721TokenUriResolver.sol";
 import {IERC721} from "lib/juice-721-hook/src/abstract/ERC721.sol";
+import {IJB721TiersHook} from "lib/juice-721-hook/src/interfaces/IJB721TiersHook.sol";
 import {IJB721TiersHookStore} from "lib/juice-721-hook/src/interfaces/IJB721TiersHookStore.sol";
 import {JB721Tier} from "lib/juice-721-hook/src/structs/JB721Tier.sol";
 import {JBIpfsDecoder} from "lib/juice-721-hook/src/libraries/JBIpfsDecoder.sol";
@@ -24,26 +25,27 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
     mapping(uint256 tierId => bytes) svgOf;
 
     /// @param hook The 721 hook that represents the Banny collection. 
+    /// @param owner The owner allowed to add SVG files that correspond to tier IDs.
     constructor(IJB721TiersHook hook, address owner) Ownable(owner) {
         HOOK = hook;
-        STORE = hook.store();
+        STORE = hook.STORE();
     }
     
     /// @notice Returns the SVG showing a dressed Naked Banny.
     /// @param tokenId The ID of the token to show. If the ID belongs to a Naked Banny, it will be shown with its current outfit.
     /// @return tokenUri The URI representing the SVG.
-    function tokenUriOf(address, uint256 tokenId) external pure returns (string memory tokenUri) {
+    function tokenUriOf(address, uint256 tokenId) external view returns (string memory tokenUri) {
         // Get a reference to the tier for the given token ID.
-        uint256 outfitTier = STORE.tierOfTokenId(HOOK, tokenId, false);
+        JB721Tier memory outfitTier = STORE.tierOfTokenId(address(HOOK), tokenId, false);
 
         // If this isn't a naked Banny and there's an SVG available, return the outfit SVG alone (or on an OG banny).        
-        if (outfitTier.category > 0) return svgOf[outfitTier.id];
+        if (outfitTier.category > 0) return ''; //svgOf[outfitTier.id];
 
         // Keep a reference to the owner of the Naked Banny.
-        address ownerOfNakedBanny = HOOK.ownerOf(tokenId);
+        address ownerOfNakedBanny = IERC721(address(HOOK)).ownerOf(tokenId);
 
         // Get a reference to each outfit ID currently attached to the Naked Banny.
-        uint256[] memory outfitIds = outfitIdsOf[tokenId]
+        uint256[] memory outfitIds = outfitIdsOf[tokenId];
 
         // Get a reference to the number of outfits are on the Naked Banny.
         uint256 numberOfOutfits = outfitIds.length;
@@ -54,12 +56,12 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
         // For each outfit, add the SVG layer if it's owned by the same owner as the Naked Banny being dressed.
         for (uint256 i; i < numberOfOutfits; i++) {
             outfitId = outfitIds[i];
-            if (HOOK.ownerOf(outfitId) != ownerOfNakedBanny) continue;
+            if (IERC721(address(HOOK)).ownerOf(outfitId) != ownerOfNakedBanny) continue;
             // Add the svgOf[outfitTier.id] to the image being composed.
         }
 
         // Return an IPFS hash if present.
-        return JBIpfsDecoder.decode(HOOK.baseURI(), STORE.encodedTierIPFSUriOf(address(HOOK), tokenId))
+        return JBIpfsDecoder.decode(HOOK.baseURI(), STORE.encodedTierIPFSUriOf(address(HOOK), tokenId));
     }
     
     /// @notice Dress your Naked Banny with outfits.
@@ -68,7 +70,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
     /// @param outfitIds The IDs of the outfits that'll be worn. Only one outfit per outfit category allowed at a time.
     function dressBannyWith(uint256 nakedBannyId, uint256[] calldata outfitIds) external {
         // Make sure call is being made by owner of Naked Banny.
-        if (HOOK.ownerOf(nakedBannyId) != msg.sender) revert();
+        if (IERC721(address(HOOK)).ownerOf(nakedBannyId) != msg.sender) revert();
 
         // Keep a reference to the number of outfits being worn.
         uint256 numberOfOutfits = outfitIds.length;
@@ -88,10 +90,10 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
             outfitId = outfitIds[i];
 
             // Check if the owner matched.
-            if (HOOK.ownerOf(outfitId) != msg.sender) revert();
+            if (IERC721(address(HOOK)).ownerOf(outfitId) != msg.sender) revert();
 
             // Get the outfit's tier.
-            outfitTier = STORE.tierOfTokenId(nft, outfitId, false);
+            outfitTier = STORE.tierOfTokenId(address(HOOK), outfitId, false);
 
             // Make sure the category is an increment of the previous outfit's category.
             if (i != 0 && outfitTier.category <= lastOutfitCategory) revert();
@@ -104,7 +106,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
         outfitIdsOf[nakedBannyId] = outfitIds;
     }
 
-    function setSvgFileOf(uint256 tierId, bytes svg) external onlyOwner {
-        svgsOf[tierId] = svg;
+    function setSvgFileOf(uint256 tierId, bytes calldata svg) external onlyOwner {
+        svgOf[tierId] = svg;
     }
 }
