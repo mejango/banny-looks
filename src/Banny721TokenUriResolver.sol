@@ -66,9 +66,9 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
     }
     
     /// @notice Dress your Naked Banny with outfits.
-    /// @dev The called must own the naked banny being dressed and all outfits being worn.
+    /// @dev The caller must own the naked banny being dressed and all outfits being worn.
     /// @param nakedBannyId The ID of the Naked Banny being dressed.
-    /// @param outfitIds The IDs of the outfits that'll be worn. Only one outfit per outfit category allowed at a time.
+    /// @param outfitIds The IDs of the outfits that'll be worn. Only one outfit per outfit category allowed at a time and they must be passed in order.
     function dressBannyWith(uint256 nakedBannyId, uint256[] calldata outfitIds) external {
         // Make sure call is being made by owner of Naked Banny.
         if (IERC721(address(HOOK)).ownerOf(nakedBannyId) != msg.sender) revert();
