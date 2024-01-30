@@ -1,67 +1,110 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.23;
 
+import {Ownable} from "lib/openzeppelin-contracts/contracts/access/Ownable.sol";
 import {IJB721TokenUriResolver} from "lib/juice-721-hook/src/interfaces/IJB721TokenUriResolver.sol";
 import {IERC721} from "lib/juice-721-hook/src/abstract/ERC721.sol";
 import {IJB721TiersHookStore} from "lib/juice-721-hook/src/interfaces/IJB721TiersHookStore.sol";
 import {JB721Tier} from "lib/juice-721-hook/src/structs/JB721Tier.sol";
+import {JBIpfsDecoder} from "lib/juice-721-hook/src/libraries/JBIpfsDecoder.sol";
 
-contract Banny721TokenUriResolver is IJB721TokenUriResolver {
+// @notice Banny outfit manager. Stores and shows Naked Bannys with outfits on.
+contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
 
+    /// @notice The 721 hook that represents the Banny collection. 
+    IJB721TiersHook immutable HOOK; 
+
+    /// @notice The contract storing hook's tiers.
     IJB721TiersHookStore immutable STORE; 
-
-    mapping(address nft => mapping(uint256 nakedBannyId => uint256[])) outfitIdsOf;
     
-    constructor( IJB721TiersHookStore store) {
-        STORE = store;
+    /// @notice The outfits currently attached to each Naked Banny.
+    mapping(uint256 nakedBannyId => uint256[]) outfitIdsOf;
+    
+    /// @notice The Naked Banny and outfit SVG files.
+    mapping(uint256 tierId => bytes) svgOf;
+
+    /// @param hook The 721 hook that represents the Banny collection. 
+    constructor(IJB721TiersHook hook, address owner) Ownable(owner) {
+        HOOK = hook;
+        STORE = hook.store();
     }
+    
+    /// @notice Returns the SVG showing a dressed Naked Banny.
+    /// @param tokenId The ID of the token to show. If the ID belongs to a Naked Banny, it will be shown with its current outfit.
+    /// @return tokenUri The URI representing the SVG.
+    function tokenUriOf(address, uint256 tokenId) external pure returns (string memory tokenUri) {
+        // Get a reference to the tier for the given token ID.
+        uint256 outfitTier = STORE.tierOfTokenId(HOOK, tokenId, false);
 
-    function tokenUriOf(address nft, uint256 tokenId) external pure returns (string memory tokenUri) {
-        nft;
-        tokenId;
-        return '';
-        // if the tokenId is a naked banny, lookup all the outfits the Banny is currently wearing, dress the banny svg in each outfit svg currently assigned.
-        // else return the outfit svg.
+        // If this isn't a naked Banny and there's an SVG available, return the outfit SVG alone (or on an OG banny).        
+        if (outfitTier.category > 0) return svgOf[outfitTier.id];
 
-        // dressBanny
-    }
+        // Keep a reference to the owner of the Naked Banny.
+        address ownerOfNakedBanny = HOOK.ownerOf(tokenId);
 
-    function dressBanny(address nft, uint256 nakedBannyId, uint256[] calldata outfitIds) external {
-        // Make sure call is being made by owner of nakedBanny.
-        if (IERC721(nft).ownerOf(nakedBannyId) != msg.sender) revert();
+        // Get a reference to each outfit ID currently attached to the Naked Banny.
+        uint256[] memory outfitIds = outfitIdsOf[tokenId]
 
+        // Get a reference to the number of outfits are on the Naked Banny.
         uint256 numberOfOutfits = outfitIds.length;
+
+        // Keep a reference to the outfit being iterated on.
         uint256 outfitId;
 
-        uint256 outfitCategory;
-        uint256 lastOutfitCategory;
-        JB721Tier memory outfitTier;
-
-        // check to see if owner owns all accessories. only dress banny is owned outfits.
+        // For each outfit, add the SVG layer if it's owned by the same owner as the Naked Banny being dressed.
         for (uint256 i; i < numberOfOutfits; i++) {
             outfitId = outfitIds[i];
-            if (IERC721(nft).ownerOf(outfitId) != msg.sender) revert();
-
-            outfitTier = STORE.tierOfTokenId(nft, outfitId, false);
-            outfitCategory = outfitTier.category;
-
-            if (i != 0 && outfitCategory <= lastOutfitCategory) revert();
-
-            lastOutfitCategory = outfitCategory;
+            if (HOOK.ownerOf(outfitId) != ownerOfNakedBanny) continue;
+            // Add the svgOf[outfitTier.id] to the image being composed.
         }
 
-        // check to see if any outfits conflict.
-        /*** 
-            Face: Category 1
-            Hat: Category 2
-            Chain: Category 3
-            Suit: Category 4
-            Shoes: Categoryat 5
-            Right hand object: Category 6
-            Left hand object: Category 7
-        */
+        // Return an IPFS hash if present.
+        return JBIpfsDecoder.decode(HOOK.baseURI(), STORE.encodedTierIPFSUriOf(address(HOOK), tokenId))
+    }
+    
+    /// @notice Dress your Naked Banny with outfits.
+    /// @dev The called must own the naked banny being dressed and all outfits being worn.
+    /// @param nakedBannyId The ID of the Naked Banny being dressed.
+    /// @param outfitIds The IDs of the outfits that'll be worn. Only one outfit per outfit category allowed at a time.
+    function dressBannyWith(uint256 nakedBannyId, uint256[] calldata outfitIds) external {
+        // Make sure call is being made by owner of Naked Banny.
+        if (HOOK.ownerOf(nakedBannyId) != msg.sender) revert();
+
+        // Keep a reference to the number of outfits being worn.
+        uint256 numberOfOutfits = outfitIds.length;
+
+        // Keep a reference to the outfit being iterated on.    
+        uint256 outfitId;
+
+        // Keep a reference to the category of the last outfit iterated on.
+        uint256 lastOutfitCategory;
+
+        // Keep a reference to the tier of the outfit being iterated on.
+        JB721Tier memory outfitTier;
+
+        // Iterate through each outfit checking to see if the message sender owns them all.
+        for (uint256 i; i < numberOfOutfits; i++) {
+            // Set the outfit ID being iterated on.
+            outfitId = outfitIds[i];
+
+            // Check if the owner matched.
+            if (HOOK.ownerOf(outfitId) != msg.sender) revert();
+
+            // Get the outfit's tier.
+            outfitTier = STORE.tierOfTokenId(nft, outfitId, false);
+
+            // Make sure the category is an increment of the previous outfit's category.
+            if (i != 0 && outfitTier.category <= lastOutfitCategory) revert();
+
+            // Keep a reference to the last outfit's category. 
+            lastOutfitCategory = outfitTier.category;
+        }
 
         // Store the outfits.  
-        outfitIdsOf[nft][nakedBannyId] = outfitIds;
+        outfitIdsOf[nakedBannyId] = outfitIds;
+    }
+
+    function setSvgFileOf(uint256 tierId, bytes svg) external onlyOwner {
+        svgsOf[tierId] = svg;
     }
 }
