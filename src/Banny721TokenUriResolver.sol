@@ -39,7 +39,11 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
         JB721Tier memory outfitTier = STORE.tierOfTokenId(address(HOOK), tokenId, false);
 
         // If this isn't a naked Banny and there's an SVG available, return the outfit SVG alone (or on an OG banny).        
-        if (outfitTier.category > 0) return ''; //svgOf[outfitTier.id];
+        if (outfitTier.category > 0) {
+            if (svgOf[outfitTier.id].length == 0) return ''; //svgOf[outfitTier.id];
+            // Fallback to returning an IPFS hash if present.
+            return JBIpfsDecoder.decode(HOOK.baseURI(), STORE.encodedTierIPFSUriOf(address(HOOK), tokenId));
+        } 
 
         // Keep a reference to the owner of the Naked Banny.
         address ownerOfNakedBanny = IERC721(address(HOOK)).ownerOf(tokenId);
@@ -59,9 +63,6 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
             if (IERC721(address(HOOK)).ownerOf(outfitId) != ownerOfNakedBanny) continue;
             // Add the svgOf[outfitTier.id] to the image being composed.
         }
-
-        // Return an IPFS hash if present.
-        return JBIpfsDecoder.decode(HOOK.baseURI(), STORE.encodedTierIPFSUriOf(address(HOOK), tokenId));
     }
     
     /// @notice Dress your Naked Banny with outfits.
@@ -105,7 +106,10 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
         // Store the outfits.  
         outfitIdsOf[nakedBannyId] = outfitIds;
     }
-
+    
+    /// @notice The owner of this contract can store SVG files for tier IDs.
+    /// @param tierId The ID of the tier having an SVG stored.
+    /// @param svg The svg being stored.
     function setSvgFileOf(uint256 tierId, bytes calldata svg) external onlyOwner {
         svgOf[tierId] = svg;
     }
