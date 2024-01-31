@@ -16,7 +16,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
 
     /// @notice SVG data of the naked Banny used to present wearables.
     /// TODO we prolly want this to be dynamic.
-    string constant private _OUTLINE_BANNY = "";
+    string private constant _OUTLINE_BANNY = "";
 
     /// @notice The 721 hook that represents the Banny collection.
     IJB721TiersHook immutable HOOK;
@@ -36,8 +36,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
     /// @notice The outfits currently attached to each Naked Banny, owned by the naked Banny's owner.
     /// @param nakedBannyId The ID of the naked banny wearing the outfits.
     function outfitIdsOf(uint256 nakedBannyId) public view returns (uint256[] memory outfitIds) {
-
-        // Keep a reference to the outfit IDs currently attached to the Naked Banny.        
+        // Keep a reference to the outfit IDs currently attached to the Naked Banny.
         uint256[] memory attachedOutfitIds = _attachedOutfitIdsOf[nakedBannyId];
 
         // Keep a reference to the owner of the Naked Banny.
@@ -80,7 +79,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
             // Layer the outfit SVG over outline Banny
             if (bytes(svgContentsOf[outfitTier.id]).length != 0) {
                 return _layeredSvg(
-                    tokenId, string.concat("<g>", _OUTLINE_BANNY, "</g>", "<g>", svgContentsOf[outfitTier.id], "</g>")
+                    string.concat("<g>", _OUTLINE_BANNY, "</g>", "<g>", svgContentsOf[outfitTier.id], "</g>")
                 );
             }
 
@@ -104,7 +103,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
             svgContents = string.concat(svgContents, "<g>", svgContentsOf[outfitIds[i]], "</g>");
         }
 
-        return _layeredSvg(tokenId, svgContents);
+        return _layeredSvg(svgContents);
     }
 
     /// @param hook The 721 hook that represents the Banny collection.
@@ -163,19 +162,18 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
 
     /// @notice The owner of this contract can store SVG files for tier IDs.
     /// @param tierId The ID of the tier having an SVG stored.
-    /// @param svgContents The svg contents being stored, not including the parent <svg></svg> element or the <g></g> element. (i.e. <path
+    /// @param svgContents The svg contents being stored, not including the parent <svg></svg> element or the <g></g>
+    /// element. (i.e. <path
     /// .../><path .../>)
     function setSvgContentsOf(uint256 tierId, string calldata svgContents) external onlyOwner {
         svgContentsOf[tierId] = svgContents;
     }
 
     /// @notice Returns the standard dimension SVG containing dynamic contents and SVG metadata.
-    /// TODO placeholder. SVG metadata will change.
-    function _layeredSvg(uint256 tokenId, string memory contents) internal pure returns (string memory) {
+    /// @param contents The contents of the SVG
+    function _layeredSvg(string memory contents) internal pure returns (string memory) {
         return string.concat(
-            "<svg width='400' height='400' viewbox='0 0 400 400' description='Token: ",
-            tokenId.toString(),
-            "'>",
+            '<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">',
             contents,
             "</svg>"
         );
