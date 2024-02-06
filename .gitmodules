@@ -10,3 +10,6 @@
 [submodule "lib/revnet-contracts"]
 	path = lib/revnet-contracts
 	url = https://github.com/rev-net/revnet-contracts
+[submodule "lib/croptop-contracts"]
+	path = lib/croptop-contracts
+	url = https://github.com/mejango/croptop-contracts
