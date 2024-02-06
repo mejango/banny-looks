@@ -5,6 +5,8 @@ import {Script, stdJson} from "lib/forge-std/src/Script.sol";
 import {Strings} from "lib/openzeppelin-contracts/contracts/utils/Strings.sol";
 import {JBConstants} from "lib/juice-contracts-v4/src/libraries/JBConstants.sol";
 import {JBTerminalConfig} from "lib/juice-contracts-v4/src/structs/JBTerminalConfig.sol";
+import {JBPayHookSpecification} from "lib/juice-contracts-v4/src/structs/JBPayHookSpecification.sol";
+import {IJBTerminal} from "lib/juice-contracts-v4/src/interfaces/terminal/IJBTerminal.sol";
 import {IJBRulesets} from "lib/juice-contracts-v4/src/interfaces/IJBRulesets.sol";
 import {IJBPrices} from "lib/juice-contracts-v4/src/interfaces/IJBPrices.sol";
 import {IJB721TiersHook} from "lib/juice-721-hook/src/interfaces/IJB721TiersHook.sol";
@@ -17,7 +19,9 @@ import {JBDeploy721TiersHookConfig} from "lib/juice-721-hook/src/structs/JBDeplo
 import {REVStageConfig} from "lib/revnet-contracts/src/structs/REVStageConfig.sol";
 import {REVBuybackHookConfig} from "lib/revnet-contracts/src/structs/REVBuybackHookConfig.sol";
 import {REVDeploy721TiersHookConfig} from "lib/revnet-contracts/src/structs/REVDeploy721TiersHookConfig.sol";
+import {REVBuybackPoolConfig} from "lib/revnet-contracts/src/structs/REVBuybackPoolConfig.sol";
 import {REVConfig} from "lib/revnet-contracts/src/structs/REVConfig.sol";
+import {REVCroptopDeployer} from "lib/revnet-contracts/src/REVCroptopDeployer.sol";
 import {AllowedPost} from "lib/croptop-contracts/src/CroptopPublisher.sol";
 import {Banny721TokenUriResolver} from "src/Banny721TokenUriResolver.sol";
 
@@ -56,7 +60,11 @@ contract Deploy is Script {
             string.concat("lib/juice-contracts-v4/broadcast/Deploy.s.sol/", chain, "/run-latest.json"), "JBRulesets"
         );
 
-        address hookAddress = _getDeploymentAddress(
+        address buybackHookAddress = _getDeploymentAddress(
+            string.concat("lib/juice-buyback/broadcast/Deploy.s.sol/", chain, "/run-latest.json"), "JBBuybackHook"
+        );
+
+        address nftHookAddress = _getDeploymentAddress(
             string.concat("lib/juice-721-hook/broadcast/Deploy.s.sol/", chain, "/run-latest.json"), "JB721TiersHook"
         );
 
@@ -82,14 +90,14 @@ contract Deploy is Script {
         address[] memory tokensToAccept = new address[](1);
         tokensToAccept[0] = JBConstants.NATIVE_TOKEN;
         terminalConfigurations[0] = JBTerminalConfig({
-            terminal: multiTerminalAddress,
+            terminal: IJBTerminal(multiTerminalAddress),
             tokensToAccept: tokensToAccept
         });
         REVStageConfig[] memory stageConfigurations = new REVStageConfig[](2);
         uint256 start = block.timestamp;
         stageConfigurations[0] = REVStageConfig({
             startsAtOrAfter: start,
-            producerSplitRate: JBConstants.MAX_RESERVED_RATE / 2,
+            operatorSplitRate: JBConstants.MAX_RESERVED_RATE / 2,
             initialIssuanceRate: 1_000_000 * decimalMultiplier,
             priceCeilingIncreaseFrequency: oneDay,
             priceCeilingIncreasePercentage: JBConstants.MAX_DECAY_RATE / 20, // 5%
@@ -106,14 +114,20 @@ contract Deploy is Script {
         REVConfig memory revnetConfiguration = REVConfig({
             baseCurrency: nativeCurrency,
             premintTokenAmount: 80_000_000 * decimalMultiplier,
-            initialProducer: producer,
+            initialOperator: producer,
             stageConfigurations: stageConfigurations
         });
-        REVBuybackHookConfig memory buybackHookConfiguration = REVBuybackHookConfig({
+        REVBuybackPoolConfig[] memory buybackPoolConfigurations = REVBuybackPoolConfig[](1);
+        buybackPoolConfigurations[0] = REVBuybackPoolConfig({
             token: JBConstants.NATIVE_TOKEN,
             fee: 500, //TODO
             twapWindow: 0, // TODO
             twapSlippageTolerance: 0 // TODO
+        });
+
+        REVBuybackHookConfig memory buybackHookConfiguration = REVBuybackHookConfig({
+            hook: IJBBuybackHook(buybackHookAddress),
+            buybackPoolConfigurations: buybackPoolConfigurations
         });
 
         JB721TierConfig[] memory tiers = JB721TierConfig[](4);
@@ -176,7 +190,7 @@ contract Deploy is Script {
 
         AllowedPost[] memory allowedPosts = new AllowedPost[](1);
         allowedPosts[0] = AllowedPost({
-            nft: hookAddress,
+            nft: nftHookAddress,
             category: 100,
             minimumPrice: 10**16,
             minimumTotalSupply: 10,
@@ -187,7 +201,7 @@ contract Deploy is Script {
         vm.startBroadcast();
 
         // Deploy the Banny URI Resolver.
-        Banny721TokenUriResolver resolver = new Banny721TokenUriResolver(IJB721TiersHook(hookAddress), msg.sender);
+        Banny721TokenUriResolver resolver = new Banny721TokenUriResolver(IJB721TiersHook(nftHookAddress), msg.sender);
 
         // Deploy the $BANNY Revnet.
         REVCroptopDeployer(revCroptopDeployerAddress).deployCroptopRevnetFor({
