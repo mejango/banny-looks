@@ -9,6 +9,7 @@ import {JBPayHookSpecification} from "lib/juice-contracts-v4/src/structs/JBPayHo
 import {IJBTerminal} from "lib/juice-contracts-v4/src/interfaces/terminal/IJBTerminal.sol";
 import {IJBRulesets} from "lib/juice-contracts-v4/src/interfaces/IJBRulesets.sol";
 import {IJBPrices} from "lib/juice-contracts-v4/src/interfaces/IJBPrices.sol";
+import {IJBBuybackHook} from "lib/juice-buyback/src/interfaces/IJBBuybackHook.sol";
 import {IJB721TiersHook} from "lib/juice-721-hook/src/interfaces/IJB721TiersHook.sol";
 import {IJB721TiersHookStore} from "lib/juice-721-hook/src/interfaces/IJB721TiersHookStore.sol";
 import {IJB721TokenUriResolver} from "lib/juice-721-hook/src/interfaces/IJB721TokenUriResolver.sol";
@@ -53,7 +54,8 @@ contract Deploy is Script {
         }
 
         address multiTerminalAddress = _getDeploymentAddress(
-            string.concat("lib/juice-contracts-v4/broadcast/Deploy.s.sol/", chain, "/run-latest.json"), "JBMultiTerminal"
+            string.concat("lib/juice-contracts-v4/broadcast/Deploy.s.sol/", chain, "/run-latest.json"),
+            "JBMultiTerminal"
         );
 
         address rulesetsAddress = _getDeploymentAddress(
@@ -69,11 +71,13 @@ contract Deploy is Script {
         );
 
         address hookStoreAddress = _getDeploymentAddress(
-            string.concat("lib/juice-721-hook/broadcast/Deploy.s.sol/", chain, "/run-latest.json"), "JB721TiersHookStore"
+            string.concat("lib/juice-721-hook/broadcast/Deploy.s.sol/", chain, "/run-latest.json"),
+            "JB721TiersHookStore"
         );
 
         address revCroptopDeployerAddress = _getDeploymentAddress(
-            string.concat("lib/revnet-contracts/broadcast/Deploy.s.sol/", chain, "/run-latest.json"), "REVCroptopDeployer"
+            string.concat("lib/revnet-contracts/broadcast/Deploy.s.sol/", chain, "/run-latest.json"),
+            "REVCroptopDeployer"
         );
 
         string memory name = "Bannyverse";
@@ -82,34 +86,32 @@ contract Deploy is Script {
         string memory baseUri = "ipfs://";
         string memory contractUri = "";
         uint32 nativeCurrency = uint32(uint160(JBConstants.NATIVE_TOKEN));
-        uint256 decimals = 18;
-        uint256 decimalMultiplier = 10**decimals;
-        uint256 oneDay = 86400;
+        uint8 decimals = 18;
+        uint256 decimalMultiplier = 10 ** decimals;
+        uint40 oneDay = 86_400;
 
         JBTerminalConfig[] memory terminalConfigurations = new JBTerminalConfig[](1);
         address[] memory tokensToAccept = new address[](1);
         tokensToAccept[0] = JBConstants.NATIVE_TOKEN;
-        terminalConfigurations[0] = JBTerminalConfig({
-            terminal: IJBTerminal(multiTerminalAddress),
-            tokensToAccept: tokensToAccept
-        });
+        terminalConfigurations[0] =
+            JBTerminalConfig({terminal: IJBTerminal(multiTerminalAddress), tokensToAccept: tokensToAccept});
         REVStageConfig[] memory stageConfigurations = new REVStageConfig[](2);
-        uint256 start = block.timestamp;
+        uint40 start = uint40(block.timestamp);
         stageConfigurations[0] = REVStageConfig({
             startsAtOrAfter: start,
-            operatorSplitRate: JBConstants.MAX_RESERVED_RATE / 2,
-            initialIssuanceRate: 1_000_000 * decimalMultiplier,
+            operatorSplitRate: uint16(JBConstants.MAX_RESERVED_RATE / 2),
+            initialIssuanceRate: uint112(1_000_000 * decimalMultiplier),
             priceCeilingIncreaseFrequency: oneDay,
-            priceCeilingIncreasePercentage: JBConstants.MAX_DECAY_RATE / 20, // 5%
-            priceFloorTaxIntensity: JBConstants.MAX_REDEMPTION_RATE / 5 // 0.2
+            priceCeilingIncreasePercentage: uint32(JBConstants.MAX_DECAY_RATE / 20), // 5%
+            priceFloorTaxIntensity: uint16(JBConstants.MAX_REDEMPTION_RATE / 5) // 0.2
         });
         stageConfigurations[1] = REVStageConfig({
-            startsAtOrAfter: start + 86400*28,
-            producerSplitRate: JBConstants.MAX_RESERVED_RATE / 2,
-            initialIssuanceRate: 100_000 * decimalMultiplier,
+            startsAtOrAfter: start + 86_400 * 28,
+            operatorSplitRate: uint16(JBConstants.MAX_RESERVED_RATE / 2),
+            initialIssuanceRate: uint112(100_000 * decimalMultiplier),
             priceCeilingIncreaseFrequency: 7 * oneDay,
-            priceCeilingIncreasePercentage: JBConstants.MAX_DECAY_RATE / 100, // 1%
-            priceFloorTaxIntensity: JBConstants.MAX_REDEMPTION_RATE / 2 // 0.5
+            priceCeilingIncreasePercentage: uint16(JBConstants.MAX_DECAY_RATE / 100), // 1%
+            priceFloorTaxIntensity: uint16(JBConstants.MAX_REDEMPTION_RATE / 2) // 0.5
         });
         REVConfig memory revnetConfiguration = REVConfig({
             baseCurrency: nativeCurrency,
@@ -117,7 +119,7 @@ contract Deploy is Script {
             initialOperator: producer,
             stageConfigurations: stageConfigurations
         });
-        REVBuybackPoolConfig[] memory buybackPoolConfigurations = REVBuybackPoolConfig[](1);
+        REVBuybackPoolConfig[] memory buybackPoolConfigurations = new REVBuybackPoolConfig[](1);
         buybackPoolConfigurations[0] = REVBuybackPoolConfig({
             token: JBConstants.NATIVE_TOKEN,
             fee: 500, //TODO
@@ -127,17 +129,17 @@ contract Deploy is Script {
 
         REVBuybackHookConfig memory buybackHookConfiguration = REVBuybackHookConfig({
             hook: IJBBuybackHook(buybackHookAddress),
-            buybackPoolConfigurations: buybackPoolConfigurations
+            poolConfigurations: buybackPoolConfigurations
         });
 
-        JB721TierConfig[] memory tiers = JB721TierConfig[](4);
+        JB721TierConfig[] memory tiers = new JB721TierConfig[](4);
         tiers[0] = JB721TierConfig({
-            price: 1 * decimalMultiplier,
+            price: uint104(1 * decimalMultiplier),
             initialSupply: 100,
             votingUnits: 0,
             reserveFrequency: 0,
             reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes(""),
+            encodedIPFSUri: bytes32(""),
             category: 0,
             allowOwnerMint: false,
             useReserveBeneficiaryAsDefault: false,
@@ -146,12 +148,12 @@ contract Deploy is Script {
             cannotBeRemoved: true
         });
         tiers[1] = JB721TierConfig({
-            price: 1 * decimalMultiplier,
+            price: uint104(1 * decimalMultiplier),
             initialSupply: 100,
             votingUnits: 0,
             reserveFrequency: 0,
             reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes(""),
+            encodedIPFSUri: bytes32(""),
             category: 0,
             allowOwnerMint: false,
             useReserveBeneficiaryAsDefault: false,
@@ -160,12 +162,12 @@ contract Deploy is Script {
             cannotBeRemoved: true
         });
         tiers[2] = JB721TierConfig({
-            price: 1 * decimalMultiplier,
+            price: uint104(1 * decimalMultiplier),
             initialSupply: 100,
             votingUnits: 0,
             reserveFrequency: 0,
             reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes(""),
+            encodedIPFSUri: bytes32(""),
             category: 0,
             allowOwnerMint: false,
             useReserveBeneficiaryAsDefault: false,
@@ -174,12 +176,12 @@ contract Deploy is Script {
             cannotBeRemoved: true
         });
         tiers[3] = JB721TierConfig({
-            price: 1 * decimalMultiplier,
+            price: uint104(1 * decimalMultiplier),
             initialSupply: 100,
             votingUnits: 0,
             reserveFrequency: 0,
             reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes(""),
+            encodedIPFSUri: bytes32(""),
             category: 0,
             allowOwnerMint: false,
             useReserveBeneficiaryAsDefault: false,
@@ -192,7 +194,7 @@ contract Deploy is Script {
         allowedPosts[0] = AllowedPost({
             nft: nftHookAddress,
             category: 100,
-            minimumPrice: 10**16,
+            minimumPrice: 10 ** 16,
             minimumTotalSupply: 10,
             maximumTotalSupply: 0,
             allowedAddresses: new address[](0)
@@ -211,33 +213,36 @@ contract Deploy is Script {
             configuration: revnetConfiguration,
             terminalConfigurations: terminalConfigurations,
             buybackHookConfiguration: buybackHookConfiguration,
-            hookConfiguration: JBDeploy721TiersHookConfig({
-            name: name,
-            symbol: symbol,
-            rulesets: IJBRulesets(rulesetsAddress),
-            baseUri: baseUri,
-            tokenUriResolver: IJB721TokenUriResolver(address(resolver)),
-            contractUri: contractUri,
-            tiersConfig: JB721InitTiersConfig({
-                tiers: tiers,
-                currency: nativeCurrency,
-                decimals: decimals,
-                prices: IJBPrices(address(0))
+            hookConfiguration: REVDeploy721TiersHookConfig({
+                baseline721HookConfiguration: JBDeploy721TiersHookConfig({
+                    name: name,
+                    symbol: symbol,
+                    rulesets: IJBRulesets(rulesetsAddress),
+                    baseUri: baseUri,
+                    tokenUriResolver: IJB721TokenUriResolver(address(resolver)),
+                    contractUri: contractUri,
+                    tiersConfig: JB721InitTiersConfig({
+                        tiers: tiers,
+                        currency: nativeCurrency,
+                        decimals: decimals,
+                        prices: IJBPrices(address(0))
+                    }),
+                    reserveBeneficiary: address(0),
+                    store: IJB721TiersHookStore(hookStoreAddress),
+                    flags: JB721TiersHookFlags({
+                        noNewTiersWithReserves: false,
+                        noNewTiersWithVotes: false,
+                        noNewTiersWithOwnerMinting: false,
+                        preventOverspending: false
+                    })
+                }),
+                owner: producer
             }),
-            reserveBeneficiary: address(0),
-            store: IJB721TiersHookStore(hookStoreAddress),
-            flags: JB721TiersHookFlags({
-                noNewTiersWithReserves: false,
-                noNewTiersWithVotes: false,
-                noNewTiersWithOwnerMinting: false,
-                preventOverspending: false
-            })
-        }),
             otherPayHooksSpecifications: new JBPayHookSpecification[](0),
             extraHookMetadata: 0,
             allowedPosts: allowedPosts
         });
-        
+
         vm.stopBroadcast();
     }
 
