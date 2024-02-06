@@ -16,3 +16,6 @@
 [submodule "lib/juice-ownable"]
 	path = lib/juice-ownable
 	url = https://github.com/Bananapus/juice-ownable
+[submodule "lib/juice-buyback"]
+	path = lib/juice-buyback
+	url = https://github.com/Bananapus/juice-buyback
