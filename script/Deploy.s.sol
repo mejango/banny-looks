@@ -3,7 +3,22 @@ pragma solidity ^0.8.23;
 
 import {Script, stdJson} from "lib/forge-std/src/Script.sol";
 import {Strings} from "lib/openzeppelin-contracts/contracts/utils/Strings.sol";
+import {JBConstants} from "lib/juice-contracts-v4/src/libraries/JBConstants.sol";
+import {JBTerminalConfig} from "lib/juice-contracts-v4/src/structs/JBTerminalConfig.sol";
+import {IJBRulesets} from "lib/juice-contracts-v4/src/interfaces/IJBRulesets.sol";
+import {IJBPrices} from "lib/juice-contracts-v4/src/interfaces/IJBPrices.sol";
 import {IJB721TiersHook} from "lib/juice-721-hook/src/interfaces/IJB721TiersHook.sol";
+import {IJB721TiersHookStore} from "lib/juice-721-hook/src/interfaces/IJB721TiersHookStore.sol";
+import {IJB721TokenUriResolver} from "lib/juice-721-hook/src/interfaces/IJB721TokenUriResolver.sol";
+import {JB721TierConfig} from "lib/juice-721-hook/src/structs/JB721TierConfig.sol";
+import {JB721TiersHookFlags} from "lib/juice-721-hook/src/structs/JB721TiersHookFlags.sol";
+import {JB721InitTiersConfig} from "lib/juice-721-hook/src/structs/JB721InitTiersConfig.sol";
+import {JBDeploy721TiersHookConfig} from "lib/juice-721-hook/src/structs/JBDeploy721TiersHookConfig.sol";
+import {REVStageConfig} from "lib/revnet-contracts/src/structs/REVStageConfig.sol";
+import {REVBuybackHookConfig} from "lib/revnet-contracts/src/structs/REVBuybackHookConfig.sol";
+import {REVDeploy721TiersHookConfig} from "lib/revnet-contracts/src/structs/REVDeploy721TiersHookConfig.sol";
+import {REVConfig} from "lib/revnet-contracts/src/structs/REVConfig.sol";
+import {AllowedPost} form "lib/croptop-contracts/src/structs/AllowedPost.sol";
 import {Banny721TokenUriResolver} from "src/Banny721TokenUriResolver.sol";
 
 contract Deploy is Script {
@@ -86,19 +101,19 @@ contract Deploy is Script {
             initialIssuanceRate: 100_000 * decimalMultiplier,
             priceCeilingIncreaseFrequency: 7 * oneDay,
             priceCeilingIncreasePercentage: JBConstants.MAX_DECAY_RATE / 100, // 1%
-            priceFloorTaxIntensity: JBConstants.MAX_REDEMPTION_RATE / 2, // 0.5
+            priceFloorTaxIntensity: JBConstants.MAX_REDEMPTION_RATE / 2 // 0.5
         });
         REVConfig memory revnetConfiguration = REVConfig({
             baseCurrency: nativeCurrency,
-            premintTokenAmount: 80_000_000 * decimalMultiplier;
+            premintTokenAmount: 80_000_000 * decimalMultiplier,
             initialProducer: producer,
-            stageConfigurations
+            stageConfigurations: stageConfigurations
         });
         REVBuybackHookConfig memory buybackHookConfiguration = REVBuybackHookConfig({
-            token: JBConstants.NATIVE_TOKEN.
-            fee: 500,
-            twapWindow: 000,
-            twapSlippageTolerance: 000
+            token: JBConstants.NATIVE_TOKEN,
+            fee: 500, //TODO
+            twapWindow: 0, // TODO
+            twapSlippageTolerance: 0 // TODO
         });
 
         JB721TierConfig[] memory tiers = JB721TierConfig[](4);
@@ -159,34 +174,6 @@ contract Deploy is Script {
             cannotBeRemoved: true
         });
 
-        JBDeploy721TiersHookConfig memory baseline721HookConfiguration = JBDeploy721TiersHookConfig({
-            name: name,
-            symbol: symbol,
-            rulesets: IJBRulesets(rulesetsAddress),
-            baseUri: baseUri,
-            tokenUriResolver: IJB721TokenUriResolver(address(resolver)),
-            contractUri: contractUri,
-            tiersConfig: JB721InitTiersConfig({
-                tiers,
-                currency: nativeCurrency,
-                decimals: decimals,
-                prices: IJBPrices(address(0))
-            }),
-            reserveBeneficiary: address(0),
-            store: IJB721TiersHookStore(hookStoreAddress),
-            flags: JB721TiersHookFlags({
-                noNewTiersWithReserves: false,
-                noNewTiersWithVotes: false,
-                noNewTiersWithOwnerMinting: false,
-                preventOverspending: false
-            })
-        });
-
-        REVDeploy721TiersHookConfig memory hookConfiguration = REVDeploy721TiersHookConfig({
-            baseline721HookConfiguration: baseline721HookConfiguration,
-            owner: producer 
-        });
-
         AllowedPost[] memory allowedPosts = new AllowedPost[](1);
         allowedPosts[0] = AllowedPost({
             nft: hookAddress,
@@ -210,7 +197,28 @@ contract Deploy is Script {
             configuration: revnetConfiguration,
             terminalConfigurations: terminalConfigurations,
             buybackHookConfiguration: buybackHookConfiguration,
-            hookConfiguration: hookConfiguration,
+            hookConfiguration: JBDeploy721TiersHookConfig({
+            name: name,
+            symbol: symbol,
+            rulesets: IJBRulesets(rulesetsAddress),
+            baseUri: baseUri,
+            tokenUriResolver: IJB721TokenUriResolver(address(resolver)),
+            contractUri: contractUri,
+            tiersConfig: JB721InitTiersConfig({
+                tiers: tiers,
+                currency: nativeCurrency,
+                decimals: decimals,
+                prices: IJBPrices(address(0))
+            }),
+            reserveBeneficiary: address(0),
+            store: IJB721TiersHookStore(hookStoreAddress),
+            flags: JB721TiersHookFlags({
+                noNewTiersWithReserves: false,
+                noNewTiersWithVotes: false,
+                noNewTiersWithOwnerMinting: false,
+                preventOverspending: false
+            })
+        }),
             otherPayHooksSpecifications: new JBPayHookSpecification[](0),
             extraHookMetadata: 0,
             allowedPosts: allowedPosts
