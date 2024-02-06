@@ -7,7 +7,6 @@
 [submodule "lib/juice-721-hook"]
 	path = lib/juice-721-hook
 	url = https://github.com/Bananapus/juice-721-hook
-	branch = language-updates
 [submodule "lib/revnet-contracts"]
 	path = lib/revnet-contracts
 	url = https://github.com/rev-net/revnet-contracts
