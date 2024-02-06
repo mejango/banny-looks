@@ -18,7 +18,7 @@ import {REVStageConfig} from "lib/revnet-contracts/src/structs/REVStageConfig.so
 import {REVBuybackHookConfig} from "lib/revnet-contracts/src/structs/REVBuybackHookConfig.sol";
 import {REVDeploy721TiersHookConfig} from "lib/revnet-contracts/src/structs/REVDeploy721TiersHookConfig.sol";
 import {REVConfig} from "lib/revnet-contracts/src/structs/REVConfig.sol";
-import {AllowedPost} form "lib/croptop-contracts/src/structs/AllowedPost.sol";
+import {AllowedPost} from "lib/croptop-contracts/src/CroptopPublisher.sol";
 import {Banny721TokenUriResolver} from "src/Banny721TokenUriResolver.sol";
 
 contract Deploy is Script {

@@ -1,2 +1,4 @@
 lib/openzeppelin-contracts/=lib/openzeppelin-contracts/
 lib/juice-721-hook/=lib/juice-721-hook/
+lib/croptop-contracts/=lib/croptop-contracts/
+lib/revnet-contracts/=lib/revnet-contracts/
