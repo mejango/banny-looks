@@ -80,6 +80,7 @@ contract Deploy is Script {
             "REVCroptopDeployer"
         );
 
+        // Define constants
         string memory name = "Bannyverse";
         string memory symbol = "$BANNY";
         string memory projectUri = "";
@@ -90,11 +91,15 @@ contract Deploy is Script {
         uint256 decimalMultiplier = 10 ** decimals;
         uint40 oneDay = 86_400;
 
+        // The terminals that the project will accept funds through.
         JBTerminalConfig[] memory terminalConfigurations = new JBTerminalConfig[](1);
         address[] memory tokensToAccept = new address[](1);
+        // Accept the chain's native currency through the multi terminal.
         tokensToAccept[0] = JBConstants.NATIVE_TOKEN;
         terminalConfigurations[0] =
             JBTerminalConfig({terminal: IJBTerminal(multiTerminalAddress), tokensToAccept: tokensToAccept});
+
+        // The project's revnet configuration
         REVStageConfig[] memory stageConfigurations = new REVStageConfig[](2);
         uint40 start = uint40(block.timestamp);
         stageConfigurations[0] = REVStageConfig({
@@ -119,19 +124,21 @@ contract Deploy is Script {
             initialOperator: producer,
             stageConfigurations: stageConfigurations
         });
+
+        // The project's buyback hook configuration.
         REVBuybackPoolConfig[] memory buybackPoolConfigurations = new REVBuybackPoolConfig[](1);
         buybackPoolConfigurations[0] = REVBuybackPoolConfig({
             token: JBConstants.NATIVE_TOKEN,
             fee: 500, //TODO
-            twapWindow: 0, // TODO
-            twapSlippageTolerance: 0 // TODO
+            twapWindow: 2 days,
+            twapSlippageTolerance: 9000
         });
-
         REVBuybackHookConfig memory buybackHookConfiguration = REVBuybackHookConfig({
             hook: IJBBuybackHook(buybackHookAddress),
             poolConfigurations: buybackPoolConfigurations
         });
 
+        // The project's NFT tiers.
         JB721TierConfig[] memory tiers = new JB721TierConfig[](4);
         tiers[0] = JB721TierConfig({
             price: uint104(1 * decimalMultiplier),
@@ -149,7 +156,7 @@ contract Deploy is Script {
         });
         tiers[1] = JB721TierConfig({
             price: uint104(1 * decimalMultiplier),
-            initialSupply: 100,
+            initialSupply: 100, //TODO
             votingUnits: 0,
             reserveFrequency: 0,
             reserveBeneficiary: address(0),
@@ -190,16 +197,18 @@ contract Deploy is Script {
             cannotBeRemoved: true
         });
 
+        // The project's allowed croptop posts.
         AllowedPost[] memory allowedPosts = new AllowedPost[](1);
         allowedPosts[0] = AllowedPost({
             nft: nftHookAddress,
             category: 100,
-            minimumPrice: 10 ** 16,
+            minimumPrice: 10 ** (decimals - 2),
             minimumTotalSupply: 10,
             maximumTotalSupply: 0,
             allowedAddresses: new address[](0)
         });
 
+        // Deploy it all.
         vm.startBroadcast();
 
         // Deploy the Banny URI Resolver.
