@@ -26,12 +26,42 @@ import {REVCroptopDeployer} from "lib/revnet-contracts/src/REVCroptopDeployer.so
 import {AllowedPost} from "lib/croptop-contracts/src/CroptopPublisher.sol";
 import {Banny721TokenUriResolver} from "src/Banny721TokenUriResolver.sol";
 
+import "src/REVCroptopSuckerDeployer.sol";
+
 contract Deploy is Script {
+
     function run() public {
+        // We need some pseudo-random bytes32.
+        bytes32 _suckerSalt = keccak256(abi.encode(
+            block.number,
+            block.timestamp
+        ));
+
+        // Deploy to sepolia
+        _deployTo({
+            _rpc: "https://rpc.ankr.com/eth_sepolia",
+            _suckerSalt: _suckerSalt,
+            _setSuckerAsHook: false
+        });
+
+        // // Deploy to OP sepolia
+        // _deployTo({
+        //     _rpc: "https://rpc.ankr.com/optimism_sepolia",
+        //     _suckerSalt: _suckerSalt,
+        //     _setSuckerAsHook: true
+        // });
+    }
+
+    function _deployTo(
+        string memory _rpc,
+        bytes32 _suckerSalt,
+        bool _setSuckerAsHook
+    ) internal {
+        vm.createSelectFork(_rpc);
         uint256 chainId = block.chainid;
         address producer;
         string memory chain;
-        // Ethereun Mainnet
+        // Ethereum Mainnet
         if (chainId == 1) {
             chain = "1";
             // Ethereum Sepolia
@@ -54,12 +84,12 @@ contract Deploy is Script {
         }
 
         address multiTerminalAddress = _getDeploymentAddress(
-            string.concat("lib/juice-contracts-v4/broadcast/Deploy.s.sol/", chain, "/run-latest.json"),
+            string.concat("lib/juice-buyback/lib/juice-contracts-v4/broadcast/Deploy.s.sol/", chain, "/run-latest.json"),
             "JBMultiTerminal"
         );
 
         address rulesetsAddress = _getDeploymentAddress(
-            string.concat("lib/juice-contracts-v4/broadcast/Deploy.s.sol/", chain, "/run-latest.json"), "JBRulesets"
+            string.concat("lib/juice-buyback/lib/juice-contracts-v4/broadcast/Deploy.s.sol/", chain, "/run-latest.json"), "JBRulesets"
         );
 
         address buybackHookAddress = _getDeploymentAddress(
@@ -75,10 +105,10 @@ contract Deploy is Script {
             "JB721TiersHookStore"
         );
 
-        address revCroptopDeployerAddress = _getDeploymentAddress(
-            string.concat("lib/revnet-contracts/broadcast/Deploy.s.sol/", chain, "/run-latest.json"),
-            "REVCroptopDeployer"
-        );
+        // address revCroptopDeployerAddress = _getDeploymentAddress(
+        //     string.concat("lib/revnet-contracts/broadcast/Deploy.s.sol/", chain, "/run-latest.json"),
+        //     "REVCroptopDeployer"
+        // );
 
         // Define constants
         string memory name = "Bannyverse";
@@ -208,14 +238,44 @@ contract Deploy is Script {
             allowedAddresses: new address[](0)
         });
 
+        address controllerAddress = _getDeploymentAddress(
+            string.concat("lib/juice-buyback/lib/juice-contracts-v4/broadcast/Deploy.s.sol/", chain, "/run-latest.json"), "JBController"
+        );
+
+        address hookDeployerAddress = _getDeploymentAddress(
+            string.concat("lib/juice-721-hook/broadcast/Deploy.s.sol/", chain, "/run-latest.json"),
+            "JB721TiersHookDeployer"
+        );
+
+        address croptopPublisherAddress = _getDeploymentAddress(
+            string.concat("lib/croptop-contracts/broadcast/Deploy.s.sol/", chain, "/run-latest.json"),
+            "CroptopPublisher"
+        );
+
+        SuckerTokenConfig[] memory _suckerTokenConfig = new SuckerTokenConfig[](1);
+        _suckerTokenConfig[0] = SuckerTokenConfig({
+            localToken: JBConstants.NATIVE_TOKEN,
+            remoteToken: JBConstants.NATIVE_TOKEN,
+            minGas: 200_000,
+            minBridgeAmount: 0.01 ether
+        });
+
         // Deploy it all.
         vm.startBroadcast();
 
         // Deploy the Banny URI Resolver.
         Banny721TokenUriResolver resolver = new Banny721TokenUriResolver(IJB721TiersHook(nftHookAddress), msg.sender);
 
-        // Deploy the $BANNY Revnet.
-        REVCroptopDeployer(revCroptopDeployerAddress).deployCroptopRevnetFor({
+        // BPSuckerDeployer(0xf60B981c4ec0Bb602a30B243A89421C225701488).createForSender(_localProjectId, _salt);
+
+        REVCroptopSuckerDeployer _deployer = new REVCroptopSuckerDeployer(
+            IJBController(controllerAddress),
+            IJB721TiersHookDeployer(hookDeployerAddress),
+            CroptopPublisher(croptopPublisherAddress),
+            0x88742fe7D45A6664eCBDf05F636f437782bC785B
+        );
+
+        _deployer.deployCroptopSuckerRevnetFor({
             name: name,
             symbol: symbol,
             projectUri: projectUri,
@@ -247,11 +307,15 @@ contract Deploy is Script {
                 }),
                 owner: producer
             }),
-            otherPayHooksSpecifications: new JBPayHookSpecification[](0),
+            // otherPayHooksSpecifications: new JBPayHookSpecification[](0),
             extraHookMetadata: 0,
-            allowedPosts: allowedPosts
-        });
+            allowedPosts: allowedPosts,
+            suckerTokenConfig: _suckerTokenConfig,
+            autoSuck: _setSuckerAsHook,
+            suckerSalt: _suckerSalt
 
+        });
+        
         vm.stopBroadcast();
     }
 
