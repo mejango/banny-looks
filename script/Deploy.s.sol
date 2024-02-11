@@ -11,10 +11,12 @@ import {IJBRulesets} from "lib/juice-contracts-v4/src/interfaces/IJBRulesets.sol
 import {IJBPrices} from "lib/juice-contracts-v4/src/interfaces/IJBPrices.sol";
 import {IJBBuybackHook} from "lib/juice-buyback/src/interfaces/IJBBuybackHook.sol";
 import {IJB721TiersHook} from "lib/juice-721-hook/src/interfaces/IJB721TiersHook.sol";
+import {IJB721TiersHookDeployer} from "lib/juice-721-hook/src/interfaces/IJB721TiersHookDeployer.sol";
 import {IJB721TiersHookStore} from "lib/juice-721-hook/src/interfaces/IJB721TiersHookStore.sol";
 import {IJB721TokenUriResolver} from "lib/juice-721-hook/src/interfaces/IJB721TokenUriResolver.sol";
 import {JB721TierConfig} from "lib/juice-721-hook/src/structs/JB721TierConfig.sol";
 import {JB721TiersHookFlags} from "lib/juice-721-hook/src/structs/JB721TiersHookFlags.sol";
+import {JBDeploy721TiersHookConfig} from "lib/juice-721-hook/src/structs/JBDeploy721TiersHookConfig.sol";
 import {JB721InitTiersConfig} from "lib/juice-721-hook/src/structs/JB721InitTiersConfig.sol";
 import {JBDeploy721TiersHookConfig} from "lib/juice-721-hook/src/structs/JBDeploy721TiersHookConfig.sol";
 import {REVStageConfig} from "lib/revnet-contracts/src/structs/REVStageConfig.sol";
@@ -53,21 +55,21 @@ contract Deploy is Script {
             revert("Invalid RPC / no juice contracts deployed on this network");
         }
 
-        address multiTerminalAddress = _getDeploymentAddress(
-            string.concat("lib/juice-contracts-v4/broadcast/Deploy.s.sol/", chain, "/run-latest.json"),
-            "JBMultiTerminal"
-        );
+        // address multiTerminalAddress = _getDeploymentAddress(
+        //     string.concat("lib/juice-contracts-v4/broadcast/Deploy.s.sol/", chain, "/run-latest.json"),
+        //     "JBMultiTerminal"
+        // );
 
         address rulesetsAddress = _getDeploymentAddress(
             string.concat("lib/juice-contracts-v4/broadcast/Deploy.s.sol/", chain, "/run-latest.json"), "JBRulesets"
         );
 
-        address buybackHookAddress = _getDeploymentAddress(
-            string.concat("lib/juice-buyback/broadcast/Deploy.s.sol/", chain, "/run-latest.json"), "JBBuybackHook"
-        );
+        // address buybackHookAddress = _getDeploymentAddress(
+        //     string.concat("lib/juice-buyback/broadcast/Deploy.s.sol/", chain, "/run-latest.json"), "JBBuybackHook"
+        // );
 
-        address nftHookAddress = _getDeploymentAddress(
-            string.concat("lib/juice-721-hook/broadcast/Deploy.s.sol/", chain, "/run-latest.json"), "JB721TiersHook"
+        address nftHookDeployerAddress = _getDeploymentAddress(
+            string.concat("lib/juice-721-hook/broadcast/Deploy.s.sol/", chain, "/run-latest.json"), "JB721TiersHookProjectDeployer"
         );
 
         address hookStoreAddress = _getDeploymentAddress(
@@ -75,182 +77,208 @@ contract Deploy is Script {
             "JB721TiersHookStore"
         );
 
-        address revCroptopDeployerAddress = _getDeploymentAddress(
-            string.concat("lib/revnet-contracts/broadcast/Deploy.s.sol/", chain, "/run-latest.json"),
-            "REVCroptopDeployer"
-        );
+        // address revCroptopDeployerAddress = _getDeploymentAddress(
+        //     string.concat("lib/revnet-contracts/broadcast/Deploy.s.sol/", chain, "/run-latest.json"),
+        //     "REVCroptopDeployer"
+        // );
 
         // Define constants
         string memory name = "Bannyverse";
         string memory symbol = "$BANNY";
-        string memory projectUri = "";
+        // string memory projectUri = "";
         string memory baseUri = "ipfs://";
         string memory contractUri = "";
         uint32 nativeCurrency = uint32(uint160(JBConstants.NATIVE_TOKEN));
         uint8 decimals = 18;
-        uint256 decimalMultiplier = 10 ** decimals;
-        uint40 oneDay = 86_400;
+        // uint256 decimalMultiplier = 10 ** decimals;
+        // uint40 oneDay = 86_400;
 
-        // The terminals that the project will accept funds through.
-        JBTerminalConfig[] memory terminalConfigurations = new JBTerminalConfig[](1);
-        address[] memory tokensToAccept = new address[](1);
-        // Accept the chain's native currency through the multi terminal.
-        tokensToAccept[0] = JBConstants.NATIVE_TOKEN;
-        terminalConfigurations[0] =
-            JBTerminalConfig({terminal: IJBTerminal(multiTerminalAddress), tokensToAccept: tokensToAccept});
+        // // The terminals that the project will accept funds through.
+        // JBTerminalConfig[] memory terminalConfigurations = new JBTerminalConfig[](1);
+        // address[] memory tokensToAccept = new address[](1);
+        // // Accept the chain's native currency through the multi terminal.
+        // tokensToAccept[0] = JBConstants.NATIVE_TOKEN;
+        // terminalConfigurations[0] =
+        //     JBTerminalConfig({terminal: IJBTerminal(multiTerminalAddress), tokensToAccept: tokensToAccept});
 
-        // The project's revnet configuration
-        REVStageConfig[] memory stageConfigurations = new REVStageConfig[](2);
-        uint40 start = uint40(block.timestamp);
-        stageConfigurations[0] = REVStageConfig({
-            startsAtOrAfter: start,
-            operatorSplitRate: uint16(JBConstants.MAX_RESERVED_RATE / 2),
-            initialIssuanceRate: uint112(1_000_000 * decimalMultiplier),
-            priceCeilingIncreaseFrequency: oneDay,
-            priceCeilingIncreasePercentage: uint32(JBConstants.MAX_DECAY_RATE / 20), // 5%
-            priceFloorTaxIntensity: uint16(JBConstants.MAX_REDEMPTION_RATE / 5) // 0.2
-        });
-        stageConfigurations[1] = REVStageConfig({
-            startsAtOrAfter: start + 86_400 * 28,
-            operatorSplitRate: uint16(JBConstants.MAX_RESERVED_RATE / 2),
-            initialIssuanceRate: uint112(100_000 * decimalMultiplier),
-            priceCeilingIncreaseFrequency: 7 * oneDay,
-            priceCeilingIncreasePercentage: uint16(JBConstants.MAX_DECAY_RATE / 100), // 1%
-            priceFloorTaxIntensity: uint16(JBConstants.MAX_REDEMPTION_RATE / 2) // 0.5
-        });
-        REVConfig memory revnetConfiguration = REVConfig({
-            baseCurrency: nativeCurrency,
-            premintTokenAmount: 80_000_000 * decimalMultiplier,
-            initialOperator: producer,
-            stageConfigurations: stageConfigurations
-        });
+        // // The project's revnet configuration
+        // REVStageConfig[] memory stageConfigurations = new REVStageConfig[](2);
+        // uint40 start = uint40(block.timestamp);
+        // stageConfigurations[0] = REVStageConfig({
+        //     startsAtOrAfter: start,
+        //     operatorSplitRate: uint16(JBConstants.MAX_RESERVED_RATE / 2),
+        //     initialIssuanceRate: uint112(1_000_000 * decimalMultiplier),
+        //     priceCeilingIncreaseFrequency: oneDay,
+        //     priceCeilingIncreasePercentage: uint32(JBConstants.MAX_DECAY_RATE / 20), // 5%
+        //     priceFloorTaxIntensity: uint16(JBConstants.MAX_REDEMPTION_RATE / 5) // 0.2
+        // });
+        // stageConfigurations[1] = REVStageConfig({
+        //     startsAtOrAfter: start + 86_400 * 28,
+        //     operatorSplitRate: uint16(JBConstants.MAX_RESERVED_RATE / 2),
+        //     initialIssuanceRate: uint112(100_000 * decimalMultiplier),
+        //     priceCeilingIncreaseFrequency: 7 * oneDay,
+        //     priceCeilingIncreasePercentage: uint16(JBConstants.MAX_DECAY_RATE / 100), // 1%
+        //     priceFloorTaxIntensity: uint16(JBConstants.MAX_REDEMPTION_RATE / 2) // 0.5
+        // });
+        // REVConfig memory revnetConfiguration = REVConfig({
+        //     baseCurrency: nativeCurrency,
+        //     premintTokenAmount: 80_000_000 * decimalMultiplier,
+        //     initialOperator: producer,
+        //     stageConfigurations: stageConfigurations
+        // });
 
-        // The project's buyback hook configuration.
-        REVBuybackPoolConfig[] memory buybackPoolConfigurations = new REVBuybackPoolConfig[](1);
-        buybackPoolConfigurations[0] = REVBuybackPoolConfig({
-            token: JBConstants.NATIVE_TOKEN,
-            fee: 500, //TODO
-            twapWindow: 2 days,
-            twapSlippageTolerance: 9000
-        });
-        REVBuybackHookConfig memory buybackHookConfiguration = REVBuybackHookConfig({
-            hook: IJBBuybackHook(buybackHookAddress),
-            poolConfigurations: buybackPoolConfigurations
-        });
+        // // The project's buyback hook configuration.
+        // REVBuybackPoolConfig[] memory buybackPoolConfigurations = new REVBuybackPoolConfig[](1);
+        // buybackPoolConfigurations[0] = REVBuybackPoolConfig({
+        //     token: JBConstants.NATIVE_TOKEN,
+        //     fee: 500, //TODO
+        //     twapWindow: 2 days,
+        //     twapSlippageTolerance: 9000
+        // });
+        // REVBuybackHookConfig memory buybackHookConfiguration = REVBuybackHookConfig({
+        //     hook: IJBBuybackHook(buybackHookAddress),
+        //     poolConfigurations: buybackPoolConfigurations
+        // });
 
-        // The project's NFT tiers.
-        JB721TierConfig[] memory tiers = new JB721TierConfig[](4);
-        tiers[0] = JB721TierConfig({
-            price: uint104(1 * decimalMultiplier),
-            initialSupply: 100,
-            votingUnits: 0,
-            reserveFrequency: 0,
-            reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(""),
-            category: 0,
-            allowOwnerMint: false,
-            useReserveBeneficiaryAsDefault: false,
-            transfersPausable: false,
-            useVotingUnits: false,
-            cannotBeRemoved: true
-        });
-        tiers[1] = JB721TierConfig({
-            price: uint104(1 * decimalMultiplier),
-            initialSupply: 100, //TODO
-            votingUnits: 0,
-            reserveFrequency: 0,
-            reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(""),
-            category: 0,
-            allowOwnerMint: false,
-            useReserveBeneficiaryAsDefault: false,
-            transfersPausable: false,
-            useVotingUnits: false,
-            cannotBeRemoved: true
-        });
-        tiers[2] = JB721TierConfig({
-            price: uint104(1 * decimalMultiplier),
-            initialSupply: 100,
-            votingUnits: 0,
-            reserveFrequency: 0,
-            reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(""),
-            category: 0,
-            allowOwnerMint: false,
-            useReserveBeneficiaryAsDefault: false,
-            transfersPausable: false,
-            useVotingUnits: false,
-            cannotBeRemoved: true
-        });
-        tiers[3] = JB721TierConfig({
-            price: uint104(1 * decimalMultiplier),
-            initialSupply: 100,
-            votingUnits: 0,
-            reserveFrequency: 0,
-            reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(""),
-            category: 0,
-            allowOwnerMint: false,
-            useReserveBeneficiaryAsDefault: false,
-            transfersPausable: false,
-            useVotingUnits: false,
-            cannotBeRemoved: true
-        });
+        // // The project's NFT tiers.
+        // JB721TierConfig[] memory tiers = new JB721TierConfig[](4);
+        // tiers[0] = JB721TierConfig({
+        //     price: uint104(1 * decimalMultiplier),
+        //     initialSupply: 100,
+        //     votingUnits: 0,
+        //     reserveFrequency: 0,
+        //     reserveBeneficiary: address(0),
+        //     encodedIPFSUri: bytes32(""),
+        //     category: 0,
+        //     allowOwnerMint: false,
+        //     useReserveBeneficiaryAsDefault: false,
+        //     transfersPausable: false,
+        //     useVotingUnits: false,
+        //     cannotBeRemoved: true
+        // });
+        // tiers[1] = JB721TierConfig({
+        //     price: uint104(1 * decimalMultiplier),
+        //     initialSupply: 100, //TODO
+        //     votingUnits: 0,
+        //     reserveFrequency: 0,
+        //     reserveBeneficiary: address(0),
+        //     encodedIPFSUri: bytes32(""),
+        //     category: 0,
+        //     allowOwnerMint: false,
+        //     useReserveBeneficiaryAsDefault: false,
+        //     transfersPausable: false,
+        //     useVotingUnits: false,
+        //     cannotBeRemoved: true
+        // });
+        // tiers[2] = JB721TierConfig({
+        //     price: uint104(1 * decimalMultiplier),
+        //     initialSupply: 100,
+        //     votingUnits: 0,
+        //     reserveFrequency: 0,
+        //     reserveBeneficiary: address(0),
+        //     encodedIPFSUri: bytes32(""),
+        //     category: 0,
+        //     allowOwnerMint: false,
+        //     useReserveBeneficiaryAsDefault: false,
+        //     transfersPausable: false,
+        //     useVotingUnits: false,
+        //     cannotBeRemoved: true
+        // });
+        // tiers[3] = JB721TierConfig({
+        //     price: uint104(1 * decimalMultiplier),
+        //     initialSupply: 100,
+        //     votingUnits: 0,
+        //     reserveFrequency: 0,
+        //     reserveBeneficiary: address(0),
+        //     encodedIPFSUri: bytes32(""),
+        //     category: 0,
+        //     allowOwnerMint: false,
+        //     useReserveBeneficiaryAsDefault: false,
+        //     transfersPausable: false,
+        //     useVotingUnits: false,
+        //     cannotBeRemoved: true
+        // });
 
-        // The project's allowed croptop posts.
-        AllowedPost[] memory allowedPosts = new AllowedPost[](1);
-        allowedPosts[0] = AllowedPost({
-            nft: nftHookAddress,
-            category: 100,
-            minimumPrice: 10 ** (decimals - 2),
-            minimumTotalSupply: 10,
-            maximumTotalSupply: 0,
-            allowedAddresses: new address[](0)
-        });
+        // // The project's allowed croptop posts.
+        // AllowedPost[] memory allowedPosts = new AllowedPost[](1);
+        // allowedPosts[0] = AllowedPost({
+        //     nft: nftHookAddress,
+        //     category: 100,
+        //     minimumPrice: 10 ** (decimals - 2),
+        //     minimumTotalSupply: 10,
+        //     maximumTotalSupply: 0,
+        //     allowedAddresses: new address[](0)
+        // });
 
         // Deploy it all.
         vm.startBroadcast();
 
         // Deploy the Banny URI Resolver.
-        Banny721TokenUriResolver resolver = new Banny721TokenUriResolver(IJB721TiersHook(nftHookAddress), msg.sender);
+        Banny721TokenUriResolver resolver = new Banny721TokenUriResolver(msg.sender);
 
-        // Deploy the $BANNY Revnet.
-        REVCroptopDeployer(revCroptopDeployerAddress).deployCroptopRevnetFor({
-            name: name,
-            symbol: symbol,
-            projectUri: projectUri,
-            configuration: revnetConfiguration,
-            terminalConfigurations: terminalConfigurations,
-            buybackHookConfiguration: buybackHookConfiguration,
-            hookConfiguration: REVDeploy721TiersHookConfig({
-                baseline721HookConfiguration: JBDeploy721TiersHookConfig({
-                    name: name,
-                    symbol: symbol,
-                    rulesets: IJBRulesets(rulesetsAddress),
-                    baseUri: baseUri,
-                    tokenUriResolver: IJB721TokenUriResolver(address(resolver)),
-                    contractUri: contractUri,
-                    tiersConfig: JB721InitTiersConfig({
-                        tiers: tiers,
-                        currency: nativeCurrency,
-                        decimals: decimals,
-                        prices: IJBPrices(address(0))
-                    }),
-                    reserveBeneficiary: address(0),
-                    store: IJB721TiersHookStore(hookStoreAddress),
-                    flags: JB721TiersHookFlags({
-                        noNewTiersWithReserves: false,
-                        noNewTiersWithVotes: false,
-                        noNewTiersWithOwnerMinting: false,
-                        preventOverspending: false
-                    })
+        IJB721TiersHook hook = IJB721TiersHookDeployer(nftHookDeployerAddress).deployHookFor({
+            projectId: 0,
+            deployTiersHookConfig: JBDeploy721TiersHookConfig({
+                name: name,
+                symbol: symbol,
+                rulesets: IJBRulesets(rulesetsAddress),
+                baseUri: baseUri,
+                tokenUriResolver: IJB721TokenUriResolver(address(resolver)),
+                contractUri: contractUri,
+                tiersConfig: JB721InitTiersConfig({
+                    tiers: new JB721TierConfig[](0),
+                    currency: nativeCurrency,
+                    decimals: decimals,
+                    prices: IJBPrices(address(0))
                 }),
-                owner: producer
-            }),
-            otherPayHooksSpecifications: new JBPayHookSpecification[](0),
-            extraHookMetadata: 0,
-            allowedPosts: allowedPosts
+                reserveBeneficiary: address(0),
+                store: IJB721TiersHookStore(hookStoreAddress),
+                flags: JB721TiersHookFlags({
+                    noNewTiersWithReserves: false,
+                    noNewTiersWithVotes: false,
+                    noNewTiersWithOwnerMinting: false,
+                    preventOverspending: false
+                })
+            })
         });
+
+        // // Deploy the $BANNY Revnet.
+        // REVCroptopDeployer(revCroptopDeployerAddress).deployCroptopRevnetFor({
+        //     name: name,
+        //     symbol: symbol,
+        //     projectUri: projectUri,
+        //     configuration: revnetConfiguration,
+        //     terminalConfigurations: terminalConfigurations,
+        //     buybackHookConfiguration: buybackHookConfiguration,
+        //     hookConfiguration: REVDeploy721TiersHookConfig({
+        //         baseline721HookConfiguration: JBDeploy721TiersHookConfig({
+        //             name: name,
+        //             symbol: symbol,
+        //             rulesets: IJBRulesets(rulesetsAddress),
+        //             baseUri: baseUri,
+        //             tokenUriResolver: IJB721TokenUriResolver(address(resolver)),
+        //             contractUri: contractUri,
+        //             tiersConfig: JB721InitTiersConfig({
+        //                 tiers: tiers,
+        //                 currency: nativeCurrency,
+        //                 decimals: decimals,
+        //                 prices: IJBPrices(address(0))
+        //             }),
+        //             reserveBeneficiary: address(0),
+        //             store: IJB721TiersHookStore(hookStoreAddress),
+        //             flags: JB721TiersHookFlags({
+        //                 noNewTiersWithReserves: false,
+        //                 noNewTiersWithVotes: false,
+        //                 noNewTiersWithOwnerMinting: false,
+        //                 preventOverspending: false
+        //             })
+        //         }),
+        //         owner: producer
+        //     }),
+        //     otherPayHooksSpecifications: new JBPayHookSpecification[](0),
+        //     extraHookMetadata: 0,
+        //     allowedPosts: allowedPosts
+        // });
 
         vm.stopBroadcast();
     }
