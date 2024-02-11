@@ -268,9 +268,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
 
     /// @notice The owner of this contract can store SVG files for tier IDs.
     /// @param tierId The ID of the tier having an SVG stored.
-    /// @param svgContents The svg contents being stored, not including the parent <svg></svg> element or the <g></g>
-    /// element. (i.e. <path
-    /// .../><path .../>)
+    /// @param svgContents The svg contents being stored, not including the parent <svg></svg> element.
     function setSvgContentsOf(uint256 tierId, string calldata svgContents) external onlyOwner {
         svgContentsOf[tierId] = svgContents;
     }
