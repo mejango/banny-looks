@@ -69,7 +69,7 @@ contract Deploy is Script {
         // );
 
         address nftHookDeployerAddress = _getDeploymentAddress(
-            string.concat("lib/juice-721-hook/broadcast/Deploy.s.sol/", chain, "/run-latest.json"), "JB721TiersHookProjectDeployer"
+            string.concat("lib/juice-721-hook/broadcast/Deploy.s.sol/", chain, "/run-latest.json"), "JB721TiersHookDeployer"
         );
 
         address hookStoreAddress = _getDeploymentAddress(
@@ -217,7 +217,7 @@ contract Deploy is Script {
         Banny721TokenUriResolver resolver = new Banny721TokenUriResolver(msg.sender);
 
         IJB721TiersHook hook = IJB721TiersHookDeployer(nftHookDeployerAddress).deployHookFor({
-            projectId: 0,
+            projectId: 1,
             deployTiersHookConfig: JBDeploy721TiersHookConfig({
                 name: name,
                 symbol: symbol,
