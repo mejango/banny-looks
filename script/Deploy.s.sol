@@ -69,7 +69,8 @@ contract Deploy is Script {
         // );
 
         address nftHookDeployerAddress = _getDeploymentAddress(
-            string.concat("lib/juice-721-hook/broadcast/Deploy.s.sol/", chain, "/run-latest.json"), "JB721TiersHookDeployer"
+            string.concat("lib/juice-721-hook/broadcast/Deploy.s.sol/", chain, "/run-latest.json"),
+            "JB721TiersHookDeployer"
         );
 
         address hookStoreAddress = _getDeploymentAddress(
@@ -90,7 +91,8 @@ contract Deploy is Script {
         string memory contractUri = "";
         uint32 nativeCurrency = uint32(uint160(JBConstants.NATIVE_TOKEN));
         uint8 decimals = 18;
-        // uint256 decimalMultiplier = 10 ** decimals;
+        uint256 decimalMultiplier = 10 ** decimals;
+        uint24 nakedBannyCategory = 0;
         // uint40 oneDay = 86_400;
 
         // // The terminals that the project will accept funds through.
@@ -140,64 +142,65 @@ contract Deploy is Script {
         //     poolConfigurations: buybackPoolConfigurations
         // });
 
-        // // The project's NFT tiers.
-        // JB721TierConfig[] memory tiers = new JB721TierConfig[](4);
-        // tiers[0] = JB721TierConfig({
-        //     price: uint104(1 * decimalMultiplier),
-        //     initialSupply: 100,
-        //     votingUnits: 0,
-        //     reserveFrequency: 0,
-        //     reserveBeneficiary: address(0),
-        //     encodedIPFSUri: bytes32(""),
-        //     category: 0,
-        //     allowOwnerMint: false,
-        //     useReserveBeneficiaryAsDefault: false,
-        //     transfersPausable: false,
-        //     useVotingUnits: false,
-        //     cannotBeRemoved: true
-        // });
-        // tiers[1] = JB721TierConfig({
-        //     price: uint104(1 * decimalMultiplier),
-        //     initialSupply: 100, //TODO
-        //     votingUnits: 0,
-        //     reserveFrequency: 0,
-        //     reserveBeneficiary: address(0),
-        //     encodedIPFSUri: bytes32(""),
-        //     category: 0,
-        //     allowOwnerMint: false,
-        //     useReserveBeneficiaryAsDefault: false,
-        //     transfersPausable: false,
-        //     useVotingUnits: false,
-        //     cannotBeRemoved: true
-        // });
-        // tiers[2] = JB721TierConfig({
-        //     price: uint104(1 * decimalMultiplier),
-        //     initialSupply: 100,
-        //     votingUnits: 0,
-        //     reserveFrequency: 0,
-        //     reserveBeneficiary: address(0),
-        //     encodedIPFSUri: bytes32(""),
-        //     category: 0,
-        //     allowOwnerMint: false,
-        //     useReserveBeneficiaryAsDefault: false,
-        //     transfersPausable: false,
-        //     useVotingUnits: false,
-        //     cannotBeRemoved: true
-        // });
-        // tiers[3] = JB721TierConfig({
-        //     price: uint104(1 * decimalMultiplier),
-        //     initialSupply: 100,
-        //     votingUnits: 0,
-        //     reserveFrequency: 0,
-        //     reserveBeneficiary: address(0),
-        //     encodedIPFSUri: bytes32(""),
-        //     category: 0,
-        //     allowOwnerMint: false,
-        //     useReserveBeneficiaryAsDefault: false,
-        //     transfersPausable: false,
-        //     useVotingUnits: false,
-        //     cannotBeRemoved: true
-        // });
+        // The project's NFT tiers.
+        JB721TierConfig[] memory tiers = new JB721TierConfig[](4);
+
+        tiers[0] = JB721TierConfig({
+            price: uint104(1 * decimalMultiplier),
+            initialSupply: 100,
+            votingUnits: 0,
+            reserveFrequency: 0,
+            reserveBeneficiary: address(0),
+            encodedIPFSUri: bytes32(""),
+            category: nakedBannyCategory,
+            allowOwnerMint: false,
+            useReserveBeneficiaryAsDefault: false,
+            transfersPausable: false,
+            useVotingUnits: false,
+            cannotBeRemoved: true
+        });
+        tiers[1] = JB721TierConfig({
+            price: uint104(1 * (decimalMultiplier - 1)),
+            initialSupply: 1000,
+            votingUnits: 0,
+            reserveFrequency: 0,
+            reserveBeneficiary: address(0),
+            encodedIPFSUri: bytes32(""),
+            category: nakedBannyCategory,
+            allowOwnerMint: false,
+            useReserveBeneficiaryAsDefault: false,
+            transfersPausable: false,
+            useVotingUnits: false,
+            cannotBeRemoved: true
+        });
+        tiers[2] = JB721TierConfig({
+            price: uint104(1 * (decimalMultiplier - 2)),
+            initialSupply: 10_000,
+            votingUnits: 0,
+            reserveFrequency: 0,
+            reserveBeneficiary: address(0),
+            encodedIPFSUri: bytes32(""),
+            category: nakedBannyCategory,
+            allowOwnerMint: false,
+            useReserveBeneficiaryAsDefault: false,
+            transfersPausable: false,
+            useVotingUnits: false,
+            cannotBeRemoved: true
+        });
+        tiers[3] = JB721TierConfig({
+            price: uint104(1 * (decimalMultiplier - 3)),
+            initialSupply: 999_999_999, // MAX
+            votingUnits: 0,
+            reserveFrequency: 0,
+            reserveBeneficiary: address(0),
+            encodedIPFSUri: bytes32(""),
+            category: nakedBannyCategory,
+            allowOwnerMint: false,
+            useReserveBeneficiaryAsDefault: false,
+            transfersPausable: false,
+            useVotingUnits: false,
+            cannotBeRemoved: true
+        });
 
         // // The project's allowed croptop posts.
         // AllowedPost[] memory allowedPosts = new AllowedPost[](1);
@@ -226,7 +229,7 @@ contract Deploy is Script {
                 tokenUriResolver: IJB721TokenUriResolver(address(resolver)),
                 contractUri: contractUri,
                 tiersConfig: JB721InitTiersConfig({
-                    tiers: new JB721TierConfig[](0),
+                    tiers: tiers,
                     currency: nativeCurrency,
                     decimals: decimals,
                     prices: IJBPrices(address(0))
