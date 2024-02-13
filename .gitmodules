@@ -7,6 +7,9 @@
 [submodule "lib/juice-721-hook"]
 	path = lib/juice-721-hook
 	url = https://github.com/Bananapus/juice-721-hook
+[submodule "lib/juice-buyback-hook"]
+	path = lib/juice-buyback-hook
+	url = https://github.com/Bananapus/juice-buyback-hook
 [submodule "lib/revnet-contracts"]
 	path = lib/revnet-contracts
 	url = https://github.com/rev-net/revnet-contracts
@@ -16,15 +19,9 @@
 [submodule "lib/juice-ownable"]
 	path = lib/juice-ownable
 	url = https://github.com/Bananapus/juice-ownable
-[submodule "lib/juice-buyback"]
-	path = lib/juice-buyback
-	url = https://github.com/Bananapus/juice-buyback
 [submodule "lib/juice-contracts-v4"]
 	path = lib/juice-contracts-v4
 	url = https://github.com/Bananapus/juice-contracts-v4
 [submodule "lib/juice-swapterminal"]
 	path = lib/juice-swapterminal
 	url = https://github.com/Bananapus/juice-swapterminal
-[submodule "lib/juice-buyback-hook"]
-	path = lib/juice-buyback-hook
-	url = https://github.com/Bananapus/juice-buyback-hook
