@@ -25,3 +25,6 @@
 [submodule "lib/juice-swapterminal"]
 	path = lib/juice-swapterminal
 	url = https://github.com/Bananapus/juice-swapterminal
+[submodule "lib/juice-buyback-hook"]
+	path = lib/juice-buyback-hook
+	url = https://github.com/Bananapus/juice-buyback-hook
