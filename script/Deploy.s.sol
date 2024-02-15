@@ -94,7 +94,7 @@ contract Deploy is Script {
 
         address optimismSuckerDeployerAddress = _getDeploymentAddress(
             string.concat("node_modules/@bananapus/suckers/broadcast/Deploy.s.sol/", chain, "/run-latest.json"),
-            "BPOptimismSucker"
+            "BPOptimismSuckerDeployer"
         );
 
         address revCroptopDeployerAddress = _getDeploymentAddress(
@@ -113,7 +113,7 @@ contract Deploy is Script {
         uint256 decimalMultiplier = 10 ** decimals;
         uint24 nakedBannyCategory = 0;
         uint40 oneDay = 86_400;
-        uint40 start = uint40(block.timestamp);
+        uint40 start = uint40(block.timestamp + 900); // 15 minutes from now
 
         // The terminals that the project will accept funds through.
         JBTerminalConfig[] memory terminalConfigurations = new JBTerminalConfig[](1);
@@ -155,7 +155,7 @@ contract Deploy is Script {
         REVBuybackPoolConfig[] memory buybackPoolConfigurations = new REVBuybackPoolConfig[](1);
         buybackPoolConfigurations[0] = REVBuybackPoolConfig({
             token: JBConstants.NATIVE_TOKEN,
-            fee: 500, //TODO
+            fee: 10000,
             twapWindow: 2 days,
             twapSlippageTolerance: 9000
         });
@@ -284,6 +284,7 @@ contract Deploy is Script {
         // Specify all sucker deployments.
         REVSuckerDeploymentConfig memory suckerDeploymentConfiguration =
             REVSuckerDeploymentConfig({deployerConfigurations: suckerDeployerConfigurations, salt: suckerSalt});
+
         // Deploy the $BANNY Revnet.
         REVCroptopDeployer(revCroptopDeployerAddress).deployCroptopRevnetFor({
             name: name,
