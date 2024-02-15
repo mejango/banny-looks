@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.23;
 
-import {Ownable} from "lib/openzeppelin-contracts/contracts/access/Ownable.sol";
-import {IJB721TokenUriResolver} from "lib/juice-721-hook/src/interfaces/IJB721TokenUriResolver.sol";
-import {IERC721} from "lib/juice-721-hook/src/abstract/ERC721.sol";
-import {IJB721TiersHook} from "lib/juice-721-hook/src/interfaces/IJB721TiersHook.sol";
-import {JB721Tier} from "lib/juice-721-hook/src/structs/JB721Tier.sol";
-import {JBIpfsDecoder} from "lib/juice-721-hook/src/libraries/JBIpfsDecoder.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {IJB721TokenUriResolver} from "@bananapus/721-hook/src/interfaces/IJB721TokenUriResolver.sol";
+import {IERC721} from "@bananapus/721-hook/src/abstract/ERC721.sol";
+import {IJB721TiersHook} from "@bananapus/721-hook/src/interfaces/IJB721TiersHook.sol";
+import {JB721Tier} from "@bananapus/721-hook/src/structs/JB721Tier.sol";
+import {JBIpfsDecoder} from "@bananapus/721-hook/src/libraries/JBIpfsDecoder.sol";
 
 /// @notice Banny asset manager. Stores and shows Naked Bannys in worlds with outfits on.
 contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
@@ -77,12 +77,6 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
     /// @dev Nakes Banny's will only be shown with a world currently owned by the owner of the Naked Banny.
     /// @custom:param nakedBannyId The ID of the Naked Banny of the world.
     mapping(uint256 nakedBannyId => uint256) internal _attachedWorldIdOf;
-
-    /// @notice The world currently attached to each Naked Banny, owned by the naked Banny's owner.
-    /// @param hook The address of the hook storing the assets.
-    /// @param nakedBannyId The ID of the naked banny shown in the associated world.
-    /// @return worldId The world attached to the Naked Banny.
-    function worldIdOf(address hook, uint256 nakedBannyId) public view returns (uint256 worldId) {}
 
     /// @notice The assets currently attached to each Naked Banny, owned by the naked Banny's owner.
     /// @param hook The address of the hook storing the assets.
