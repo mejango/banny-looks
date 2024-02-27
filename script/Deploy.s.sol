@@ -19,15 +19,17 @@ import {JB721TiersHookFlags} from "@bananapus/721-hook/src/structs/JB721TiersHoo
 import {JBDeploy721TiersHookConfig} from "@bananapus/721-hook/src/structs/JBDeploy721TiersHookConfig.sol";
 import {JB721InitTiersConfig} from "@bananapus/721-hook/src/structs/JB721InitTiersConfig.sol";
 import {JBDeploy721TiersHookConfig} from "@bananapus/721-hook/src/structs/JBDeploy721TiersHookConfig.sol";
-import {BPTokenConfig} from "@bananapus/suckers/src/structs/BPTokenConfig.sol";
+import {BPTokenMapping} from "@bananapus/suckers/src/structs/BPTokenMapping.sol";
+import {BPSuckerDeployerConfig} from "@bananapus/suckers/src/structs/BPSuckerDeployerConfig.sol";
 import {IBPSuckerDeployer} from "@bananapus/suckers/src/interfaces/IBPSuckerDeployer.sol";
 import {REVStageConfig} from "@rev-net/core/src/structs/REVStageConfig.sol";
 import {REVBuybackHookConfig} from "@rev-net/core/src/structs/REVBuybackHookConfig.sol";
 import {REVDeploy721TiersHookConfig} from "@rev-net/core/src/structs/REVDeploy721TiersHookConfig.sol";
 import {REVBuybackPoolConfig} from "@rev-net/core/src/structs/REVBuybackPoolConfig.sol";
+import {REVDescription} from "@rev-net/core/src/structs/REVDescription.sol";
 import {REVConfig} from "@rev-net/core/src/structs/REVConfig.sol";
+import {REVCroptopAllowedPost} from "@rev-net/core/src/structs/REVCroptopAllowedPost.sol";
 import {REVCroptopDeployer} from "@rev-net/core/src/REVCroptopDeployer.sol";
-import {REVSuckerDeployerConfig} from "@rev-net/core/src/structs/REVSuckerDeployerConfig.sol";
 import {REVSuckerDeploymentConfig} from "@rev-net/core/src/structs/REVSuckerDeploymentConfig.sol";
 import {CTAllowedPost} from "@croptop/core/src/structs/CTAllowedPost.sol";
 
@@ -38,17 +40,20 @@ contract Deploy is Script {
         // We need some pseudo-random bytes32.
         bytes32 suckerSalt = keccak256(abi.encode(block.number, block.timestamp));
 
+        // More pseudo-random bytes32.
+        bytes32 tokenSalt = keccak256(abi.encode(block.timestamp, block.number));
+
         // Deploy to sepolia
-        _deployTo({rpc: "https://rpc.ankr.com/eth_sepolia", suckerSalt: suckerSalt});
+        _deployTo({rpc: "https://rpc.ankr.com/eth_sepolia", suckerSalt: suckerSalt, tokenSalt: tokenSalt});
 
         // Deploy to OP sepolia
-        _deployTo({rpc: "https://rpc.ankr.com/optimism_sepolia", suckerSalt: suckerSalt});
+        // _deployTo({rpc: "https://rpc.ankr.com/optimism_sepolia", suckerSalt: suckerSalt, tokenSalt: tokenSalt});
     }
 
-    function _deployTo(string memory rpc, bytes32 suckerSalt) private {
-        vm.createSelectFork(rpc);
+    function _deployTo(string memory rpc, bytes32 tokenSalt, bytes32 suckerSalt) private {
+        // vm.createSelectFork(rpc);
         uint256 chainId = block.chainid;
-        address operator;
+        address operator = 0x961d4191965C49537c88F764D88318872CE405bE;
         string memory chain;
         // Ethereun Mainnet
         if (chainId == 1) {
@@ -92,10 +97,7 @@ contract Deploy is Script {
             "JB721TiersHookStore"
         );
 
-        address optimismSuckerDeployerAddress = _getDeploymentAddress(
-            string.concat("node_modules/@bananapus/suckers/broadcast/Deploy.s.sol/", chain, "/run-latest.json"),
-            "BPOptimismSuckerDeployer"
-        );
+        address optimismSuckerDeployerAddress = 0xDBA108aE1738F456A0685f4C0aE30532385C4c24;
 
         address revCroptopDeployerAddress = _getDeploymentAddress(
             string.concat("node_modules/@rev-net/core/broadcast/Deploy.s.sol/", chain, "/run-latest.json"),
@@ -104,7 +106,7 @@ contract Deploy is Script {
 
         // Define constants
         string memory name = "Bannyverse";
-        string memory symbol = "$BANNY";
+        string memory symbol = "BANNY";
         string memory projectUri = "";
         string memory baseUri = "ipfs://";
         string memory contractUri = "";
@@ -113,7 +115,7 @@ contract Deploy is Script {
         uint256 decimalMultiplier = 10 ** decimals;
         uint24 nakedBannyCategory = 0;
         uint40 oneDay = 86_400;
-        uint40 start = uint40(block.timestamp + 900); // 15 minutes from now
+        uint40 start = uint40(block.timestamp); // 15 minutes from now
 
         // The terminals that the project will accept funds through.
         JBTerminalConfig[] memory terminalConfigurations = new JBTerminalConfig[](1);
@@ -225,71 +227,65 @@ contract Deploy is Script {
         });
 
         // The project's allowed croptop posts.
-        CTAllowedPost[] memory allowedPosts = new CTAllowedPost[](3);
-        allowedPosts[0] = CTAllowedPost({
-            nft: address(0),
+        REVCroptopAllowedPost[] memory allowedPosts = new REVCroptopAllowedPost[](4);
+        allowedPosts[0] = REVCroptopAllowedPost({
             category: 100,
             minimumPrice: 10 ** (decimals - 3),
             minimumTotalSupply: 10_000,
-            maximumTotalSupply: 0,
+            maximumTotalSupply: 999_999_999,
             allowedAddresses: new address[](0)
         });
-        allowedPosts[1] = CTAllowedPost({
-            nft: address(0),
+        allowedPosts[1] = REVCroptopAllowedPost({
             category: 101,
             minimumPrice: 10 ** (decimals - 1),
             minimumTotalSupply: 100,
-            maximumTotalSupply: 0,
+            maximumTotalSupply: 999_999_999,
             allowedAddresses: new address[](0)
         });
-        allowedPosts[2] = CTAllowedPost({
-            nft: address(0),
+        allowedPosts[2] = REVCroptopAllowedPost({
             category: 102,
             minimumPrice: 10 ** decimals,
             minimumTotalSupply: 10,
-            maximumTotalSupply: 0,
+            maximumTotalSupply: 999_999_999,
             allowedAddresses: new address[](0)
         });
-        allowedPosts[3] = CTAllowedPost({
-            nft: address(0),
+        allowedPosts[3] = REVCroptopAllowedPost({
             category: 103,
             minimumPrice: 10 ** (decimals + 2),
             minimumTotalSupply: 10,
-            maximumTotalSupply: 0,
+            maximumTotalSupply: 999_999_999,
             allowedAddresses: new address[](0)
         });
 
+        // Organize the instructions for how this project will connect to other chains.
+        BPTokenMapping[] memory tokenMappings = new BPTokenMapping[](0);
+        // tokenMappings[0] = BPTokenMapping({
+        //     localToken: JBConstants.NATIVE_TOKEN,
+        //     remoteToken: JBConstants.NATIVE_TOKEN,
+        //     minGas: 200_000,
+        //     minBridgeAmount: 0.01 ether
+        // });
+
+        // Specify the optimism sucker.
+        BPSuckerDeployerConfig[] memory suckerDeployerConfigurations = new BPSuckerDeployerConfig[](0);
+        // suckerDeployerConfigurations[0] = BPSuckerDeployerConfig({
+        //     deployer: IBPSuckerDeployer(optimismSuckerDeployerAddress),
+        //     mappings: tokenMappings
+        // });
+
+        // Specify all sucker deployments.
+        REVSuckerDeploymentConfig memory suckerDeploymentConfiguration =
+            REVSuckerDeploymentConfig({deployerConfigurations: suckerDeployerConfigurations, salt: suckerSalt});
         // Deploy it all.
         vm.startBroadcast();
 
         // Deploy the Banny URI Resolver.
         Banny721TokenUriResolver resolver = new Banny721TokenUriResolver(msg.sender);
 
-        // Organize the instructions for how this project will connect to other chains.
-        BPTokenConfig[] memory tokenConfigurations = new BPTokenConfig[](0);
-        tokenConfigurations[0] = BPTokenConfig({
-            localToken: JBConstants.NATIVE_TOKEN,
-            remoteToken: JBConstants.NATIVE_TOKEN,
-            minGas: 200_000,
-            minBridgeAmount: 0.01 ether
-        });
-
-        // Specify the optimism sucker.
-        REVSuckerDeployerConfig[] memory suckerDeployerConfigurations = new REVSuckerDeployerConfig[](1);
-        suckerDeployerConfigurations[0] = REVSuckerDeployerConfig({
-            deployer: IBPSuckerDeployer(optimismSuckerDeployerAddress),
-            tokenConfigurations: tokenConfigurations
-        });
-
-        // Specify all sucker deployments.
-        REVSuckerDeploymentConfig memory suckerDeploymentConfiguration =
-            REVSuckerDeploymentConfig({deployerConfigurations: suckerDeployerConfigurations, salt: suckerSalt});
 
         // Deploy the $BANNY Revnet.
-        REVCroptopDeployer(revCroptopDeployerAddress).deployCroptopRevnetFor({
-            name: name,
-            symbol: symbol,
-            projectUri: projectUri,
+        REVCroptopDeployer(revCroptopDeployerAddress).deployCroptopRevnetWith({
+            description: REVDescription(name, symbol, projectUri, tokenSalt),
             configuration: revnetConfiguration,
             terminalConfigurations: terminalConfigurations,
             buybackHookConfiguration: buybackHookConfiguration,
@@ -317,7 +313,9 @@ contract Deploy is Script {
                         preventOverspending: false
                     })
                 }),
-                owner: operator
+                operatorCanAdjustTiers: true,
+                operatorCanUpdateMetadata: true,
+                operatorCanMint: true
             }),
             otherPayHooksSpecifications: new JBPayHookSpecification[](0),
             extraHookMetadata: 0,
