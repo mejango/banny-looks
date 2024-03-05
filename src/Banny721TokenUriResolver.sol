@@ -2,6 +2,8 @@
 pragma solidity 0.8.23;
 
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {Context} from "@openzeppelin/contracts/utils/Context.sol";
+import {ERC2771Context} from "@openzeppelin/contracts/metatx/ERC2771Context.sol";
 import {IJB721TokenUriResolver} from "@bananapus/721-hook/src/interfaces/IJB721TokenUriResolver.sol";
 import {IERC721} from "@bananapus/721-hook/src/abstract/ERC721.sol";
 import {IJB721TiersHook} from "@bananapus/721-hook/src/interfaces/IJB721TiersHook.sol";
@@ -9,7 +11,7 @@ import {JB721Tier} from "@bananapus/721-hook/src/structs/JB721Tier.sol";
 import {JBIpfsDecoder} from "@bananapus/721-hook/src/libraries/JBIpfsDecoder.sol";
 
 /// @notice Banny asset manager. Stores and shows Naked Bannys in worlds with outfits on.
-contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
+contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Ownable {
     event DecorateBanny(address indexed hook, uint256 indexed nakenBannyId, uint256 worldId, uint256[] outfitIds, address caller);
     event SetSvgContents(uint256 indexed tierId, bytes32 indexed svgHash, string svgContents, address caller);
     event SetSvgHash(uint256 indexed tierId, bytes32 indexed svgHash, address caller);
@@ -236,7 +238,8 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
     }
     
     /// @param owner The owner allowed to add SVG files that correspond to tier IDs.
-    constructor(address owner) Ownable(owner) {}
+    /// @param trustedForwarder The trusted forwarder for the ERC2771Context.
+    constructor(address owner, address trustedForwarder) Ownable(owner) ERC2771Context(trustedForwarder) {}
 
     /// @notice Dress your Naked Banny with outfits.
     /// @dev The caller must own the naked banny being dressed and all outfits being worn.
@@ -556,5 +559,26 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
                 contents = string.concat(contents, svgContentsOf(hook, outfitId));
             }
         }
+    }
+
+    //*********************************************************************//
+    // ---------------------- internal transactions ---------------------- //
+    //*********************************************************************//
+
+    /// @notice Returns the sender, prefered to use over `msg.sender`
+    /// @return sender the sender address of this call.
+    function _msgSender() internal view override(ERC2771Context, Context) returns (address sender) {
+        return ERC2771Context._msgSender();
+    }
+
+    /// @notice Returns the calldata, prefered to use over `msg.data`
+    /// @return calldata the `msg.data` of this call
+    function _msgData() internal view override(ERC2771Context, Context) returns (bytes calldata) {
+        return ERC2771Context._msgData();
+    }
+
+    /// @dev ERC-2771 specifies the context as being a single address (20 bytes).
+    function _contextSuffixLength() internal view virtual override(ERC2771Context, Context) returns (uint256) {
+        return super._contextSuffixLength();
     }
 }

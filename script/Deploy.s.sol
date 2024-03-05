@@ -54,24 +54,31 @@ contract Deploy is Script {
         vm.createSelectFork(rpc);
         uint256 chainId = block.chainid;
         address operator = 0x961d4191965C49537c88F764D88318872CE405bE;
+        address trustedForwarder;
         string memory chain;
         // Ethereun Mainnet
         if (chainId == 1) {
+            trustedForwarder = 0xB2b5841DBeF766d4b521221732F9B618fCf34A87;
             chain = "1";
             // Ethereum Sepolia
         } else if (chainId == 11_155_111) {
+            trustedForwarder = 0xB2b5841DBeF766d4b521221732F9B618fCf34A87;
             chain = "11155111";
             // Optimism Mainnet
         } else if (chainId == 420) {
+            trustedForwarder = 0xB2b5841DBeF766d4b521221732F9B618fCf34A87;
             chain = "420";
             // Optimism Sepolia
         } else if (chainId == 11_155_420) {
+            trustedForwarder = 0xB2b5841DBeF766d4b521221732F9B618fCf34A87;
             chain = "11155420";
             // Polygon Mainnet
         } else if (chainId == 137) {
+            trustedForwarder = 0xB2b5841DBeF766d4b521221732F9B618fCf34A87;
             chain = "137";
             // Polygon Mumbai
         } else if (chainId == 80_001) {
+            trustedForwarder = 0xB2b5841DBeF766d4b521221732F9B618fCf34A87;
             chain = "80001";
         } else {
             revert("Invalid RPC / no juice contracts deployed on this network");
@@ -280,7 +287,7 @@ contract Deploy is Script {
         vm.startBroadcast();
 
         // Deploy the Banny URI Resolver.
-        Banny721TokenUriResolver resolver = new Banny721TokenUriResolver(msg.sender);
+        Banny721TokenUriResolver resolver = new Banny721TokenUriResolver(msg.sender, trustedForwarder);
 
         // Deploy the $BANNY Revnet.
         REVCroptopDeployer(revCroptopDeployerAddress).deployCroptopRevnetWith({
