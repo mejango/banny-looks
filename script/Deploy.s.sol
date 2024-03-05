@@ -47,11 +47,11 @@ contract Deploy is Script {
         _deployTo({rpc: "https://rpc.ankr.com/eth_sepolia", suckerSalt: suckerSalt, tokenSalt: tokenSalt});
 
         // Deploy to OP sepolia
-        // _deployTo({rpc: "https://rpc.ankr.com/optimism_sepolia", suckerSalt: suckerSalt, tokenSalt: tokenSalt});
+        _deployTo({rpc: "https://rpc.ankr.com/optimism_sepolia", suckerSalt: suckerSalt, tokenSalt: tokenSalt});
     }
 
     function _deployTo(string memory rpc, bytes32 tokenSalt, bytes32 suckerSalt) private {
-        // vm.createSelectFork(rpc);
+        vm.createSelectFork(rpc);
         uint256 chainId = block.chainid;
         address operator = 0x961d4191965C49537c88F764D88318872CE405bE;
         string memory chain;
@@ -157,7 +157,7 @@ contract Deploy is Script {
         REVBuybackPoolConfig[] memory buybackPoolConfigurations = new REVBuybackPoolConfig[](1);
         buybackPoolConfigurations[0] = REVBuybackPoolConfig({
             token: JBConstants.NATIVE_TOKEN,
-            fee: 10000,
+            fee: 10_000,
             twapWindow: 2 days,
             twapSlippageTolerance: 9000
         });
@@ -258,20 +258,20 @@ contract Deploy is Script {
         });
 
         // Organize the instructions for how this project will connect to other chains.
-        BPTokenMapping[] memory tokenMappings = new BPTokenMapping[](0);
-        // tokenMappings[0] = BPTokenMapping({
-        //     localToken: JBConstants.NATIVE_TOKEN,
-        //     remoteToken: JBConstants.NATIVE_TOKEN,
-        //     minGas: 200_000,
-        //     minBridgeAmount: 0.01 ether
-        // });
+        BPTokenMapping[] memory tokenMappings = new BPTokenMapping[](1);
+        tokenMappings[0] = BPTokenMapping({
+            localToken: JBConstants.NATIVE_TOKEN,
+            remoteToken: JBConstants.NATIVE_TOKEN,
+            minGas: 200_000,
+            minBridgeAmount: 0.01 ether
+        });
 
         // Specify the optimism sucker.
-        BPSuckerDeployerConfig[] memory suckerDeployerConfigurations = new BPSuckerDeployerConfig[](0);
-        // suckerDeployerConfigurations[0] = BPSuckerDeployerConfig({
-        //     deployer: IBPSuckerDeployer(optimismSuckerDeployerAddress),
-        //     mappings: tokenMappings
-        // });
+        BPSuckerDeployerConfig[] memory suckerDeployerConfigurations = new BPSuckerDeployerConfig[](1);
+        suckerDeployerConfigurations[0] = BPSuckerDeployerConfig({
+            deployer: IBPSuckerDeployer(optimismSuckerDeployerAddress),
+            mappings: tokenMappings
+        });
 
         // Specify all sucker deployments.
         REVSuckerDeploymentConfig memory suckerDeploymentConfiguration =
@@ -281,7 +281,6 @@ contract Deploy is Script {
 
         // Deploy the Banny URI Resolver.
         Banny721TokenUriResolver resolver = new Banny721TokenUriResolver(msg.sender);
-
 
         // Deploy the $BANNY Revnet.
         REVCroptopDeployer(revCroptopDeployerAddress).deployCroptopRevnetWith({

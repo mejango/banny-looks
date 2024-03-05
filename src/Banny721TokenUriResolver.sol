@@ -10,6 +10,11 @@ import {JBIpfsDecoder} from "@bananapus/721-hook/src/libraries/JBIpfsDecoder.sol
 
 /// @notice Banny asset manager. Stores and shows Naked Bannys in worlds with outfits on.
 contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
+    event DecorateBanny(address indexed hook, uint256 indexed nakenBannyId, uint256 worldId, uint256[] outfitIds, address caller);
+    event SetSvgContents(uint256 indexed tierId, bytes32 indexed svgHash, string svgContents, address caller);
+    event SetSvgHash(uint256 indexed tierId, bytes32 indexed svgHash, address caller);
+    event SetSvgBaseUri(string baseUri, address caller);
+
     string public constant NAKED_BANNY =
         '<g class="a1"><path d="M173 53h4v17h-4z"/></g><g class="a2"><path d="M167 57h3v10h-3z"/><path d="M169 53h4v17h-4z"/></g><g class="a3"><path d="M167 53h3v4h-3z"/><path d="M163 57h4v10h-4z"/><path d="M167 67h3v3h-3z"/></g><g class="b1"><path d="M213 253h-3v-3-3h-3v-7-3h-4v-10h-3v-7-7-3h-3v-73h-4v-10h-3v-10h-3v-7h-4v-7h-3v-3h-3v-3h-4v10h4v10h3v10h3v3h4v7 3 70 3h3v7h3v20h4v7h3v3h3v3h4v4h3v3h3v-3-4z"/><path d="M253 307v-4h-3v-3h-3v-3h-4v-4h-3v-3h-3v-3h-4v-4h-3v-3h-3v-3h-4v-4h-3v-6h-3v-7h-4v17h4v3h3v3h3 4v4h3v3h3v3h4v4h3v3h3v3h4v4h3v3h3v3h4v-6h-4z"/></g><g class="b2"><path d="M250 310v-3h-3v-4h-4v-3h-3v-3h-3v-4h-4v-3h-3v-3h-3v-4h-7v-3h-3v-3h-4v-17h-3v-3h-3v-4h-4v-3h-3v-3h-3v-7h-4v-20h-3v-7h-3v-73-3-7h-4v-3h-3v-10h-3v-10h-4V70h-3v-3l-3 100 3-100v40h-3v10h-4v6h-3v14h-3v3 13h-4v44h4v16h3v14h3v13h4v10h3v7h3v3h4v3h3v4h3v3h4v3h3v4h3v3h4v3h3v7h7v7h6v3h7v3h7v4h13v3h3v3h10v-3h-3zm-103-87v-16h3v-10h-3v6h-4v17h-3v10h3v-7h4z"/><path d="M143 230h4v7h-4zm4 10h3v3h-3zm3 7h3v3h-3zm3 6h4v4h-4z"/><path d="M163 257h-6v3h3v3h3v4h4v-4-3h-4v-3z"/></g><g class="b3"><path d="M143 197v6h4v-6h6v-44h4v-16h3v-14h3v-6h4v-10h3V97h-7v6h-3v4h-3v3h-4v3h-3v4 3h-3v3 4h-4v10h-3v16 4h-3v46h3v-6h3z"/><path d="M140 203h3v17h-3z"/><path d="M137 220h3v10h-3z"/><path d="M153 250h-3v-7h-3v-6h-4v-7h-3v10h3v7h4v6h3v4h3v-7zm-3 10h3v7h-3z"/><path d="M147 257h3v3h-3zm6 0h4v3h-4z"/><path d="M160 263v-3h-3v3 7h6v-7h-3zm-10-56v16h-3v7h3v10h3v7h4v6h6v4h7v-4-3h-3v-10h-4v-13h-3v-14h-3v-16h-4v10h-3z"/><path d="M243 313v-3h-3v-3h-10-3v-4h-7v-3h-7v-3h-6v-7h-7v-7h-3v-3h-4v-3h-3v-4h-3v-3h-4v-3h-3v-4h-3v-3h-4v-3h-3v10h-3v3h-4v3h-3v7h3v7h4v6h3v5h4v3h6v3h3v3h4 3v3h3 4v3h3 3v4h10v3h7 7 3v3h10 3v-3h10v-3h4v-4h-14z"/></g><g class="b4"><path d="M183 130h4v7h-4z"/><path d="M180 127h3v3h-3zm-27-4h4v7h-4z"/><path d="M157 117h3v6h-3z"/><path d="M160 110h3v7h-3z"/><path d="M163 107h4v3h-4zm-3 83h3v7h-3z"/><path d="M163 187h4v3h-4zm20 0h7v3h-7z"/><path d="M180 190h3v3h-3zm10-7h3v4h-3z"/><path d="M193 187h4v6h-4zm-20 53h4v7h-4z"/><path d="M177 247h3v6h-3z"/><path d="M180 253h3v7h-3z"/><path d="M183 260h7v3h-7z"/><path d="M190 263h3v4h-3zm0-20h3v4h-3z"/><path d="M187 240h3v3h-3z"/><path d="M190 237h3v3h-3zm13 23h4v3h-4z"/><path d="M207 263h3v7h-3z"/><path d="M210 270h3v3h-3zm-10 7h3v6h-3z"/><path d="M203 283h4v7h-4z"/><path d="M207 290h6v3h-6z"/></g><g class="o"><path d="M133 157h4v50h-4zm0 63h4v10h-4zm27-163h3v10h-3z"/><path d="M163 53h4v4h-4z"/><path d="M167 50h10v3h-10z"/><path d="M177 53h3v17h-3z"/><path d="M173 70h4v27h-4zm-6 0h3v27h-3z"/><path d="M163 67h4v3h-4zm0 30h4v3h-4z"/><path d="M160 100h3v3h-3z"/><path d="M157 103h3v4h-3z"/><path d="M153 107h4v3h-4z"/><path d="M150 110h3v3h-3z"/><path d="M147 113h3v7h-3z"/><path d="M143 120h4v7h-4z"/><path d="M140 127h3v10h-3z"/><path d="M137 137h3v20h-3zm56-10h4v10h-4z"/><path d="M190 117h3v10h-3z"/><path d="M187 110h3v7h-3z"/><path d="M183 103h4v7h-4z"/><path d="M180 100h3v3h-3z"/><path d="M177 97h3v3h-3zm-40 106h3v17h-3zm0 27h3v10h-3zm10 30h3v7h-3z"/><path d="M150 257v-4h-3v-6h-4v-7h-3v10h3v10h4v-3h3z"/><path d="M150 257h3v3h-3z"/><path d="M163 273v-3h-6v-10h-4v7h-3v3h3v3h4v7h3v-7h3z"/><path d="M163 267h4v3h-4z"/><path d="M170 257h-3-4v3h4v7h3v-10z"/><path d="M157 253h6v4h-6z"/><path d="M153 247h4v6h-4z"/><path d="M150 240h3v7h-3z"/><path d="M147 230h3v10h-3zm13 50h3v7h-3z"/><path d="M143 223h4v7h-4z"/><path d="M147 207h3v16h-3z"/><path d="M150 197h3v10h-3zm-10 0h3v6h-3zm50 113h7v3h-7zm23 10h17v3h-17z"/><path d="M230 323h13v4h-13z"/><path d="M243 320h10v3h-10z"/><path d="M253 317h4v3h-4z"/><path d="M257 307h3v10h-3z"/><path d="M253 303h4v4h-4z"/><path d="M250 300h3v3h-3z"/><path d="M247 297h3v3h-3z"/><path d="M243 293h4v4h-4z"/><path d="M240 290h3v3h-3z"/><path d="M237 287h3v3h-3z"/><path d="M233 283h4v4h-4z"/><path d="M230 280h3v3h-3z"/><path d="M227 277h3v3h-3z"/><path d="M223 273h4v4h-4z"/><path d="M220 267h3v6h-3z"/><path d="M217 260h3v7h-3z"/><path d="M213 253h4v7h-4z"/><path d="M210 247h3v6h-3z"/><path d="M207 237h3v10h-3z"/><path d="M203 227h4v10h-4zm-40 60h4v6h-4zm24 20h3v3h-3z"/><path d="M167 293h3v5h-3zm16 14h4v3h-4z"/><path d="M170 298h4v3h-4zm10 6h3v3h-3z"/><path d="M174 301h6v3h-6zm23 12h6v4h-6z"/><path d="M203 317h10v3h-10zm-2-107v-73h-4v73h3v17h3v-17h-2z"/></g>';
     string public constant DEFAULT_LEGS =
@@ -28,10 +33,13 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
     uint8 public constant LEGS_CATEGORY = 2;
     uint8 public constant NECKLACE_CATEGORY = 3;
     uint8 public constant FACE_CATEGORY = 4;
-    uint8 public constant HEADGEAR_CATEGORY = 5;
-    uint8 public constant SUIT_CATEGORY = 6;
-    uint8 public constant RIGHT_FIST_CATEGORY = 7;
-    uint8 public constant LEFT_FIST_CATEGORY = 8;
+    uint8 public constant EYES_CATEGORY = 5;
+    uint8 public constant MOUTH_CATEGORY = 6;
+    uint8 public constant HEADGEAR_CATEGORY = 7;
+    uint8 public constant SUIT_CATEGORY = 8;
+    uint8 public constant RIGHT_FIST_CATEGORY = 9;
+    uint8 public constant LEFT_FIST_CATEGORY = 10;
+    uint8 public constant MISC_CATEGORY = 11;
 
     string public constant OUTLINE_1 = "050505";
     string public constant OUTLINE_2 = "808080";
@@ -64,9 +72,13 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
     string public constant ORIGINAL_BODY_3 = "f3a603";
     string public constant ORIGINAL_BODY_4 = "965a1a";
 
+    /// @notice The Naked Banny and outfit SVG hash files.
+    /// @custom:param tierId The ID of the tier that the SVG hash represent.
+    mapping(uint256 tierId => bytes32) public svgHashOf;
+
     /// @notice The Naked Banny and outfit SVG files.
     /// @custom:param tierId The ID of the tier that the SVG contents represent.
-    mapping(uint256 tierId => string) svgContentsOf;
+    mapping(uint256 tierId => string) private _svgContentsOf;
 
     /// @notice The outfits currently attached to each Naked Banny.
     /// @dev Nakes Banny's will only be shown with outfits currently owned by the owner of the Naked Banny.
@@ -77,6 +89,9 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
     /// @dev Nakes Banny's will only be shown with a world currently owned by the owner of the Naked Banny.
     /// @custom:param nakedBannyId The ID of the Naked Banny of the world.
     mapping(uint256 nakedBannyId => uint256) internal _attachedWorldIdOf;
+
+    /// @notice The base of the domain hosting the SVG files that can be lazily uploaded to the contract.    
+    string public svgBaseUri;
 
     /// @notice The assets currently attached to each Naked Banny, owned by the naked Banny's owner.
     /// @param hook The address of the hook storing the assets.
@@ -125,6 +140,23 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
         }
     }
 
+    /// @notice The Naked Banny and outfit SVG files.
+    /// @custom:param tierId The ID of the tier that the SVG contents represent.
+    function svgContentsOf(address hook, uint256 tierId) public view returns (string memory) {
+        // Keep a reference to the stored scg contents.
+        string memory svgContents = _svgContentsOf[tierId];
+
+        if (bytes(svgContents).length != 0) return svgContents;
+
+        return string.concat(
+            '<g><image xlink:href="',
+            JBIpfsDecoder.decode(
+                svgBaseUri, IJB721TiersHook(hook).STORE().encodedIPFSUriOf(hook, tierId)
+            ),
+            '" width="400" height="400"/></g>'
+        );
+    }
+
     /// @notice Returns the SVG showing a dressed Naked Banny.
     /// @param tokenId The ID of the token to show. If the ID belongs to a Naked Banny, it will be shown with its
     /// current outfits in its current world.
@@ -142,7 +174,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
         // If this isn't a Naked Banny and there's an SVG available, return the asset SVG alone (or on a manakin banny).
         if (tier.category > NAKED_CATEGORY) {
             // Keep a reference to the SVG contents.
-            string memory svgContents = svgContentsOf[tier.id];
+            string memory svgContents = svgContentsOf(hook, tier.id);
 
             // Layer the outfit SVG over the manekin Banny
             if (bytes(svgContents).length != 0) {
@@ -154,9 +186,12 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
                 return _layeredSvg(contents);
             }
 
+            // If the tier's category is greater than the last expected category, use the default base URI of the 721 contract. Otherwise use the SVG URI.
+            string baseUri = tier.category > MISC_CATEGORY ? IJB721TiersHook(hook).baseURI() : svgBaseUri;
+
             // Fallback to returning an IPFS hash if present.
             return JBIpfsDecoder.decode(
-                IJB721TiersHook(hook).baseURI(), IJB721TiersHook(hook).STORE().encodedTierIPFSUriOf(hook, tokenId)
+                baseUri, IJB721TiersHook(hook).STORE().encodedTierIPFSUriOf(hook, tokenId)
             );
         }
 
@@ -173,7 +208,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
         uint256 numberOfOutfits = outfitIds.length;
 
         // Add the world if needed.
-        if (worldId != 0) contents = string.concat(contents, svgContentsOf[worldId]);
+        if (worldId != 0) contents = string.concat(contents, svgContentsOf(hook, worldId));
 
         // Start with the Naked Banny.
         contents = string.concat(contents, _nakedBannySvgOf(tier.id));
@@ -191,6 +226,8 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
         bool hasLegs;
         bool hasNecklace;
         bool hasFace;
+        bool hasEyes;
+        bool hasMouth;
 
         // If there are less than 3 outfits, loop once more to make sure all default outfits are added.
         uint256 numberOfIterations = numberOfOutfits < 3 ? numberOfOutfits + 1 : numberOfOutfits;
@@ -229,15 +266,28 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
             if (category == FACE_CATEGORY) {
                 hasFace = true;
             } else if (category > FACE_CATEGORY && !hasFace) {
-                if (tier.id == ALIEN_TIER) contents = string.concat(contents, DEFAULT_ALIEN_EYES);
-                else contents = string.concat(contents, DEFAULT_STANDARD_EYES);
-                contents = string.concat(contents, DEFAULT_MOUTH);
-                hasFace = true;
+                if (category == EYES_CATEGORY) {
+                    hasEyes = true;
+                } else if (category > EYES_CATEGORY && !hasEyes) {
+                    if (tier.id == ALIEN_TIER) contents = string.concat(contents, DEFAULT_ALIEN_EYES);
+                    else contents = string.concat(contents, DEFAULT_STANDARD_EYES);
+                    hasEyes = true;
+                }
+                if (category == MOUTH_CATEGORY) {
+                    hasMouth = true;
+                } else if (category > MOUTH_CATEGORY && !hasMouth) {
+                    contents = string.concat(contents, DEFAULT_MOUTH);
+                    hasMouth = true;
+                }
+
+                if (hasEyes && hasMouth && !hasFace) {
+                    hasFace = true;
+                }
             }
 
             // Add the outfit if needed.
             if (outfitId != 0) {
-                contents = string.concat(contents, svgContentsOf[outfitId]);
+                contents = string.concat(contents, svgContentsOf(hook, outfitId));
             }
         }
 
@@ -280,6 +330,8 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
 
             // Store the world for the banny.
             _attachedWorldIdOf[nakedBannyId] = worldId;
+        } else {
+            _attachedWorldIdOf[nakedBannyId] = 0;
         }
 
         // Keep a reference to the number of outfits being worn.
@@ -309,7 +361,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
             if (outfitTier.id == 0) revert();
 
             // The tier's category must be a known category.
-            if (outfitTier.category < LEGS_CATEGORY || outfitTier.category > LEFT_FIST_CATEGORY) revert();
+            if (outfitTier.category < LEGS_CATEGORY || outfitTier.category > MISC_CATEGORY) revert();
 
             // Make sure the category is an increment of the previous outfit's category.
             if (i != 0 && outfitTier.category <= lastAssetCategory) revert();
@@ -320,17 +372,52 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
 
         // Store the outfits.
         _attachedOutfitIdsOf[nakedBannyId] = outfitIds;
-    }
+
+        emit DecorateBanny(hook, nakedBannyId, worldId, outfitIds, msg.sender);
+    } 
 
     /// @notice The owner of this contract can store SVG files for tier IDs.
     /// @param tierId The ID of the tier having an SVG stored.
     /// @param svgContents The svg contents being stored, not including the parent <svg></svg> element.
-    function setSvgContentsOf(uint256 tierId, string calldata svgContents) external onlyOwner {
+    function setSvgContentsOf(uint256 tierId, string calldata svgContents) external {
         // Make sure there isn't already contents for the specified tierId;
-        if (bytes(svgContentsOf[tierId]).length != 0) revert();
+        if (bytes(_svgContentsOf[tierId]).length != 0) revert();
+
+        // Get the stored svg hash for the tier.
+        bytes32 svgHash = svgHashOf[tierId];
+
+        // Make sure a hash exists.
+        if (svgHash == bytes32(0)) revert();
+
+        // Make sure the content matches the hash.
+        if (keccak256(abi.encodePacked(svgContents)) != svgHash) revert();
 
         // Store the svg contents.
-        svgContentsOf[tierId] = svgContents;
+        _svgContentsOf[tierId] = svgContents;
+
+        emit SetSvgContents(tierId, svgHash, svgContents, msg.sender);
+    }
+
+    /// @notice Allows the owner of this contract to upload the hash of an svg file for a tierId.
+    /// @dev This allows anyone to lazily upload the correct svg file.
+    /// @param tierId The ID of the tier having an SVG hash stored.
+    /// @param svgHash The svg hash being stored, not including the parent <svg></svg> element.
+    function setSvgHashOf(uint256 tierId, bytes32 svgHash) external onlyOwner {
+        // Make sure there isn't already contents for the specified tierId;
+        if (svgHashOf[tierId] != bytes32(0)) revert();
+
+        // Store the svg contents.
+        svgHashOf[tierId] = svgHash;
+
+        emit SetSvgHash(tierId, svgHash, msg.sender);
+    }
+
+    /// @notice Allows the owner of this contract to specify the base of the domain hosting the SVG files.
+    function setSvgBaseUriOf(uint256 baseUri) external onlyOwner {
+        // Store the base URI.
+        svgBaseUri = baseUri;
+
+        emit SetSvgBaseUri(baseUri, msg.sender);
     }
 
     /// @notice Returns the standard dimension SVG containing dynamic contents and SVG metadata.
@@ -352,6 +439,26 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, Ownable {
             "<style>.o{fill:",
             OUTLINE_2,
             ";}.b2{fill:none;}.b3{fill:none;}.b4{fill:none;}.a1{fill:none;}.a2{fill:none;}.a3{fill:none;}</style>",
+            NAKED_BANNY
+        );
+        return string.concat(
+            "<style>.o{fill:",
+            OUTLINE_2,
+            ";}.b1{fill:#",
+            ORIGINAL_BODY_1,
+            ";}.b2{fill:#",
+            ORIGINAL_BODY_2,
+            ";}.b3{fill:#",
+            ORIGINAL_BODY_3,
+            ";}.b4{fill:#",
+            ORIGINAL_BODY_4,
+            ";}.a1{fill:#",
+            ORIGINAL_BODY_1,
+            ";}.a2{fill:#",
+            ORIGINAL_BODY_2,
+            ";}.a3{fill:#",
+            ORIGINAL_BODY_3,
+            ";}</style>",
             NAKED_BANNY
         );
     }
