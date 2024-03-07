@@ -47,11 +47,11 @@ contract Deploy is Script {
         _deployTo({rpc: "https://rpc.ankr.com/eth_sepolia", suckerSalt: suckerSalt, tokenSalt: tokenSalt});
 
         // Deploy to OP sepolia
-        _deployTo({rpc: "https://rpc.ankr.com/optimism_sepolia", suckerSalt: suckerSalt, tokenSalt: tokenSalt});
+        // _deployTo({rpc: "https://rpc.ankr.com/optimism_sepolia", suckerSalt: suckerSalt, tokenSalt: tokenSalt});
     }
 
     function _deployTo(string memory rpc, bytes32 tokenSalt, bytes32 suckerSalt) private {
-        vm.createSelectFork(rpc);
+        // vm.createSelectFork(rpc);
         uint256 chainId = block.chainid;
         address operator = 0x961d4191965C49537c88F764D88318872CE405bE;
         address trustedForwarder;

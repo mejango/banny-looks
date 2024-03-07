@@ -384,26 +384,6 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             ";}.b2{fill:none;}.b3{fill:none;}.b4{fill:none;}.a1{fill:none;}.a2{fill:none;}.a3{fill:none;}</style>",
             NAKED_BANNY
         );
-        return string.concat(
-            "<style>.o{fill:",
-            OUTLINE_2,
-            ";}.b1{fill:#",
-            ORIGINAL_BODY_1,
-            ";}.b2{fill:#",
-            ORIGINAL_BODY_2,
-            ";}.b3{fill:#",
-            ORIGINAL_BODY_3,
-            ";}.b4{fill:#",
-            ORIGINAL_BODY_4,
-            ";}.a1{fill:#",
-            ORIGINAL_BODY_1,
-            ";}.a2{fill:#",
-            ORIGINAL_BODY_2,
-            ";}.a3{fill:#",
-            ORIGINAL_BODY_3,
-            ";}</style>",
-            NAKED_BANNY
-        );
     }
 
     function _nakedBannySvgOf(uint256 tier) internal pure returns (string memory) {
