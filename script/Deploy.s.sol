@@ -53,7 +53,7 @@ contract Deploy is Script {
     function _deployTo(string memory rpc, bytes32 tokenSalt, bytes32 suckerSalt) private {
         // vm.createSelectFork(rpc);
         uint256 chainId = block.chainid;
-        address operator = 0x961d4191965C49537c88F764D88318872CE405bE;
+        address operator = 0x817738DC393d682Ca5fBb268707b99F2aAe96baE;
         address trustedForwarder;
         string memory chain;
         // Ethereun Mainnet
@@ -154,6 +154,7 @@ contract Deploy is Script {
 
         // The project's revnet configuration
         REVConfig memory revnetConfiguration = REVConfig({
+            description: REVDescription(name, symbol, projectUri, tokenSalt),
             baseCurrency: nativeCurrency,
             premintTokenAmount: 80_000_000 * decimalMultiplier,
             initialOperator: operator,
@@ -287,11 +288,10 @@ contract Deploy is Script {
         vm.startBroadcast();
 
         // Deploy the Banny URI Resolver.
-        Banny721TokenUriResolver resolver = new Banny721TokenUriResolver(msg.sender, trustedForwarder);
+        Banny721TokenUriResolver resolver = new Banny721TokenUriResolver(operator, trustedForwarder);
 
         // Deploy the $BANNY Revnet.
         REVCroptopDeployer(revCroptopDeployerAddress).deployCroptopRevnetWith({
-            description: REVDescription(name, symbol, projectUri, tokenSalt),
             configuration: revnetConfiguration,
             terminalConfigurations: terminalConfigurations,
             buybackHookConfiguration: buybackHookConfiguration,
