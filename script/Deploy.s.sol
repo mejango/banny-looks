@@ -162,15 +162,15 @@ contract Deploy is Script {
         });
 
         // The project's buyback hook configuration.
-        REVBuybackPoolConfig[] memory buybackPoolConfigurations = new REVBuybackPoolConfig[](1);
-        buybackPoolConfigurations[0] = REVBuybackPoolConfig({
-            token: JBConstants.NATIVE_TOKEN,
-            fee: 10_000,
-            twapWindow: 2 days,
-            twapSlippageTolerance: 9000
-        });
+        REVBuybackPoolConfig[] memory buybackPoolConfigurations = new REVBuybackPoolConfig[](0);
+        // buybackPoolConfigurations[0] = REVBuybackPoolConfig({
+        //     token: JBConstants.NATIVE_TOKEN,
+        //     fee: 10_000,
+        //     twapWindow: 2 days,
+        //     twapSlippageTolerance: 9000
+        // });
         REVBuybackHookConfig memory buybackHookConfiguration = REVBuybackHookConfig({
-            hook: IJBBuybackHook(buybackHookAddress),
+            hook: IJBBuybackHook(address(0)), //IJBBuybackHook(buybackHookAddress),
             poolConfigurations: buybackPoolConfigurations
         });
 
