@@ -275,15 +275,16 @@ contract Deploy is Script {
         });
 
         // Specify the optimism sucker.
-        BPSuckerDeployerConfig[] memory suckerDeployerConfigurations = new BPSuckerDeployerConfig[](1);
-        suckerDeployerConfigurations[0] = BPSuckerDeployerConfig({
-            deployer: IBPSuckerDeployer(optimismSuckerDeployerAddress),
-            mappings: tokenMappings
-        });
+        BPSuckerDeployerConfig[] memory suckerDeployerConfigurations = new BPSuckerDeployerConfig[](0);
+        // suckerDeployerConfigurations[0] = BPSuckerDeployerConfig({
+        //     deployer: IBPSuckerDeployer(optimismSuckerDeployerAddress),
+        //     mappings: tokenMappings
+        // });
 
         // Specify all sucker deployments.
         REVSuckerDeploymentConfig memory suckerDeploymentConfiguration =
-            REVSuckerDeploymentConfig({deployerConfigurations: suckerDeployerConfigurations, salt: suckerSalt});
+            REVSuckerDeploymentConfig({deployerConfigurations: suckerDeployerConfigurations, salt: bytes32(0)}); //suckerSalt});
+
         // Deploy it all.
         vm.startBroadcast();
 
