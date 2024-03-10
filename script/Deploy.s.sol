@@ -178,8 +178,8 @@ contract Deploy is Script {
         JB721TierConfig[] memory tiers = new JB721TierConfig[](4);
 
         tiers[0] = JB721TierConfig({
-            price: uint104(1 * (decimalMultiplier - 4)),
-            initialSupply: 999_999_999, // MAX
+            price: uint104(1 * 10**decimals),
+            initialSupply: 100,
             votingUnits: 0,
             reserveFrequency: 0,
             reserveBeneficiary: address(0),
@@ -192,21 +192,7 @@ contract Deploy is Script {
             cannotBeRemoved: true
         });
         tiers[1] = JB721TierConfig({
-            price: uint104(1 * (decimalMultiplier - 2)),
-            initialSupply: 10_000,
-            votingUnits: 0,
-            reserveFrequency: 0,
-            reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(""),
-            category: nakedBannyCategory,
-            allowOwnerMint: false,
-            useReserveBeneficiaryAsDefault: false,
-            transfersPausable: false,
-            useVotingUnits: false,
-            cannotBeRemoved: true
-        });
-        tiers[2] = JB721TierConfig({
-            price: uint104(1 * (decimalMultiplier - 1)),
+            price: uint104(1 * 10**(decimals - 1)),
             initialSupply: 1000,
             votingUnits: 0,
             reserveFrequency: 0,
@@ -219,9 +205,23 @@ contract Deploy is Script {
             useVotingUnits: false,
             cannotBeRemoved: true
         });
+        tiers[2] = JB721TierConfig({
+            price: uint104(1 * 10**(decimals - 2)),
+            initialSupply: 10_000,
+            votingUnits: 0,
+            reserveFrequency: 0,
+            reserveBeneficiary: address(0),
+            encodedIPFSUri: bytes32(""),
+            category: nakedBannyCategory,
+            allowOwnerMint: false,
+            useReserveBeneficiaryAsDefault: false,
+            transfersPausable: false,
+            useVotingUnits: false,
+            cannotBeRemoved: true
+        });
         tiers[3] = JB721TierConfig({
-            price: uint104(1 * decimalMultiplier),
-            initialSupply: 100,
+            price: uint104(1 * 10**(decimals - 4)),
+            initialSupply: 999_999_999, // MAX
             votingUnits: 0,
             reserveFrequency: 0,
             reserveBeneficiary: address(0),

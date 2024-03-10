@@ -63,36 +63,36 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     uint8 public constant LEFT_FIST_CATEGORY = 10;
     uint8 public constant MISC_CATEGORY = 11;
 
-    string public constant OUTLINE_1 = "050505";
-    string public constant OUTLINE_2 = "808080";
+    string private constant OUTLINE_1 = "050505";
+    string private constant OUTLINE_2 = "808080";
 
     string public constant WHITE = "f9f9f9";
 
-    uint8 public constant ALIEN_TIER = 1;
-    string public constant ALIEN_BODY_1 = "67d757";
-    string public constant ALIEN_BODY_2 = "30a220";
-    string public constant ALIEN_BODY_3 = "217a15";
-    string public constant ALIEN_BODY_4 = "none";
-    string public constant ALIEN_ANTENNA_1 = "e483ef";
-    string public constant ALIEN_ANTENNA_2 = "dc2fef";
+    uint8 private constant ALIEN_TIER = 1;
+    string private constant ALIEN_BODY_1 = "67d757";
+    string private constant ALIEN_BODY_2 = "30a220";
+    string private constant ALIEN_BODY_3 = "217a15";
+    string private constant ALIEN_BODY_4 = "none";
+    string private constant ALIEN_ANTENNA_1 = "e483ef";
+    string private constant ALIEN_ANTENNA_2 = "dc2fef";
 
-    uint8 public constant PINK_TIER = 2;
-    string public constant PINK_BODY_1 = "ffd8c5";
-    string public constant PINK_BODY_2 = "ff96a9";
-    string public constant PINK_BODY_3 = "fe588b";
-    string public constant PINK_BODY_4 = "c92f45";
+    uint8 private constant PINK_TIER = 2;
+    string private constant PINK_BODY_1 = "ffd8c5";
+    string private constant PINK_BODY_2 = "ff96a9";
+    string private constant PINK_BODY_3 = "fe588b";
+    string private constant PINK_BODY_4 = "c92f45";
 
-    uint8 public constant ORANGE_TIER = 3;
-    string public constant ORANGE_BODY_1 = "f3a603";
-    string public constant ORANGE_BODY_2 = "ff7c02";
-    string public constant ORANGE_BODY_3 = "fd3600";
-    string public constant ORANGE_BODY_4 = "c32e0d";
+    uint8 private constant ORANGE_TIER = 3;
+    string private constant ORANGE_BODY_1 = "f3a603";
+    string private constant ORANGE_BODY_2 = "ff7c02";
+    string private constant ORANGE_BODY_3 = "fd3600";
+    string private constant ORANGE_BODY_4 = "c32e0d";
 
-    uint8 public constant ORIGINAL_TIER = 4;
-    string public constant ORIGINAL_BODY_1 = "ffe900";
-    string public constant ORIGINAL_BODY_2 = "ffc700";
-    string public constant ORIGINAL_BODY_3 = "f3a603";
-    string public constant ORIGINAL_BODY_4 = "965a1a";
+    uint8 private constant ORIGINAL_TIER = 4;
+    string private constant ORIGINAL_BODY_1 = "ffe900";
+    string private constant ORIGINAL_BODY_2 = "ffc700";
+    string private constant ORIGINAL_BODY_3 = "f3a603";
+    string private constant ORIGINAL_BODY_4 = "965a1a";
 
     /// @notice The Naked Banny and outfit SVG hash files.
     /// @custom:param tierId The ID of the tier that the SVG hash represent.
@@ -200,10 +200,10 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             // Keep a reference to the SVG contents.
             string memory svgContents = svgContentsOf(hook, tier.id);
 
-            // Layer the outfit SVG over the manekin Banny
+            // Layer the outfit SVG over the mannequin Banny
             if (bytes(svgContents).length != 0) {
-                // Start with the manekin SVG if we're not returning a world.
-                if (tier.category != WORLD_CATEGORY) contents = _manekinBannySvg();
+                // Start with the mannequin SVG if we're not returning a world.
+                if (tier.category != WORLD_CATEGORY) contents = _mannequinBannySvg();
                 // Add the asset.
                 contents = string.concat(contents, svgContents);
                 // Return the SVG.
@@ -246,12 +246,12 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             Base64.encode(
                 abi.encodePacked(
                     '{"name":"',
-                    _nameOf(tierId, tier.category),
+                    _nameOf(tokenId, tier.id, tier.category),
                     '", "id": "',
                     tier.id.toString(),
                     '","description":"A relic of the Bannyverse","image":"data:image/svg+xml;base64,',
                     Base64.encode(abi.encodePacked(_layeredSvg(contents))),
-                    string('"}')
+                    '"}'
                 )
             )
         );
@@ -261,7 +261,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     /// @param hook The hook storing the assets.
     /// @param tokenId The ID of the token to show. If the ID belongs to a Naked Banny, it will be shown with its
     /// current outfits in its current world.
-    /// @return tokenUri The URI representing the SVG.
+    /// @return bannySvg The SVG.
     function outfittedBannySvgOf(address hook, uint256 tokenId) external view returns (string memory bannySvg) {
         // Get a reference to the tier for the given token ID.
         JB721Tier memory tier = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, tokenId, false);
@@ -297,11 +297,11 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         return _layeredSvg(contents);
     }
 
-    function nameOf(address hook, uint256 tokenId) public returns (string memory) {
+    function nameOf(address hook, uint256 tokenId) view public returns (string memory) {
         // Get a reference to the tier for the given token ID.
         JB721Tier memory tier = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, tokenId, false);
 
-        return _nameOf(tier.id, tier.category);
+        return _nameOf(tokenId, tier.id, tier.category);
     }
 
     /// @param owner The owner allowed to add SVG files that correspond to tier IDs.
@@ -454,7 +454,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         );
     }
 
-    function _manekinBannySvg() internal pure returns (string memory) {
+    function _mannequinBannySvg() internal pure returns (string memory) {
         return string.concat(
             "<style>.o{fill:",
             OUTLINE_2,
@@ -627,7 +627,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     }
 
     /// @notice The name of each tier.
-    function _nameOf(uint256 tokenId, uint256 tierId, uint256 category) public returns (string memory) {
+    function _nameOf(uint256 tokenId, uint256 tierId, uint256 category) view public returns (string memory) {
         if (tierId == ALIEN_TIER) {
             return string.concat("Alien Naked Banny ", tokenId.toString());
         } else if (tierId == PINK_TIER) {
@@ -664,6 +664,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             } else if (category == MISC_CATEGORY) {
                 return string.concat("Misc: ", name);
             }
+        return "";
         }
     }
 
