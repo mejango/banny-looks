@@ -1,8 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.23;
 
+import "lib/base64/base64.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {Context} from "@openzeppelin/contracts/utils/Context.sol";
+import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 import {ERC2771Context} from "@openzeppelin/contracts/metatx/ERC2771Context.sol";
 import {IJB721TokenUriResolver} from "@bananapus/721-hook/src/interfaces/IJB721TokenUriResolver.sol";
 import {IERC721} from "@bananapus/721-hook/src/abstract/ERC721.sol";
@@ -12,10 +14,15 @@ import {JBIpfsDecoder} from "@bananapus/721-hook/src/libraries/JBIpfsDecoder.sol
 
 /// @notice Banny asset manager. Stores and shows Naked Bannys in worlds with outfits on.
 contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Ownable {
-    event DecorateBanny(address indexed hook, uint256 indexed nakenBannyId, uint256 worldId, uint256[] outfitIds, address caller);
+    using Strings for uint256;
+
+    event DecorateBanny(
+        address indexed hook, uint256 indexed nakenBannyId, uint256 worldId, uint256[] outfitIds, address caller
+    );
     event SetSvgContents(uint256 indexed tierId, bytes32 indexed svgHash, string svgContents, address caller);
     event SetSvgHash(uint256 indexed tierId, bytes32 indexed svgHash, address caller);
     event SetSvgBaseUri(string baseUri, address caller);
+    event SetTierName(uint256 indexed tierId, string name, address caller);
 
     error UNRECOGNIZED_WORLD();
     error UNAUTHORIZED_NAKED_BANNY();
@@ -91,6 +98,10 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     /// @custom:param tierId The ID of the tier that the SVG hash represent.
     mapping(uint256 tierId => bytes32) public svgHashOf;
 
+    /// @notice The name of each tier.
+    /// @custom:param tierId The ID of the tier that the name belongs to.
+    mapping(uint256 tierId => string) private _tierNameOf;
+
     /// @notice The Naked Banny and outfit SVG files.
     /// @custom:param tierId The ID of the tier that the SVG contents represent.
     mapping(uint256 tierId => string) private _svgContentsOf;
@@ -105,7 +116,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     /// @custom:param nakedBannyId The ID of the Naked Banny of the world.
     mapping(uint256 nakedBannyId => uint256) internal _attachedWorldIdOf;
 
-    /// @notice The base of the domain hosting the SVG files that can be lazily uploaded to the contract.    
+    /// @notice The base of the domain hosting the SVG files that can be lazily uploaded to the contract.
     string public svgBaseUri;
 
     /// @notice The assets currently attached to each Naked Banny, owned by the naked Banny's owner.
@@ -165,14 +176,12 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
 
         return string.concat(
             '<g><image xlink:href="',
-            JBIpfsDecoder.decode(
-                svgBaseUri, IJB721TiersHook(hook).STORE().encodedIPFSUriOf(hook, tierId)
-            ),
+            JBIpfsDecoder.decode(svgBaseUri, IJB721TiersHook(hook).STORE().encodedIPFSUriOf(hook, tierId)),
             '" width="400" height="400"/></g>'
         );
     }
 
-    /// @notice Returns the SVG showing a dressed Naked Banny.
+    /// @notice Returns the SVG showing a dressed Naked Banny in a world.
     /// @param tokenId The ID of the token to show. If the ID belongs to a Naked Banny, it will be shown with its
     /// current outfits in its current world.
     /// @return tokenUri The URI representing the SVG.
@@ -201,13 +210,12 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
                 return _layeredSvg(contents);
             }
 
-            // If the tier's category is greater than the last expected category, use the default base URI of the 721 contract. Otherwise use the SVG URI.
+            // If the tier's category is greater than the last expected category, use the default base URI of the 721
+            // contract. Otherwise use the SVG URI.
             string memory baseUri = tier.category > MISC_CATEGORY ? IJB721TiersHook(hook).baseURI() : svgBaseUri;
 
             // Fallback to returning an IPFS hash if present.
-            return JBIpfsDecoder.decode(
-                baseUri, IJB721TiersHook(hook).STORE().encodedTierIPFSUriOf(hook, tokenId)
-            );
+            return JBIpfsDecoder.decode(baseUri, IJB721TiersHook(hook).STORE().encodedTierIPFSUriOf(hook, tokenId));
         }
 
         uint256 worldId;
@@ -226,7 +234,59 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         contents = string.concat(contents, _nakedBannySvgOf(tier.id));
 
         // Get the outfit contents.
-        string memory outfitContents = _outfitContentsFor({ hook: hook, nakedBannyTier: tier.id, outfitIds: outfitIds });
+        string memory outfitContents = _outfitContentsFor({hook: hook, nakedBannyTier: tier.id, outfitIds: outfitIds});
+
+        // Add the outfit contents if there are any.
+        if (bytes(outfitContents).length != 0) {
+            contents = string.concat(contents, outfitContents);
+        }
+
+        return string.concat(
+            "data:application/json;base64,",
+            Base64.encode(
+                abi.encodePacked(
+                    '{"name":"',
+                    _nameOf(tierId, tier.category),
+                    '", "id": "',
+                    tier.id.toString(),
+                    '","description":"A relic of the Bannyverse","image":"data:image/svg+xml;base64,',
+                    Base64.encode(abi.encodePacked(_layeredSvg(contents))),
+                    string('"}')
+                )
+            )
+        );
+    }
+
+    /// @notice Returns the SVG showing a dressed Naked Banny.
+    /// @param hook The hook storing the assets.
+    /// @param tokenId The ID of the token to show. If the ID belongs to a Naked Banny, it will be shown with its
+    /// current outfits in its current world.
+    /// @return tokenUri The URI representing the SVG.
+    function outfittedBannySvgOf(address hook, uint256 tokenId) external view returns (string memory bannySvg) {
+        // Get a reference to the tier for the given token ID.
+        JB721Tier memory tier = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, tokenId, false);
+
+        // If the token's tier doesn't exist, return an empty uri.
+        if (tier.id == 0) return "";
+
+        // Compose the contents.
+        string memory contents;
+
+        // If this isn't a Naked Banny and there's an SVG available, return the asset SVG alone (or on a manakin banny).
+        if (tier.category > NAKED_CATEGORY) return "";
+
+        uint256[] memory outfitIds;
+
+        // Get a reference to each asset ID currently attached to the Naked Banny.
+        try this.assetIdsOf(hook, tokenId) returns (uint256, uint256[] memory _outfitIds) {
+            outfitIds = _outfitIds;
+        } catch (bytes memory) {}
+
+        // Start with the Naked Banny.
+        contents = string.concat(contents, _nakedBannySvgOf(tier.id));
+
+        // Get the outfit contents.
+        string memory outfitContents = _outfitContentsFor({hook: hook, nakedBannyTier: tier.id, outfitIds: outfitIds});
 
         // Add the outfit contents if there are any.
         if (bytes(outfitContents).length != 0) {
@@ -236,14 +296,21 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         // Return the SVG.
         return _layeredSvg(contents);
     }
-    
+
+    function nameOf(address hook, uint256 tokenId) public returns (string memory) {
+        // Get a reference to the tier for the given token ID.
+        JB721Tier memory tier = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, tokenId, false);
+
+        return _nameOf(tier.id, tier.category);
+    }
+
     /// @param owner The owner allowed to add SVG files that correspond to tier IDs.
     /// @param trustedForwarder The trusted forwarder for the ERC2771Context.
     constructor(address owner, address trustedForwarder) Ownable(owner) ERC2771Context(trustedForwarder) {}
 
     /// @notice Dress your Naked Banny with outfits.
     /// @dev The caller must own the naked banny being dressed and all outfits being worn.
-    /// @param hook The address of the hook storing the assets.
+    /// @param hook The hook storing the assets.
     /// @param nakedBannyId The ID of the Naked Banny being dressed.
     /// @param worldId The ID of the world that'll be associated with the specified banny.
     /// @param outfitIds The IDs of the outfits that'll be associated with the specified banny. Only one outfit per
@@ -304,7 +371,9 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             if (outfitTier.id == 0) revert UNRECOGNIZED_OUTFIT();
 
             // The tier's category must be a known category.
-            if (outfitTier.category < LEGS_CATEGORY || outfitTier.category > MISC_CATEGORY) revert UNRECOGNIZED_CATEGORY();
+            if (outfitTier.category < LEGS_CATEGORY || outfitTier.category > MISC_CATEGORY) {
+                revert UNRECOGNIZED_CATEGORY();
+            }
 
             // Make sure the category is an increment of the previous outfit's category.
             if (i != 0 && outfitTier.category <= lastAssetCategory) revert UNORDERED_CATEGORIES();
@@ -317,7 +386,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         _attachedOutfitIdsOf[nakedBannyId] = outfitIds;
 
         emit DecorateBanny(hook, nakedBannyId, worldId, outfitIds, msg.sender);
-    } 
+    }
 
     /// @notice The owner of this contract can store SVG files for tier IDs.
     /// @param tierId The ID of the tier having an SVG stored.
@@ -353,6 +422,14 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         svgHashOf[tierId] = svgHash;
 
         emit SetSvgHash(tierId, svgHash, msg.sender);
+    }
+
+    /// @notice Allows the owner to set the tier's name.
+    /// @param tierId The ID of the tier having its name stored.
+    /// @param name The name of the tier.
+    function setTierName(uint256 tierId, string memory name) external onlyOwner {
+        _tierNameOf[tierId] = name;
+        emit SetTierName(tierId, name, msg.sender);
     }
 
     /// @notice Allows the owner of this contract to specify the base of the domain hosting the SVG files.
@@ -464,7 +541,15 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     /// @param hook The address of the hook storing the assets.
     /// @param nakedBannyTier The tier of the naked banny being dressed.
     /// @param outfitIds The IDs of the outfits that'll be associated with the specified banny.
-    function _outfitContentsFor(address hook, uint256 nakedBannyTier, uint256[] memory outfitIds) internal view returns (string memory contents) {
+    function _outfitContentsFor(
+        address hook,
+        uint256 nakedBannyTier,
+        uint256[] memory outfitIds
+    )
+        internal
+        view
+        returns (string memory contents)
+    {
         // Get a reference to the number of outfits are on the Naked Banny.
         uint256 numberOfOutfits = outfitIds.length;
 
@@ -537,6 +622,47 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             // Add the outfit if needed.
             if (outfitId != 0) {
                 contents = string.concat(contents, svgContentsOf(hook, outfitId));
+            }
+        }
+    }
+
+    /// @notice The name of each tier.
+    function _nameOf(uint256 tokenId, uint256 tierId, uint256 category) public returns (string memory) {
+        if (tierId == ALIEN_TIER) {
+            return string.concat("Alien Naked Banny ", tokenId.toString());
+        } else if (tierId == PINK_TIER) {
+            return string.concat("Pink Naked Banny ", tokenId.toString());
+        } else if (tierId == ORANGE_TIER) {
+            return string.concat("Orange Naked Banny ", tokenId.toString());
+        } else if (tierId == ORIGINAL_TIER) {
+            return string.concat("Original Naked Banny ", tokenId.toString());
+        } else {
+            string memory name = _tierNameOf[tierId];
+            if (bytes(name).length == 0) name = tokenId.toString();
+            else name = string.concat(name, " ", tokenId.toString());
+
+            if (category == WORLD_CATEGORY) {
+                return string.concat("World: ", name);
+            } else if (category == LEGS_CATEGORY) {
+                return string.concat("Legs: ", name);
+            } else if (category == NECKLACE_CATEGORY) {
+                return string.concat("Necklace: ", name);
+            } else if (category == FACE_CATEGORY) {
+                return string.concat("Face: ", name);
+            } else if (category == EYES_CATEGORY) {
+                return string.concat("Eyes: ", name);
+            } else if (category == MOUTH_CATEGORY) {
+                return string.concat("Mouth: ", name);
+            } else if (category == HEADGEAR_CATEGORY) {
+                return string.concat("Headgear: ", name);
+            } else if (category == SUIT_CATEGORY) {
+                return string.concat("Suit: ", name);
+            } else if (category == RIGHT_FIST_CATEGORY) {
+                return string.concat("Right fist: ", name);
+            } else if (category == LEFT_FIST_CATEGORY) {
+                return string.concat("Left fist: ", name);
+            } else if (category == MISC_CATEGORY) {
+                return string.concat("Misc: ", name);
             }
         }
     }
