@@ -74,7 +74,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
 
     /// @notice The Naked Banny and outfit SVG hash files.
     /// @custom:param tierId The ID of the tier that the SVG hash represent.
-   mapping(uint256 tierId => bytes32) public svgHashOf;
+    mapping(uint256 tierId => bytes32) public svgHashOf;
 
     /// @notice The base of the domain hosting the SVG files that can be lazily uploaded to the contract.
     string public svgBaseUri;
@@ -98,18 +98,10 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     mapping(uint256 nakedBannyId => uint256) internal _attachedWorldIdOf;
 
     /// @notice The assets currently attached to each Naked Banny, owned by the naked Banny's owner.
-    /// @param hook The address of the hook storing the assets.
     /// @param nakedBannyId The ID of the naked banny shows with the associated assets.
     /// @return worldId The world attached to the Naked Banny.
     /// @return outfitIds The outfits attached to the Naked Banny.
-    function assetIdsOf(
-        address hook,
-        uint256 nakedBannyId
-    )
-        public
-        view
-        returns (uint256 worldId, uint256[] memory outfitIds)
-    {
+    function assetIdsOf(uint256 nakedBannyId) public view returns (uint256 worldId, uint256[] memory outfitIds) {
         // Keep a reference to the outfit IDs currently attached to the Naked Banny.
         uint256[] memory attachedOutfitIds = _attachedOutfitIdsOf[nakedBannyId];
 
@@ -176,14 +168,14 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         }
 
         return string.concat(
-            "data:img/svg+xml;base64,",
+            "data:application/json;base64,",
             Base64.encode(
                 abi.encodePacked(
                     '{"name":"',
                     _nameOf(tokenId, tier.id, tier.category),
                     '", "id": "',
                     tier.id.toString(),
-                    '","description":"A relic of the Bannyverse","image":"data:image/svg+xml;base64,',
+                    '","description":"A piece of the Bannyverse","image":"data:image/svg+xml;base64,',
                     Base64.encode(abi.encodePacked(contents)),
                     '"}'
                 )
@@ -230,7 +222,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         uint256[] memory outfitIds;
 
         // Get a reference to each asset ID currently attached to the Naked Banny.
-        try this.assetIdsOf(hook, tokenId) returns (uint256 _worldId, uint256[] memory _outfitIds) {
+        try this.assetIdsOf(tokenId) returns (uint256 _worldId, uint256[] memory _outfitIds) {
             worldId = _worldId;
             outfitIds = _outfitIds;
         } catch (bytes memory) {}
@@ -339,17 +331,18 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
 
             // Make sure the category is an increment of the previous outfit's category.
             if (i != 0 && outfitTier.category <= lastAssetCategory) revert UNORDERED_CATEGORIES();
-    
+
             if (outfitTier.category == _FACE_CATEGORY) {
                 hasFace = true;
-            }
-            else if (outfitTier.category == _SUIT_CATEGORY) {
+            } else if (outfitTier.category == _SUIT_CATEGORY) {
                 hasSuit = true;
-            }
-            else if ((outfitTier.category == _FACE_EYES_CATEGORY || outfitTier.category == _FACE_MOUTH_CATEGORY) && hasFace) {
+            } else if (
+                (outfitTier.category == _FACE_EYES_CATEGORY || outfitTier.category == _FACE_MOUTH_CATEGORY) && hasFace
+            ) {
                 revert FACE_ALREADY_ADDED();
-            }
-            else if ((outfitTier.category == _SUIT_TOP_CATEGORY || outfitTier.category == _SUIT_BOTTOM_CATEGORY) && hasSuit) {
+            } else if (
+                (outfitTier.category == _SUIT_TOP_CATEGORY || outfitTier.category == _SUIT_BOTTOM_CATEGORY) && hasSuit
+            ) {
                 revert SUIT_ALREADY_ADDED();
             }
 

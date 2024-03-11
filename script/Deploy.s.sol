@@ -44,13 +44,18 @@ contract Deploy is Script {
         bytes32 tokenSalt = keccak256(abi.encode(block.timestamp, block.number));
 
         // Deploy to sepolia
-        _deployTo({rpc: "https://rpc.ankr.com/eth_sepolia", suckerSalt: suckerSalt, tokenSalt: tokenSalt});
+        _deployTo({
+            rpc: "https://rpc.ankr.com/eth_sepolia",
+            suckerSalt: suckerSalt,
+            tokenSalt: tokenSalt,
+            premintChainId: block.chainid
+        });
 
         // Deploy to OP sepolia
         // _deployTo({rpc: "https://rpc.ankr.com/optimism_sepolia", suckerSalt: suckerSalt, tokenSalt: tokenSalt});
     }
 
-    function _deployTo(string memory rpc, bytes32 tokenSalt, bytes32 suckerSalt) private {
+    function _deployTo(string memory rpc, bytes32 tokenSalt, bytes32 suckerSalt, uint256 premintChainId) private {
         // vm.createSelectFork(rpc);
         uint256 chainId = block.chainid;
         address operator = 0x817738DC393d682Ca5fBb268707b99F2aAe96baE;
@@ -137,7 +142,7 @@ contract Deploy is Script {
         REVStageConfig[] memory stageConfigurations = new REVStageConfig[](2);
         stageConfigurations[0] = REVStageConfig({
             startsAtOrAfter: start,
-            operatorSplitRate: uint16(JBConstants.MAX_RESERVED_RATE / 2),
+            splitRate: uint16(JBConstants.MAX_RESERVED_RATE / 2),
             initialIssuanceRate: uint112(1_000_000 * decimalMultiplier),
             priceCeilingIncreaseFrequency: oneDay,
             priceCeilingIncreasePercentage: uint32(JBConstants.MAX_DECAY_RATE / 20), // 5%
@@ -145,7 +150,7 @@ contract Deploy is Script {
         });
         stageConfigurations[1] = REVStageConfig({
             startsAtOrAfter: start + 86_400 * 28,
-            operatorSplitRate: uint16(JBConstants.MAX_RESERVED_RATE / 2),
+            splitRate: uint16(JBConstants.MAX_RESERVED_RATE / 2),
             initialIssuanceRate: uint112(100_000 * decimalMultiplier),
             priceCeilingIncreaseFrequency: 7 * oneDay,
             priceCeilingIncreasePercentage: uint16(JBConstants.MAX_DECAY_RATE / 100), // 1%
@@ -157,7 +162,8 @@ contract Deploy is Script {
             description: REVDescription(name, symbol, projectUri, tokenSalt),
             baseCurrency: nativeCurrency,
             premintTokenAmount: 80_000_000 * decimalMultiplier,
-            initialOperator: operator,
+            premintChainId: premintChainId,
+            initialSplitOperator: operator,
             stageConfigurations: stageConfigurations
         });
 
