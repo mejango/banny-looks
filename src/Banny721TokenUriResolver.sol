@@ -395,9 +395,14 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     /// @notice Allows the owner to set the tier's name.
     /// @param tierId The ID of the tier having its name stored.
     /// @param name The name of the tier.
-    function setTierName(uint256 tierId, string memory name) external onlyOwner {
-        _tierNameOf[tierId] = name;
-        emit SetTierName(tierId, name, msg.sender);
+    function setTierName(uint256[] memory tierIds, string[] memory names) external onlyOwner {
+
+        uint256 numberOfTiers = tierIds.length;
+
+        for (uint256 i; i < numberOfTiers; i++) {
+            _tierNameOf[tierIds[i]] = names[i];
+            emit SetTierName(tierId, name, msg.sender);
+        }
     }
 
     /// @notice Allows the owner of this contract to specify the base of the domain hosting the SVG files.
