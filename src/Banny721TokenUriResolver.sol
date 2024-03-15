@@ -393,14 +393,20 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     }
 
     /// @notice Allows the owner to set the tier's name.
-    /// @param tierId The ID of the tier having its name stored.
-    /// @param name The name of the tier.
+    /// @param tierIds The IDs of the tiers having their name stored.
+    /// @param names The names of the tiers.
     function setTierName(uint256[] memory tierIds, string[] memory names) external onlyOwner {
 
         uint256 numberOfTiers = tierIds.length;
 
+        uint256 tierId;
+        string memory name;
+
         for (uint256 i; i < numberOfTiers; i++) {
-            _tierNameOf[tierIds[i]] = names[i];
+            tierId = tierIds[i];
+            name = names[i];
+
+            _tierNameOf[tierId] = name;
             emit SetTierName(tierId, name, msg.sender);
         }
     }
@@ -478,7 +484,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         } else if (tier == PINK_TIER) {
             return ("ffd8c5", "ff96a9", "fe588b", "c92f45", "ffd8c5", "ff96a9", "fe588b");
         } else if (tier == ORANGE_TIER) {
-            return ("f3a603", "ff7c02", "ff7c02", "c32e0d", "f3a603", "ff7c02", "ff7c02");
+            return ("f3a603", "ff7c02", "fd3600", "c32e0d", "f3a603", "ff7c02", "fd3600");
         } else if (tier == ORIGINAL_TIER) {
             return ("ffe900", "ffc700", "f3a603", "965a1a", "ffe900", "ffc700", "f3a603");
         }
