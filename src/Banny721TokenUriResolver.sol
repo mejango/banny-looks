@@ -256,8 +256,6 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         // Get a reference to the tier for the given token ID.
         JB721Tier memory tier = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, tokenId, false);
 
-        bool isToken = tokenId % IJB721TiersHook(hook).STORE() == 0;
-
         return _nameOf(tokenId, tier.id, tier.category);
     }
 

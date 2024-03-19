@@ -168,15 +168,15 @@ contract Deploy is Script {
         });
 
         // The project's buyback hook configuration.
-        REVBuybackPoolConfig[] memory buybackPoolConfigurations = new REVBuybackPoolConfig[](0);
-        // buybackPoolConfigurations[0] = REVBuybackPoolConfig({
-        //     token: JBConstants.NATIVE_TOKEN,
-        //     fee: 10_000,
-        //     twapWindow: 2 days,
-        //     twapSlippageTolerance: 9000
-        // });
+        REVBuybackPoolConfig[] memory buybackPoolConfigurations = new REVBuybackPoolConfig[](1);
+        buybackPoolConfigurations[0] = REVBuybackPoolConfig({
+            token: JBConstants.NATIVE_TOKEN,
+            fee: 10_000,
+            twapWindow: 2 days,
+            twapSlippageTolerance: 9000
+        });
         REVBuybackHookConfig memory buybackHookConfiguration = REVBuybackHookConfig({
-            hook: IJBBuybackHook(address(0)), //IJBBuybackHook(buybackHookAddress),
+            hook: IJBBuybackHook(buybackHookAddress),
             poolConfigurations: buybackPoolConfigurations
         });
 
@@ -281,11 +281,11 @@ contract Deploy is Script {
         });
 
         // Specify the optimism sucker.
-        BPSuckerDeployerConfig[] memory suckerDeployerConfigurations = new BPSuckerDeployerConfig[](0);
-        // suckerDeployerConfigurations[0] = BPSuckerDeployerConfig({
-        //     deployer: IBPSuckerDeployer(optimismSuckerDeployerAddress),
-        //     mappings: tokenMappings
-        // });
+        BPSuckerDeployerConfig[] memory suckerDeployerConfigurations = new BPSuckerDeployerConfig[](1);
+        suckerDeployerConfigurations[0] = BPSuckerDeployerConfig({
+            deployer: IBPSuckerDeployer(optimismSuckerDeployerAddress),
+            mappings: tokenMappings
+        });
 
         // Specify all sucker deployments.
         REVSuckerDeploymentConfig memory suckerDeploymentConfiguration =
