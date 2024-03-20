@@ -6,6 +6,7 @@ import "@bananapus/721-hook/script/helpers/Hook721DeploymentLib.sol";
 import "@bananapus/suckers/script/helpers/SuckerDeploymentLib.sol";
 import "@croptop/core/script/helpers/CroptopDeploymentLib.sol";
 import "@rev-net/core/script/helpers/RevnetCoreDeploymentLib.sol";
+import "@bananapus/buyback-hook/script/helpers/BuybackDeploymentLib.sol";
 
 import {JBConstants} from "@bananapus/core/src/libraries/JBConstants.sol";
 import {JBTerminalConfig} from "@bananapus/core/src/structs/JBTerminalConfig.sol";
@@ -55,11 +56,14 @@ contract DeployScript is Script, Sphinx {
     RevnetCoreDeployment revnet;
     /// @notice tracks the deployment of the 721 hook contracts for the chain we are deploying to.
     Hook721Deployment hook;
+    /// @notice tracks the deployment of the buyback hook.
+    BuybackDeployment buybackHook;
 
     BannyverseRevnetConfig bannyverseConfig;
 
     uint256 PREMINT_CHAIN_ID = 1;
     bytes32 SALT = "BANNYVERSE";
+    bytes32 SUCKER_SALT = "BANNYVERSE_SUCKER";
     bytes32 RESOLVER_SALT = "Banny721TokenUriResolver";
 
     address OPERATOR = 0x817738DC393d682Ca5fBb268707b99F2aAe96baE;
@@ -98,6 +102,10 @@ contract DeployScript is Script, Sphinx {
         hook = Hook721DeploymentLib.getDeployment(
             vm.envOr("NANA_721_DEPLOYMENT_PATH", string("node_modules/@bananapus/721-hook/deployments/"))
         );
+        // Get the deployment addresses for the 721 hook contracts for this chain.
+        buybackHook = BuybackDeploymentLib.getDeployment(
+            vm.envOr("NANA_BUYBACK_HOOK_DEPLOYMENT_PATH", string("node_modules/@bananapus/buyback-hook/deployments/"))
+        );
 
         bannyverseConfig = getBannyverseRevnetConfig();
 
@@ -117,7 +125,7 @@ contract DeployScript is Script, Sphinx {
         uint256 decimalMultiplier = 10 ** decimals;
         uint24 nakedBannyCategory = 0;
         uint40 oneDay = 86_400;
-        uint40 start = uint40(block.timestamp); // 15 minutes from now
+        uint40 start = uint40(1710875417); // 15 minutes from now
 
         // The terminals that the project will accept funds through.
         JBTerminalConfig[] memory terminalConfigurations = new JBTerminalConfig[](1);
@@ -132,7 +140,7 @@ contract DeployScript is Script, Sphinx {
         REVStageConfig[] memory stageConfigurations = new REVStageConfig[](2);
         stageConfigurations[0] = REVStageConfig({
             startsAtOrAfter: start,
-            operatorSplitRate: uint16(JBConstants.MAX_RESERVED_RATE / 2),
+            splitRate: uint16(JBConstants.MAX_RESERVED_RATE / 2),
             initialIssuanceRate: uint112(1_000_000 * decimalMultiplier),
             priceCeilingIncreaseFrequency: oneDay,
             priceCeilingIncreasePercentage: uint32(JBConstants.MAX_DECAY_RATE / 20), // 5%
@@ -140,7 +148,7 @@ contract DeployScript is Script, Sphinx {
         });
         stageConfigurations[1] = REVStageConfig({
             startsAtOrAfter: start + 86_400 * 28,
-            operatorSplitRate: uint16(JBConstants.MAX_RESERVED_RATE / 2),
+            splitRate: uint16(JBConstants.MAX_RESERVED_RATE / 2),
             initialIssuanceRate: uint112(100_000 * decimalMultiplier),
             priceCeilingIncreaseFrequency: 7 * oneDay,
             priceCeilingIncreasePercentage: uint16(JBConstants.MAX_DECAY_RATE / 100), // 1%
@@ -152,21 +160,21 @@ contract DeployScript is Script, Sphinx {
             description: REVDescription(name, symbol, projectUri, SALT),
             baseCurrency: nativeCurrency,
             premintTokenAmount: 80_000_000 * decimalMultiplier,
-            // premintChainId: PREMINT_CHAIN_ID,
-            initialOperator: OPERATOR,
+            premintChainId: PREMINT_CHAIN_ID,
+            initialSplitOperator: OPERATOR,
             stageConfigurations: stageConfigurations
         });
 
         // The project's buyback hook configuration.
-        REVBuybackPoolConfig[] memory buybackPoolConfigurations = new REVBuybackPoolConfig[](0);
-        // buybackPoolConfigurations[0] = REVBuybackPoolConfig({
-        //     token: JBConstants.NATIVE_TOKEN,
-        //     fee: 10_000,
-        //     twapWindow: 2 days,
-        //     twapSlippageTolerance: 9000
-        // });
+        REVBuybackPoolConfig[] memory buybackPoolConfigurations = new REVBuybackPoolConfig[](1);
+        buybackPoolConfigurations[0] = REVBuybackPoolConfig({
+            token: JBConstants.NATIVE_TOKEN,
+            fee: 10_000,
+            twapWindow: 2 days,
+            twapSlippageTolerance: 9000
+        });
         REVBuybackHookConfig memory buybackHookConfiguration = REVBuybackHookConfig({
-            hook: IJBBuybackHook(address(0)), //IJBBuybackHook(buybackHookAddress),
+            hook: buybackHook.hook,
             poolConfigurations: buybackPoolConfigurations
         });
 
@@ -271,15 +279,18 @@ contract DeployScript is Script, Sphinx {
         });
 
         // Specify the optimism sucker.
-        BPSuckerDeployerConfig[] memory suckerDeployerConfigurations = new BPSuckerDeployerConfig[](0);
-        // suckerDeployerConfigurations[0] = BPSuckerDeployerConfig({
-        //     deployer: IBPSuckerDeployer(optimismSuckerDeployerAddress),
-        //     mappings: tokenMappings
-        // });
+        if(address(suckers.optimismDeployer) == address(0))
+            revert("Optimism sucker deployer is not configured on this network.");
+
+        BPSuckerDeployerConfig[] memory suckerDeployerConfigurations = new BPSuckerDeployerConfig[](1);
+        suckerDeployerConfigurations[0] = BPSuckerDeployerConfig({
+            deployer: IBPSuckerDeployer(suckers.optimismDeployer),
+            mappings: tokenMappings
+        });
 
         // Specify all sucker deployments.
         REVSuckerDeploymentConfig memory suckerDeploymentConfiguration =
-            REVSuckerDeploymentConfig({deployerConfigurations: suckerDeployerConfigurations, salt: bytes32(0)}); //suckerSalt});
+            REVSuckerDeploymentConfig({deployerConfigurations: suckerDeployerConfigurations, salt: SUCKER_SALT});
 
         return BannyverseRevnetConfig({
             configuration: revnetConfiguration,
@@ -319,8 +330,20 @@ contract DeployScript is Script, Sphinx {
     }
 
     function deploy() public sphinx {
-        // Deploy the Banny URI Resolver and update our config with its address.
-        // bannyverseConfig.hookConfiguration.baseline721HookConfiguration.tokenUriResolver = new Banny721TokenUriResolver{salt: RESOLVER_SALT}(OPERATOR, TRUSTED_FORWARDER);
+        // Deploy the Banny URI Resolver.
+        Banny721TokenUriResolver resolver;
+        {
+            // Perform the check for the resolver..
+            (address _resolver, bool _resolverIsDeployed) =
+                _isDeployed(RESOLVER_SALT, type(Banny721TokenUriResolver).creationCode, abi.encode(OPERATOR, TRUSTED_FORWARDER));
+            // Deploy it if it has not been deployed yet.
+            resolver = !_resolverIsDeployed
+                ? new Banny721TokenUriResolver{salt: RESOLVER_SALT}(OPERATOR, TRUSTED_FORWARDER)
+                : Banny721TokenUriResolver(_resolver);
+        }
+
+        // Update our config with its address.
+        bannyverseConfig.hookConfiguration.baseline721HookConfiguration.tokenUriResolver = resolver;
 
         // Deploy the $BANNY Revnet.
         revnet.croptop_deployer.deployCroptopRevnetWith({
@@ -333,5 +356,25 @@ contract DeployScript is Script, Sphinx {
             extraHookMetadata: bannyverseConfig.extraHookMetadata,
             allowedPosts: bannyverseConfig.allowedPosts
         });
+    }
+
+    function _isDeployed(
+        bytes32 salt,
+        bytes memory creationCode,
+        bytes memory arguments
+    )
+        internal
+        view
+        returns (address, bool)
+    {
+        address _deployedTo = vm.computeCreate2Address({
+            salt: salt,
+            initCodeHash: keccak256(abi.encodePacked(creationCode, arguments)),
+            // Arachnid/deterministic-deployment-proxy address.
+            deployer: address(0x4e59b44847b379578588920cA78FbF26c0B4956C)
+        });
+
+        // Return if code is already present at this address.
+        return (_deployedTo, address(_deployedTo).code.length != 0);
     }
 }

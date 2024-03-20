@@ -1,6 +1,6 @@
 {
     "name": "@bannyverse/core",
-    "version": "0.0.9",
+    "version": "0.0.10",
     "license": "MIT",
     "repository": {
         "type": "git",
@@ -11,16 +11,18 @@
         "coverage:integration": "forge coverage --match-path \"./src/*.sol\" --report lcov --report summary",
         "deploy:mainnets": "source ./.env && npx sphinx propose ./script/Deploy.s.sol --networks mainnets",
         "deploy:testnets": "source ./.env && npx sphinx propose ./script/Deploy.s.sol --networks testnets",
-        "artifacts": "source ./.env && npx sphinx artifacts --org-id 'cltepuu9u0003j58rjtbd0hvu' --project-name 'revnet-core'"
+        "artifacts": "source ./.env && npx sphinx artifacts --org-id 'cltepuu9u0003j58rjtbd0hvu' --project-name 'bannyverse-core'"
     },
     "dependencies": {
-        "@bananapus/721-hook": "github:Bananapus/nana-721-hook#feat/sphinx",
-        "@bananapus/core": "github:Bananapus/nana-core#feat/sphinx",
+        "@bananapus/721-hook": "^0.0.4",
+        "@bananapus/core": "^0.0.7",
         "@bananapus/ownable": "^0.0.4",
         "@bananapus/permission-ids": "^0.0.4",
-        "@croptop/core": "github:xBA5ED/croptop-core#feat/sphinx",
+        "@croptop/core": "^0.0.3",
         "@openzeppelin/contracts": "^5.0.1",
-        "@rev-net/core": "github:rev-net/revnet-core#feat/sphinx",
-        "@sphinx-labs/plugins": "^0.30.4"
+        "@rev-net/core": "^0.0.13",
+        "@sphinx-labs/plugins": "^0.30.4",
+        "@bananapus/suckers": "^0.0.5",
+        "@bananapus/buyback-hook": "^0.0.4"
     }
 }
