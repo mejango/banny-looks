@@ -280,12 +280,12 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         external
     {
         // Make sure call is being made by owner of Naked Banny.
-        if (IERC721(hook).ownerOf(nakedBannyId) != msg.sender) revert UNAUTHORIZED__NAKED_BANNY();
+        if (IERC721(hook).ownerOf(nakedBannyId) != _msgSender()) revert UNAUTHORIZED__NAKED_BANNY();
 
         // Add the world if needed.
         if (worldId != 0) {
             // Check if the owner matched.
-            if (IERC721(hook).ownerOf(worldId) != msg.sender) revert UNAUTHORIZED_WORLD();
+            if (IERC721(hook).ownerOf(worldId) != _msgSender()) revert UNAUTHORIZED_WORLD();
 
             // Get the world's tier.
             JB721Tier memory worldTier = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, worldId, false);
@@ -320,7 +320,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             outfitId = outfitIds[i];
 
             // Check if the owner matched.
-            if (IERC721(hook).ownerOf(outfitId) != msg.sender) revert UNAUTHORIZED_OUTFIT();
+            if (IERC721(hook).ownerOf(outfitId) != _msgSender()) revert UNAUTHORIZED_OUTFIT();
 
             // Get the outfit's tier.
             outfitTier = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, outfitId, false);
@@ -357,7 +357,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         // Store the outfits.
         _attachedOutfitIdsOf[nakedBannyId] = outfitIds;
 
-        emit DecorateBanny(hook, nakedBannyId, worldId, outfitIds, msg.sender);
+        emit DecorateBanny(hook, nakedBannyId, worldId, outfitIds, _msgSender());
     }
 
     /// @notice The owner of this contract can store SVG files for tier IDs.
