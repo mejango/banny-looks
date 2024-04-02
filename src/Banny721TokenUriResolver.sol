@@ -19,10 +19,10 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     event DecorateBanny(
         address indexed hook, uint256 indexed nakenBannyId, uint256 worldId, uint256[] outfitIds, address caller
     );
-    event SetSvgContents(uint256 indexed tierId, bytes32 indexed svgHash, string svgContents, address caller);
-    event SetSvgHash(uint256 indexed tierId, bytes32 indexed svgHash, address caller);
+    event SetSvgContents(uint256[] indexed tierId, string svgContents, address caller);
+    event SetSvgHashs(uint256[] indexed tierIds, bytes32 indexed svgHashs, address caller);
     event SetSvgBaseUri(string baseUri, address caller);
-    event SetTierName(uint256 indexed tierId, string name, address caller);
+    event SetTierNames(uint256[] indexed tierIds, string[] names, address caller);
     
     error HEAD_ALREADY_ADDED();
     error FACE_ALREADY_ADDED();
@@ -91,7 +91,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
 
     /// @notice The Naked Banny and outfit SVG files.
     /// @custom:param tierId The ID of the tier that the SVG contents represent.
-    mapping(uint256 tierId => string) private _svgContentsOf;
+    mapping(uint256 tierId => string) private _svgContentOf;
 
     /// @notice The outfits currently attached to each Naked Banny.
     /// @dev Nakes Banny's will only be shown with outfits currently owned by the owner of the Naked Banny.
@@ -377,39 +377,58 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     }
 
     /// @notice The owner of this contract can store SVG files for tier IDs.
-    /// @param tierId The ID of the tier having an SVG stored.
+    /// @param tierIds The IDs of the tiers having SVGs stored.
     /// @param svgContents The svg contents being stored, not including the parent <svg></svg> element.
-    function setSvgContentsOf(uint256 tierId, string calldata svgContents) external {
-        // Make sure there isn't already contents for the specified tierId;
-        if (bytes(_svgContentsOf[tierId]).length != 0) revert CONTENTS_ALREADY_STORED();
+    function setSvgContentsOf(uint256[] memory tierId, string[] calldata svgContents) external {
+        uint256 numberOfTiers = tierIds.length;
 
-        // Get the stored svg hash for the tier.
-        bytes32 svgHash = svgHashOf[tierId];
+        uint256 tierId;
+        string memory svgContent;
 
-        // Make sure a hash exists.
-        if (svgHash == bytes32(0)) revert HASH_NOT_FOUND();
+        for (uint256 i; i < numberOfTiers; i++) {
+            tierId = tierIds[i];
+            svgContent = svgContents[i];
 
-        // Make sure the content matches the hash.
-        if (keccak256(abi.encodePacked(svgContents)) != svgHash) revert CONTENTS_MISMATCH();
+            // Make sure there isn't already contents for the specified tierId;
+            if (bytes(_svgContentOf[tierId]).length != 0) revert CONTENTS_ALREADY_STORED();
 
-        // Store the svg contents.
-        _svgContentsOf[tierId] = svgContents;
+            // Get the stored svg hash for the tier.
+            bytes32 svgHash = svgHashOf[tierId];
 
-        emit SetSvgContents(tierId, svgHash, svgContents, msg.sender);
+            // Make sure a hash exists.
+            if (svgHash == bytes32(0)) revert HASH_NOT_FOUND();
+
+            // Make sure the content matches the hash.
+            if (keccak256(abi.encodePacked(svgContent)) != svgHash) revert CONTENTS_MISMATCH();
+
+            // Store the svg contents.
+            _svgContentOf[tierId] = svgContent;
+        }
+
+        emit SetSvgContents(tierIds, svgContents, msg.sender);
     }
 
     /// @notice Allows the owner of this contract to upload the hash of an svg file for a tierId.
     /// @dev This allows anyone to lazily upload the correct svg file.
-    /// @param tierId The ID of the tier having an SVG hash stored.
-    /// @param svgHash The svg hash being stored, not including the parent <svg></svg> element.
-    function setSvgHashOf(uint256 tierId, bytes32 svgHash) external onlyOwner {
-        // Make sure there isn't already contents for the specified tierId;
-        if (svgHashOf[tierId] != bytes32(0)) revert HASH_ALREADY_STORED();
+    /// @param tierIds The IDs of the tiers having SVG hashes stored.
+    /// @param svgHashs The svg hashes being stored, not including the parent <svg></svg> element.
+    function setSvgHashsOf(uint256[] memory tierIds, bytes32[] memory svgHashs) external onlyOwner {
+        uint256 numberOfTiers = tierIds.length;
 
-        // Store the svg contents.
-        svgHashOf[tierId] = svgHash;
+        uint256 tierId;
+        bytes32 memory svgHash;
 
-        emit SetSvgHash(tierId, svgHash, msg.sender);
+        for (uint256 i; i < numberOfTiers; i++) {
+            tierId = tierIds[i];
+            svgHash = svgHashs[i];
+
+            // Make sure there isn't already contents for the specified tierId;
+            if (svgHashOf[tierId] != bytes32(0)) revert HASH_ALREADY_STORED();
+            _tierNameOf[tierId] = name;
+            // Store the svg contents.
+            svgHashOf[tierId] = svgHash;
+        }
+        emit SetSvgHash(tierIds, svgHashs, msg.sender);
     }
 
     /// @notice Allows the owner to set the tier's name.
@@ -427,8 +446,8 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             name = names[i];
 
             _tierNameOf[tierId] = name;
-            emit SetTierName(tierId, name, msg.sender);
         }
+        emit SetTierName(tierIds, names, msg.sender);
     }
 
     /// @notice Allows the owner of this contract to specify the base of the domain hosting the SVG files.
@@ -652,7 +671,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     /// @custom:param tierId The ID of the tier that the SVG contents represent.
     function _svgOf(address hook, uint256 tierId) private view returns (string memory) {
         // Keep a reference to the stored scg contents.
-        string memory svgContents = _svgContentsOf[tierId];
+        string memory svgContents = _svgContentOf[tierId];
 
         if (bytes(svgContents).length != 0) return svgContents;
 
