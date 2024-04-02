@@ -38,7 +38,7 @@ contract Drop1Script is Script, Sphinx {
         address producer;
 
         // Get the deployment addresses for the 721 hook contracts for this chain.
-        hook = Hook721Deployment(0xB2b5841DBeF766d4b521221732F9B618fCf34A87);
+        hook = Hook721Deployment(address(0)); //TODO add the right address.
 
         // The project's NFT tiers.
         JB721TierConfig[] memory tiers = new JB721TierConfig[](30);
@@ -50,7 +50,7 @@ contract Drop1Script is Script, Sphinx {
             votingUnits: 0,
             reserveFrequency: 0,
             reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32("0x9639b46715172ad9d838ea37014b1c43c70365b15857ef955d96891239e58af0"),
+            encodedIPFSUri: bytes32("0xfac0fecc3f4cb984445834b3bc3430b3cf2b91d16c56b019e8359ca3a4a4d0f4"),
             category: 9,
             allowOwnerMint: false,
             useReserveBeneficiaryAsDefault: false,
@@ -275,7 +275,7 @@ contract Drop1Script is Script, Sphinx {
             votingUnits: 0,
             reserveFrequency: 0,
             reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32("0xfd19d14b78edb4ebfa55098c89c0e1d9465c149cf745a61fc3ff44f12695e971"),
+            encodedIPFSUri: bytes32("0x621aa6a57f53c4979d6abe4dd43546419d6fa892aefabe158d3ac1a8f92d5ba6"),
             category: 10,
             allowOwnerMint: false,
             useReserveBeneficiaryAsDefault: false,
