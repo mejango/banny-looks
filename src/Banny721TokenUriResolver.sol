@@ -19,8 +19,8 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     event DecorateBanny(
         address indexed hook, uint256 indexed nakenBannyId, uint256 worldId, uint256[] outfitIds, address caller
     );
-    event SetSvgContents(uint256[] indexed tierId, string svgContents, address caller);
-    event SetSvgHashs(uint256[] indexed tierIds, bytes32 indexed svgHashs, address caller);
+    event SetSvgContents(uint256[] indexed tierId, string[] svgContents, address caller);
+    event SetSvgHashes(uint256[] indexed tierIds, bytes32[] indexed svgHashs, address caller);
     event SetSvgBaseUri(string baseUri, address caller);
     event SetTierNames(uint256[] indexed tierIds, string[] names, address caller);
     
@@ -66,7 +66,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     uint8 private constant _FACE_MOUTH_CATEGORY = 7;
     uint8 private constant _HEADGEAR_CATEGORY = 8;
     uint8 private constant _ONESIE_CATEGORY = 9;
-    uint8 private constant _SHOES_CATEGORY = 10;
+    uint8 private constant _SHOE_CATEGORY = 10;
     uint8 private constant _SUIT_CATEGORY = 11;
     uint8 private constant _SUIT_BOTTOM_CATEGORY = 12;
     uint8 private constant _SUIT_TOP_CATEGORY = 13;
@@ -349,7 +349,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             } else if (outfitTier.category == _ONESIE_CATEGORY) {
                 hasOnesie = true;
             } else if (
-                (outfitTier.category == _SUIT_CATEGORY || outfitTier.category == _SUIT_TOP_CATEGORY || outfitTier.category == _SUIT_BOTTOM_CATEGORY || outfitTier.category == _SHOES_CATEGORY) && hasOnesie
+                (outfitTier.category == _SUIT_CATEGORY || outfitTier.category == _SUIT_TOP_CATEGORY || outfitTier.category == _SUIT_BOTTOM_CATEGORY || outfitTier.category == _SHOE_CATEGORY) && hasOnesie
             ) {
                 revert ONESIE_ALREADY_ADDED();
             } else if (
@@ -379,7 +379,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     /// @notice The owner of this contract can store SVG files for tier IDs.
     /// @param tierIds The IDs of the tiers having SVGs stored.
     /// @param svgContents The svg contents being stored, not including the parent <svg></svg> element.
-    function setSvgContentsOf(uint256[] memory tierId, string[] calldata svgContents) external {
+    function setSvgContentsOf(uint256[] memory tierIds, string[] calldata svgContents) external {
         uint256 numberOfTiers = tierIds.length;
 
         uint256 tierId;
@@ -416,7 +416,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         uint256 numberOfTiers = tierIds.length;
 
         uint256 tierId;
-        bytes32 memory svgHash;
+        bytes32 svgHash;
 
         for (uint256 i; i < numberOfTiers; i++) {
             tierId = tierIds[i];
@@ -424,11 +424,11 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
 
             // Make sure there isn't already contents for the specified tierId;
             if (svgHashOf[tierId] != bytes32(0)) revert HASH_ALREADY_STORED();
-            _tierNameOf[tierId] = name;
+
             // Store the svg contents.
             svgHashOf[tierId] = svgHash;
         }
-        emit SetSvgHash(tierIds, svgHashs, msg.sender);
+        emit SetSvgHashes(tierIds, svgHashs, msg.sender);
     }
 
     /// @notice Allows the owner to set the tier's name.
@@ -447,7 +447,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
 
             _tierNameOf[tierId] = name;
         }
-        emit SetTierName(tierIds, names, msg.sender);
+        emit SetTierNames(tierIds, names, msg.sender);
     }
 
     /// @notice Allows the owner of this contract to specify the base of the domain hosting the SVG files.
@@ -638,8 +638,8 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
                 return string.concat("World: ", name);
             } else if (category == _BACKSIDE_CATEGORY) {
                 return string.concat("Backside: ", name);
-            } else if (category == _LEGS_CATEGORY) {
-                return string.concat("Legs: ", name);
+            } else if (category == _SHOE_CATEGORY) {
+                return string.concat("Shoe: ", name);
             } else if (category == _NECKLACE_CATEGORY) {
                 return string.concat("Necklace: ", name);
             } else if (category == _FACE_CATEGORY) {
