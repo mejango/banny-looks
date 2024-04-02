@@ -750,6 +750,8 @@ contract Drop1Script is Script, Sphinx {
         names[39] = "Zucco Tshirt";
 
         bannyverse.resolver.setTierNames(tierIds, names);
+
+        bannyverse.resolver.setSvgBaseUri("https://bannyverse.infura-ipfs.io/");
     }
 
     function _isDeployed(

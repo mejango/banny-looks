@@ -451,7 +451,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     }
 
     /// @notice Allows the owner of this contract to specify the base of the domain hosting the SVG files.
-    function setSvgBaseUriOf(string calldata baseUri) external onlyOwner {
+    function setSvgBaseUri(string calldata baseUri) external onlyOwner {
         // Store the base URI.
         svgBaseUri = baseUri;
 
