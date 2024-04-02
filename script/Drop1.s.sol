@@ -694,7 +694,7 @@ contract Drop1Script is Script, Sphinx {
         svgHashes[36] = bytes32(0xdb88f7db87040a94e91ad12bf12a59dcb6324a9f47d56325a787ddc28d1e3b3e);
         svgHashes[37] = bytes32(0x7e95e4f07ff7b2fa2b1afce8729079119a43ab865a691166ba9c6b6bb99e79f0);
         svgHashes[38] = bytes32(0x0dbc34cc734039dae91309142c5042a9ffc46f14a6c3a11eb8c74fa7d7b23e55);
-        svgHashes[39] = bytes32(63ecce624ab9c586fed702aee4496063482ad846b8e685767dfc2509f6bdfb12);
+        svgHashes[39] = bytes32(0x63ecce624ab9c586fed702aee4496063482ad846b8e685767dfc2509f6bdfb12);
 
         resolver.setSvgHashsOf(tierIds, svgHashes);
 
