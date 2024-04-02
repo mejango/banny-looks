@@ -2,27 +2,21 @@
 pragma solidity 0.8.23;
 
 import {JB721TierConfig} from "@bananapus/721-hook/src/structs/JB721TierConfig.sol";
-import {JB721TieredHook} from "@bananapus/721-hook/src/JB721TieredHook.sol";
+import {JB721TiersHook} from "@bananapus/721-hook/src/JB721TiersHook.sol";
+
+import "./helpers/BannyverseDeploymentLib.sol";
+import "@rev-net/core/script/helpers/RevnetCoreDeploymentLib.sol";
 
 import {Sphinx} from "@sphinx-labs/contracts/SphinxPlugin.sol";
 import {Script} from "forge-std/Script.sol";
 
-import {Banny721TokenUriResolver} from "./../src/Banny721TokenUriResolver.sol";
-
 contract Drop1Script is Script, Sphinx {
-    /// @notice tracks the deployment of the 721 hook contracts for the chain we are deploying to.
-    JB721TieredHook hook;
+    /// @notice tracks the deployment of the revnet contracts for the chain we are deploying to.
+    RevnetCoreDeployment revnet;
+    /// @notice tracks the deployment of the bannyverse contracts for the chain we are deploying to.
+    BannyverseDeployment bannyverse;
 
-    BannyverseRevnetConfig bannyverseConfig;
-    Banny721TokenUriResolver resolver;
-
-    uint256 PREMINT_CHAIN_ID = 1;
-    bytes32 SALT = "BANNYVERSE";
-    bytes32 SUCKER_SALT = "BANNYVERSE_SUCKER";
-    bytes32 RESOLVER_SALT = "Banny721TokenUriResolver";
-
-    address OPERATOR = 0x817738DC393d682Ca5fBb268707b99F2aAe96baE;
-    address TRUSTED_FORWARDER = 0xB2b5841DBeF766d4b521221732F9B618fCf34A87;
+    JB721TiersHook hook;
 
     function configureSphinx() public override {
         // TODO: Update to contain revnet devs.
@@ -36,11 +30,25 @@ contract Drop1Script is Script, Sphinx {
     }
 
     function run() public {
-        address producer;
+        // Get the deployment addresses for the 721 hook contracts for this chain.
+        revnet = RevnetCoreDeploymentLib.getDeployment(
+            vm.envOr("REVNET_CORE_DEPLOYMENT_PATH", string("node_modules/@rev-net/core/deployments/"))
+        );
 
         // Get the deployment addresses for the 721 hook contracts for this chain.
-        hook = Hook721Deployment(address(0)); //TODO add the right address.
-        resolver = Banny721TokenUriResolver(address(0)); // TODO add the right address.
+        bannyverse = BannyverseDeploymentLib.getDeployment(
+            vm.envOr("BANNYVERSE_CORE_DEPLOYMENT_PATH", string("deployments/"))
+        );
+
+        // Get the hook address by using the deployer. 
+        hook = revnet.croptop_deployer.payHookSpecificationsOf(bannyverse.revnetId);
+        deploy();
+    }
+
+    function deploy() public sphinx {
+        // TODO: ?
+        // TODO: Define decimals
+        address producer;
 
         // The project's NFT tiers.
         JB721TierConfig[] memory tiers = new JB721TierConfig[](30);
@@ -696,7 +704,7 @@ contract Drop1Script is Script, Sphinx {
         svgHashes[38] = bytes32(0x0dbc34cc734039dae91309142c5042a9ffc46f14a6c3a11eb8c74fa7d7b23e55);
         svgHashes[39] = bytes32(0x63ecce624ab9c586fed702aee4496063482ad846b8e685767dfc2509f6bdfb12);
 
-        resolver.setSvgHashsOf(tierIds, svgHashes);
+        bannyverse.resolver.setSvgHashsOf(tierIds, svgHashes);
 
         string[] memory names = new string[](40);
         names[0] = "Astronaut Body";
@@ -740,7 +748,7 @@ contract Drop1Script is Script, Sphinx {
         names[38] = "Zipper Jacket";
         names[39] = "Zucco Tshirt";
 
-        resolver.setTierNames(tierIds, names);
+        bannyverse.resolver.setTierNames(tierIds, names);
     }
 
     function _isDeployed(
