@@ -56,7 +56,7 @@ contract Drop1Script is Script, Sphinx {
 
         // Astronaut Body
         tiers[0] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 2)),
+            price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 250,
             votingUnits: 0,
             reserveFrequency: 0,
@@ -71,7 +71,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Astronaut Head
         tiers[1] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 3)),
+            price: uint104(1 * (10 ** (decimals - 3))),
             initialSupply: 10_000,
             votingUnits: 0,
             reserveFrequency: 0,
@@ -86,7 +86,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Baggies
         tiers[2] = JB721TierConfig({
-            price: uint104(15 * 10 ** (decimals - 1)),
+            price: uint104(15 * (10 ** (decimals - 1))),
             initialSupply: 30,
             votingUnits: 0,
             reserveFrequency: 0,
@@ -101,7 +101,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Bandolph staff
         tiers[3] = JB721TierConfig({
-            price: uint104(125 * 10 ** (decimals - 2)),
+            price: uint104(125 * (10 ** (decimals - 2))),
             initialSupply: 250,
             votingUnits: 0,
             reserveFrequency: 0,
@@ -116,7 +116,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Banny vision pro 
         tiers[4] = JB721TierConfig({
-            price: uint104(1 * 10 ** decimals),
+            price: uint104(1 * (10 ** decimals)),
             initialSupply: 100,
             votingUnits: 0,
             reserveFrequency: 25,
@@ -131,7 +131,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Cheap beer
         tiers[5] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 3)),
+            price: uint104(1 * (10 ** (decimals - 3))),
             initialSupply: 10_000,
             votingUnits: 0,
             reserveFrequency: 0,
@@ -146,7 +146,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Catana
         tiers[6] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 2)),
+            price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 250,
             votingUnits: 0,
             reserveFrequency: 0,
@@ -161,7 +161,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Chefs knife
         tiers[7] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 3)),
+            price: uint104(1 * (10 ** (decimals - 3))),
             initialSupply: 500,
             votingUnits: 0,
             reserveFrequency: 0,
@@ -176,7 +176,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Club beanie
         tiers[8] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 3)),
+            price: uint104(1 * (10 ** (decimals - 3))),
             initialSupply: 1_000,
             votingUnits: 0,
             reserveFrequency: 0,
@@ -191,7 +191,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Constitution
         tiers[9] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 3)),
+            price: uint104(1 * (10 ** (decimals - 3))),
             initialSupply: 10_000,
             votingUnits: 0,
             reserveFrequency: 0,
@@ -206,7 +206,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Cyberpunk glasses 
         tiers[10] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 2)),
+            price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 150,
             votingUnits: 0,
             reserveFrequency: 0,
@@ -221,7 +221,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Pew pew 
         tiers[11] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 2)),
+            price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 150,
             votingUnits: 0,
             reserveFrequency: 0,
@@ -236,7 +236,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // DJ booth
         tiers[12] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 1)),
+            price: uint104(1 * (10 ** (decimals - 1))),
             initialSupply: 10,
             votingUnits: 0,
             reserveFrequency: 10,
@@ -251,7 +251,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Doc coat
         tiers[13] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 2)),
+            price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 250,
             votingUnits: 0,
             reserveFrequency: 0,
@@ -266,7 +266,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Dorthy dress
         tiers[14] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 2)),
+            price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 250,
             votingUnits: 0,
             reserveFrequency: 0,
@@ -281,7 +281,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Dorthy shoes 
         tiers[15] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 2)),
+            price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 250,
             votingUnits: 0,
             reserveFrequency: 0,
@@ -296,7 +296,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Dorthy hair
         tiers[16] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 2)),
+            price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 250,
             votingUnits: 0,
             reserveFrequency: 0,
@@ -311,7 +311,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Farmer hat
         tiers[17] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 2)),
+            price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 250,
             votingUnits: 0,
             reserveFrequency: 0,
@@ -326,7 +326,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Gas can
         tiers[18] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 1)),
+            price: uint104(1 * (10 ** (decimals - 1))),
             initialSupply: 25,
             votingUnits: 0,
             reserveFrequency: 25,
@@ -341,7 +341,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Geisha body
         tiers[19] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 1)),
+            price: uint104(1 * (10 ** (decimals - 1))),
             initialSupply: 100,
             votingUnits: 0,
             reserveFrequency: 100,
@@ -356,7 +356,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Geisha hair
         tiers[20] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 1)),
+            price: uint104(1 * (10 ** (decimals - 1))),
             initialSupply: 100,
             votingUnits: 0,
             reserveFrequency: 100,
@@ -371,7 +371,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Goat jersey
         tiers[21] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 1)),
+            price: uint104(1 * (10 ** (decimals - 1))),
             initialSupply: 50,
             votingUnits: 0,
             reserveFrequency: 12,
@@ -386,7 +386,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Headphones
         tiers[22] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 2)),
+            price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 500,
             votingUnits: 0,
             reserveFrequency: 0,
@@ -401,7 +401,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Investor shades 
         tiers[23] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 2)),
+            price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 250,
             votingUnits: 0,
             reserveFrequency: 0,
@@ -416,7 +416,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Irie tshirt 
         tiers[24] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 3)),
+            price: uint104(1 * (10 ** (decimals - 3))),
             initialSupply: 250,
             votingUnits: 0,
             reserveFrequency: 0,
@@ -431,7 +431,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Jonny utah shirt 
         tiers[25] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 3)),
+            price: uint104(1 * (10 ** (decimals - 3))),
             initialSupply: 250,
             votingUnits: 0,
             reserveFrequency: 0,
@@ -446,7 +446,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Lightsaber 
         tiers[26] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 3)),
+            price: uint104(1 * (10 ** (decimals - 3))),
             initialSupply: 5000,
             votingUnits: 0,
             reserveFrequency: 0,
@@ -461,7 +461,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Mouthstraw 
         tiers[27] = JB721TierConfig({
-            price: uint104(1 * 10 ** decimals),
+            price: uint104(1 * (10 ** decimals)),
             initialSupply: 15,
             votingUnits: 0,
             reserveFrequency: 15,
@@ -476,7 +476,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Natty dread
         tiers[28] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 2)),
+            price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 100,
             votingUnits: 0,
             reserveFrequency: 0,
@@ -491,7 +491,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Nerd
         tiers[29] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 1)),
+            price: uint104(1 * (10 ** (decimals - 1))),
             initialSupply: 50,
             votingUnits: 0,
             reserveFrequency: 0,
@@ -506,7 +506,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Peachhair 
         tiers[30] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 2)),
+            price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 100,
             votingUnits: 0,
             reserveFrequency: 0,
@@ -521,7 +521,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Potion 
         tiers[31] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 1)),
+            price: uint104(1 * (10 ** (decimals - 1))),
             initialSupply: 100,
             votingUnits: 0,
             reserveFrequency: 50,
@@ -536,7 +536,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Proff glasses
         tiers[32] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 2)),
+            price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 200,
             votingUnits: 0,
             reserveFrequency: 0,
@@ -551,7 +551,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Proff hair
         tiers[33] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 2)),
+            price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 200,
             votingUnits: 0,
             reserveFrequency: 0,
@@ -566,7 +566,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Punk jacket
         tiers[34] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 1)),
+            price: uint104(1 * (10 ** (decimals - 1))),
             initialSupply: 50,
             votingUnits: 0,
             reserveFrequency: 0,
@@ -581,7 +581,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Quaid helmet
         tiers[35] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 3)),
+            price: uint104(1 * (10 ** (decimals - 3))),
             initialSupply: 100,
             votingUnits: 0,
             reserveFrequency: 0,
@@ -596,7 +596,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Sweatsuit
         tiers[36] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 1)),
+            price: uint104(1 * (10 ** (decimals - 1))),
             initialSupply: 20,
             votingUnits: 0,
             reserveFrequency: 0,
@@ -611,7 +611,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Dagger 
         tiers[37] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 3)),
+            price: uint104(1 * (10 ** (decimals - 3))),
             initialSupply: 150,
             votingUnits: 0,
             reserveFrequency: 0,
@@ -626,7 +626,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Zipper jacket
         tiers[38] = JB721TierConfig({
-            price: uint104(25 * 10 ** (decimals - 2)),
+            price: uint104(25 * (10 ** (decimals - 2))),
             initialSupply: 25,
             votingUnits: 0,
             reserveFrequency: 25,
@@ -641,7 +641,7 @@ contract Drop1Script is Script, Sphinx {
         });
         // Zucco tshirt
         tiers[39] = JB721TierConfig({
-            price: uint104(1 * 10 ** (decimals - 3)),
+            price: uint104(1 * (10 ** (decimals - 3))),
             initialSupply: 10000,
             votingUnits: 0,
             reserveFrequency: 0,
