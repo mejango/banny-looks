@@ -14,6 +14,7 @@ contract Drop1Script is Script, Sphinx {
     JB721TieredHook hook;
 
     BannyverseRevnetConfig bannyverseConfig;
+    Banny721TokenUriResolver resolver;
 
     uint256 PREMINT_CHAIN_ID = 1;
     bytes32 SALT = "BANNYVERSE";
@@ -39,6 +40,7 @@ contract Drop1Script is Script, Sphinx {
 
         // Get the deployment addresses for the 721 hook contracts for this chain.
         hook = Hook721Deployment(address(0)); //TODO add the right address.
+        resolver = Banny721TokenUriResolver(address(0)); // TODO add the right address.
 
         // The project's NFT tiers.
         JB721TierConfig[] memory tiers = new JB721TierConfig[](30);
@@ -149,7 +151,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Chefs knife
-        tiers[6] = JB721TierConfig({
+        tiers[7] = JB721TierConfig({
             price: uint104(1 * 10 ** (decimals - 3)),
             initialSupply: 500,
             votingUnits: 0,
@@ -164,7 +166,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Club beanie
-        tiers[7] = JB721TierConfig({
+        tiers[8] = JB721TierConfig({
             price: uint104(1 * 10 ** (decimals - 3)),
             initialSupply: 1_000,
             votingUnits: 0,
@@ -179,7 +181,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Constitution
-        tiers[8] = JB721TierConfig({
+        tiers[9] = JB721TierConfig({
             price: uint104(1 * 10 ** (decimals - 3)),
             initialSupply: 10_000,
             votingUnits: 0,
@@ -194,7 +196,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Cyberpunk glasses 
-        tiers[9] = JB721TierConfig({
+        tiers[10] = JB721TierConfig({
             price: uint104(1 * 10 ** (decimals - 2)),
             initialSupply: 150,
             votingUnits: 0,
@@ -209,7 +211,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Pew pew 
-        tiers[10] = JB721TierConfig({
+        tiers[11] = JB721TierConfig({
             price: uint104(1 * 10 ** (decimals - 2)),
             initialSupply: 150,
             votingUnits: 0,
@@ -224,7 +226,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // DJ booth
-        tiers[11] = JB721TierConfig({
+        tiers[12] = JB721TierConfig({
             price: uint104(1 * 10 ** (decimals - 1)),
             initialSupply: 10,
             votingUnits: 0,
@@ -239,7 +241,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Doc coat
-        tiers[12] = JB721TierConfig({
+        tiers[13] = JB721TierConfig({
             price: uint104(1 * 10 ** (decimals - 2)),
             initialSupply: 250,
             votingUnits: 0,
@@ -254,7 +256,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Dorthy dress
-        tiers[13] = JB721TierConfig({
+        tiers[14] = JB721TierConfig({
             price: uint104(1 * 10 ** (decimals - 2)),
             initialSupply: 250,
             votingUnits: 0,
@@ -269,7 +271,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Dorthy shoes 
-        tiers[14] = JB721TierConfig({
+        tiers[15] = JB721TierConfig({
             price: uint104(1 * 10 ** (decimals - 2)),
             initialSupply: 250,
             votingUnits: 0,
@@ -284,7 +286,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Dorthy hair
-        tiers[15] = JB721TierConfig({
+        tiers[16] = JB721TierConfig({
             price: uint104(1 * 10 ** (decimals - 2)),
             initialSupply: 250,
             votingUnits: 0,
@@ -299,7 +301,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Farmer hat
-        tiers[16] = JB721TierConfig({
+        tiers[17] = JB721TierConfig({
             price: uint104(1 * 10 ** (decimals - 2)),
             initialSupply: 250,
             votingUnits: 0,
@@ -314,7 +316,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Gas can
-        tiers[17] = JB721TierConfig({
+        tiers[18] = JB721TierConfig({
             price: uint104(1 * 10 ** (decimals - 1)),
             initialSupply: 25,
             votingUnits: 0,
@@ -329,7 +331,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Geisha body
-        tiers[18] = JB721TierConfig({
+        tiers[19] = JB721TierConfig({
             price: uint104(1 * 10 ** (decimals - 1)),
             initialSupply: 100,
             votingUnits: 0,
@@ -344,7 +346,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Geisha hair
-        tiers[19] = JB721TierConfig({
+        tiers[20] = JB721TierConfig({
             price: uint104(1 * 10 ** (decimals - 1)),
             initialSupply: 100,
             votingUnits: 0,
@@ -359,7 +361,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Goat jersey
-        tiers[20] = JB721TierConfig({
+        tiers[21] = JB721TierConfig({
             price: uint104(1 * 10 ** (decimals - 1)),
             initialSupply: 50,
             votingUnits: 0,
@@ -374,7 +376,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Headphones
-        tiers[21] = JB721TierConfig({
+        tiers[22] = JB721TierConfig({
             price: uint104(1 * 10 ** (decimals - 2)),
             initialSupply: 500,
             votingUnits: 0,
@@ -389,7 +391,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Investor shades 
-        tiers[22] = JB721TierConfig({
+        tiers[23] = JB721TierConfig({
             price: uint104(1 * 10 ** (decimals - 2)),
             initialSupply: 250,
             votingUnits: 0,
@@ -404,7 +406,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Irie tshirt 
-        tiers[23] = JB721TierConfig({
+        tiers[24] = JB721TierConfig({
             price: uint104(1 * 10 ** (decimals - 3)),
             initialSupply: 250,
             votingUnits: 0,
@@ -419,7 +421,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Jonny utah shirt 
-        tiers[24] = JB721TierConfig({
+        tiers[25] = JB721TierConfig({
             price: uint104(1 * 10 ** (decimals - 3)),
             initialSupply: 250,
             votingUnits: 0,
@@ -434,7 +436,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Lightsaber 
-        tiers[25] = JB721TierConfig({
+        tiers[26] = JB721TierConfig({
             price: uint104(1 * 10 ** (decimals - 3)),
             initialSupply: 5000,
             votingUnits: 0,
@@ -449,7 +451,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Mouthstraw 
-        tiers[26] = JB721TierConfig({
+        tiers[27] = JB721TierConfig({
             price: uint104(1 * 10 ** decimals),
             initialSupply: 15,
             votingUnits: 0,
@@ -464,7 +466,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Natty dread
-        tiers[27] = JB721TierConfig({
+        tiers[28] = JB721TierConfig({
             price: uint104(1 * 10 ** (decimals - 2)),
             initialSupply: 100,
             votingUnits: 0,
@@ -479,7 +481,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Nerd
-        tiers[28] = JB721TierConfig({
+        tiers[29] = JB721TierConfig({
             price: uint104(1 * 10 ** (decimals - 1)),
             initialSupply: 50,
             votingUnits: 0,
@@ -494,7 +496,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Peachhair 
-        tiers[29] = JB721TierConfig({
+        tiers[30] = JB721TierConfig({
             price: uint104(1 * 10 ** (decimals - 2)),
             initialSupply: 100,
             votingUnits: 0,
@@ -509,7 +511,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Potion 
-        tiers[30] = JB721TierConfig({
+        tiers[31] = JB721TierConfig({
             price: uint104(1 * 10 ** (decimals - 1)),
             initialSupply: 100,
             votingUnits: 0,
@@ -524,7 +526,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Proff glasses
-        tiers[31] = JB721TierConfig({
+        tiers[32] = JB721TierConfig({
             price: uint104(1 * 10 ** (decimals - 2)),
             initialSupply: 200,
             votingUnits: 0,
@@ -539,7 +541,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Proff hair
-        tiers[32] = JB721TierConfig({
+        tiers[33] = JB721TierConfig({
             price: uint104(1 * 10 ** (decimals - 2)),
             initialSupply: 200,
             votingUnits: 0,
@@ -554,7 +556,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Punk jacket
-        tiers[33] = JB721TierConfig({
+        tiers[34] = JB721TierConfig({
             price: uint104(1 * 10 ** (decimals - 1)),
             initialSupply: 50,
             votingUnits: 0,
@@ -569,7 +571,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Quaid helmet
-        tiers[34] = JB721TierConfig({
+        tiers[35] = JB721TierConfig({
             price: uint104(1 * 10 ** (decimals - 3)),
             initialSupply: 100,
             votingUnits: 0,
@@ -584,7 +586,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Sweatsuit
-        tiers[35] = JB721TierConfig({
+        tiers[36] = JB721TierConfig({
             price: uint104(1 * 10 ** (decimals - 1)),
             initialSupply: 20,
             votingUnits: 0,
@@ -599,7 +601,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Dagger 
-        tiers[36] = JB721TierConfig({
+        tiers[37] = JB721TierConfig({
             price: uint104(1 * 10 ** (decimals - 3)),
             initialSupply: 150,
             votingUnits: 0,
@@ -614,7 +616,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Zipper jacket
-        tiers[37] = JB721TierConfig({
+        tiers[38] = JB721TierConfig({
             price: uint104(25 * 10 ** (decimals - 2)),
             initialSupply: 25,
             votingUnits: 0,
@@ -629,7 +631,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Zucco tshirt
-        tiers[38] = JB721TierConfig({
+        tiers[39] = JB721TierConfig({
             price: uint104(1 * 10 ** (decimals - 3)),
             initialSupply: 10000,
             votingUnits: 0,
@@ -645,6 +647,100 @@ contract Drop1Script is Script, Sphinx {
         });
 
         hook.adjustTiers(tiers, new uint256[](0));
+
+        uint256[] memory tierIds = new uint256[](40);
+        bytes32[] memory svgHashes = new bytes32[](40);
+
+        for (uint256 i; i < 40; i++) {
+          tierIds[i] = i + 5;
+        }
+
+        svgHashes[0] = bytes32(0x72c967fccb0ecfb66d8b5902c00b28cd19b7fabb0396cc8d110d2c7b1c5be369);
+        svgHashes[1] = bytes32(0x3912f3b815511f3fc935703669624b1efb9ab6afdbd308f66edcb2960ac8f93f);
+        svgHashes[2] = bytes32(0xa056a061d44fe1d02ee153c030afaaa773521056bc591ec9ed3290fe7a3b9917);
+        svgHashes[3] = bytes32(0xacfbffe21e3de73825eaf11dd666d7ac1ed3dce71c40e2f78abfdcc61de6e231);
+        svgHashes[4] = bytes32(0x48722804c2fb5388619745793bb4664aa99a58b33809093db0023cf6c2a94dfb);
+        svgHashes[5] = bytes32(0x40e6ae57605ea4bc547bafafb1dc8b00f0235070ca4005a4f277ac6197612b28);
+        svgHashes[6] = bytes32(0x4bacb12fd3dac3a392d8edca1c4ddb9f480619f4c7e18c3fbda6fa44f59f2080);
+        svgHashes[7] = bytes32(0xe2a349c0acba1d273ba01e9ad266bbdad652cec5184ad73ee82c11044ac28558);
+        svgHashes[8] = bytes32(0x5aeb94cf89e7be61849b77d4fb32a105473048d7a4a35bccbf87bee0f48e4c71);
+        svgHashes[9] = bytes32(0xd571397055350d3338d73f7594ba5d12deb1345ee16dffaa6d108bb0b2e50e4a);
+        svgHashes[10] = bytes32(0x74ce81a55d03e0a3cb769df5723243f5ffc879b5af3960ecc6eafddbfe03e319);
+        svgHashes[11] = bytes32(0xfd3ac98d3d60677cbcbf1c3f88d97214618ee15839616c916c0ef954e62ca13a);
+        svgHashes[12] = bytes32(0x84a5e65f54a55bcfffbb050892be115a1f9e51f749c09f899f84886c547e0ad9);
+        svgHashes[13] = bytes32(0x43985a2ccd8f5fe3a08d0d6f6ccd37c58797f83b1b7fbd4fe921135257d9317a);
+        svgHashes[14] = bytes32(0xafb136b2e279fab66ebc2ad03f254a6bb15845cfd2d02659b67b05b0cb212171);
+        svgHashes[15] = bytes32(0xef34613334ea81f3e6394fb3156f029810341f422ce553187483cc11a05ee06b);
+        svgHashes[16] = bytes32(0x1417655d1e83bb653e865f7a8653c065c9677ec42c0fac7ea75d9142099ee04d);
+        svgHashes[17] = bytes32(0x294170bd6598f1e1ec50f9b4fc8e13195595581017f4f5eecc67e15a7c22bbf3);
+        svgHashes[18] = bytes32(0xcc63099a7a1172d04db284be80a6b14c2b2c44f546837fd2864e9f10d7fd32aa);
+        svgHashes[19] = bytes32(0xe2db3e12eac178f0ec6ca29f0354050d6f9bea8dc1ed1ede7650a982d074dc52);
+        svgHashes[20] = bytes32(0x27cb2a6eaba1ed713e06759a2cbbeb202b9c30d14b3277650112c4a33b904abe);
+        svgHashes[21] = bytes32(0x1d8a511b9f64f91ba487c3f154b72a27e6e0006b5fcd936d4144b840c4c89e17);
+        svgHashes[22] = bytes32(0x660274af6d3a0cbf6eb5c17653dc987ff5ffeae0cbd4f43217c69bf855ae6f60);
+        svgHashes[23] = bytes32(0x99f076bd58bcd99698984eddbf98c26fe2724279bb251273ffe33d3ba70841b3);
+        svgHashes[24] = bytes32(0x8ea063476043ea13f2c5234c5c436904910ffc2057160f0107ee9e282f19e297);
+        svgHashes[25] = bytes32(0x9f0084ae54058a1501ab4475406829effc1b720c43a1eff64f7528be3d5233fb);
+        svgHashes[26] = bytes32(0xa6292ef611888f53067dff30033f1e20d7fc53d21111a18537b5932639b20fe1);
+        svgHashes[27] = bytes32(0xce073a9ba6daaf651ef126ad5a377717006150abd6a89217669d619d53ed716d);
+        svgHashes[28] = bytes32(0x310312dbf88bcd24550fe00ceacc2df4e58741f99f9f48a07f34a57b4e3bf57f);
+        svgHashes[29] = bytes32(0xcca9b51edef8e733b928028b3f9a61619b72ce937cd47d25fe0f15b9cb5f2ec3);
+        svgHashes[30] = bytes32(0x55e4e915c0642002cfedef043154b00b0f5c9b084ee241e2f283f8040ab3af92);
+        svgHashes[31] = bytes32(0x22dd4da99647543397cbd8afa162b9bf3243a774c3db1ab2130251ab4c47eb48);
+        svgHashes[32] = bytes32(0x252faea09bdfea00c4616dbe51d208200b5b8369093dfb5acc7fbcdd739dac83);
+        svgHashes[33] = bytes32(0x8bc333f872da87d8f11875a1f8cbb5947759ec69484fdd25b6e927ffe2547346);
+        svgHashes[34] = bytes32(0xa60f89b538e91947a1c3902527d8258816c55d8cce027c24c317d7194f780588);
+        svgHashes[35] = bytes32(0xacd990609f9ecced2b7baa0d251f8561a78793e4bd80c82ced2c7d6e305ed1ef);
+        svgHashes[36] = bytes32(0xdb88f7db87040a94e91ad12bf12a59dcb6324a9f47d56325a787ddc28d1e3b3e);
+        svgHashes[37] = bytes32(0x7e95e4f07ff7b2fa2b1afce8729079119a43ab865a691166ba9c6b6bb99e79f0);
+        svgHashes[38] = bytes32(0x0dbc34cc734039dae91309142c5042a9ffc46f14a6c3a11eb8c74fa7d7b23e55);
+        svgHashes[39] = bytes32(63ecce624ab9c586fed702aee4496063482ad846b8e685767dfc2509f6bdfb12);
+
+        resolver.setSvgHashsOf(tierIds, svgHashes);
+
+        string[] memory names = new string[](40);
+        names[0] = "Astronaut Body";
+        names[1] = "Astronaut Helmet";
+        names[2] = "Baggies";
+        names[3] = "Bandolph Staff";
+        names[4] = "Banny Vision Pro";
+        names[5] = "Cheap Beer";
+        names[6] = "Catana";
+        names[7] = "Chefs Knife";
+        names[8] = "Club Beanie";
+        names[9] = "Constitution";
+        names[10] = "Cyberpunk Glasses";
+        names[11] = "Pew Pew";
+        names[12] = "DJ Booth";
+        names[13] = "Doc Coat";
+        names[14] = "Dorthy Dress";
+        names[15] = "Dorthy Shoes";
+        names[16] = "Dorthy Hair";
+        names[17] = "Farmer Hat";
+        names[18] = "Gas Can";
+        names[19] = "Geisha Body";
+        names[20] = "Geisha Hair";
+        names[21] = "Goat Jersey";
+        names[22] = "Headphones";
+        names[23] = "Irie Shirt";
+        names[24] = "Jonny Utah Shirty";
+        names[25] = "Lightsaber";
+        names[26] = "Mouthstraw";
+        names[27] = "Natty Dred";
+        names[28] = "Nerd";
+        names[29] = "Peach Hair";
+        names[30] = "Potion";
+        names[31] = "Proff Glasses";
+        names[32] = "Proff Hair";
+        names[33] = "Punk Jacket";
+        names[34] = "Sweatsuit";
+        names[35] = "Dagger";
+        names[36] = "Zipper Jacket";
+        names[37] = "Zucco Tshirt";
+        names[38] = "Zipper Jacket";
+        names[39] = "Zucco Tshirt";
+
+        resolver.setTierNames(tierIds, names);
     }
 
     function _isDeployed(

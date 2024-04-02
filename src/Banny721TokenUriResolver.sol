@@ -434,7 +434,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     /// @notice Allows the owner to set the tier's name.
     /// @param tierIds The IDs of the tiers having their name stored.
     /// @param names The names of the tiers.
-    function setTierName(uint256[] memory tierIds, string[] memory names) external onlyOwner {
+    function setTierNames(uint256[] memory tierIds, string[] memory names) external onlyOwner {
 
         uint256 numberOfTiers = tierIds.length;
 
