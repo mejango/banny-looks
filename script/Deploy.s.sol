@@ -64,11 +64,11 @@ contract DeployScript is Script, Sphinx {
     BannyverseRevnetConfig bannyverseConfig;
 
     uint256 PREMINT_CHAIN_ID = 1;
-    bytes32 SALT = "BANNYVERSE";
+    bytes32 SALT = "BANNY_VERSE";
     bytes32 SUCKER_SALT = "BANNYVERSE_SUCKER";
     bytes32 RESOLVER_SALT = "Banny721TokenUriResolver";
 
-    address OPERATOR = 0x817738DC393d682Ca5fBb268707b99F2aAe96baE;
+    address OPERATOR;
     address TRUSTED_FORWARDER = 0xB2b5841DBeF766d4b521221732F9B618fCf34A87;
 
     function configureSphinx() public override {
@@ -108,6 +108,9 @@ contract DeployScript is Script, Sphinx {
         buybackHook = BuybackDeploymentLib.getDeployment(
             vm.envOr("NANA_BUYBACK_HOOK_DEPLOYMENT_PATH", string("node_modules/@bananapus/buyback-hook/deployments/"))
         );
+
+        // Set the operator to be this safe.
+        OPERATOR = safeAddress();
 
         bannyverseConfig = getBannyverseRevnetConfig();
 

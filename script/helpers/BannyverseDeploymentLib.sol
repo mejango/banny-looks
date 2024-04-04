@@ -47,7 +47,7 @@ library BannyverseDeploymentLib {
         deployment.resolver = Banny721TokenUriResolver(_getDeploymentAddress(path, "bannyverse-core", network_name, "Banny721TokenUriResolver"));
 
         // TODO: Update after every deployment and/or verify that it is 2 on every chain.
-        deployment.revnetId = 2;
+        deployment.revnetId = 3;
     }
 
     /// @notice Get the address of a contract that was deployed by the Deploy script.
