@@ -46,13 +46,11 @@ contract Drop1Script is Script, Sphinx {
     }
 
     function deploy() public sphinx {
-        // TODO: ?
-        // TODO: Define decimals
-        address producer;
+        address producer = safeAddress();
         uint256 decimals = 18;
 
         // The project's NFT tiers.
-        JB721TierConfig[] memory tiers = new JB721TierConfig[](30);
+        JB721TierConfig[] memory tiers = new JB721TierConfig[](40);
 
         // Astronaut Body
         tiers[0] = JB721TierConfig({
