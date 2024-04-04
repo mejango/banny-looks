@@ -52,23 +52,8 @@ contract Drop1Script is Script, Sphinx {
         // The project's NFT tiers.
         JB721TierConfig[] memory tiers = new JB721TierConfig[](40);
 
-        // Astronaut Body
-        tiers[0] = JB721TierConfig({
-            price: uint104(1 * (10 ** (decimals - 2))),
-            initialSupply: 250,
-            votingUnits: 0,
-            reserveFrequency: 0,
-            reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0xadb4f498b101bdfd65030fb597f7f2817d908f034ba25581ca11f8408cc3770a),
-            category: 9,
-            allowOwnerMint: false,
-            useReserveBeneficiaryAsDefault: false,
-            transfersPausable: false,
-            useVotingUnits: false,
-            cannotBeRemoved: false
-        });
         // Astronaut Head
-        tiers[1] = JB721TierConfig({
+        tiers[0] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 3))),
             initialSupply: 10_000,
             votingUnits: 0,
@@ -82,38 +67,8 @@ contract Drop1Script is Script, Sphinx {
             useVotingUnits: false,
             cannotBeRemoved: false
         });
-        // Baggies
-        tiers[2] = JB721TierConfig({
-            price: uint104(15 * (10 ** (decimals - 1))),
-            initialSupply: 30,
-            votingUnits: 0,
-            reserveFrequency: 0,
-            reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0xc9a3b7f6c641966285e345d12a68fb6d962b0e62f5b10398f206ad0282ca31cd),
-            category: 12,
-            allowOwnerMint: false,
-            useReserveBeneficiaryAsDefault: false,
-            transfersPausable: false,
-            useVotingUnits: false,
-            cannotBeRemoved: false
-        });
-        // Bandolph staff
-        tiers[3] = JB721TierConfig({
-            price: uint104(125 * (10 ** (decimals - 2))),
-            initialSupply: 250,
-            votingUnits: 0,
-            reserveFrequency: 0,
-            reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0xdc278de8567be400acb8d95a5a8bdb921f1802bac54b53637f2ac3edd057d087),
-            category: 14,
-            allowOwnerMint: false,
-            useReserveBeneficiaryAsDefault: false,
-            transfersPausable: false,
-            useVotingUnits: false,
-            cannotBeRemoved: false
-        });
         // Banny vision pro 
-        tiers[4] = JB721TierConfig({
+        tiers[1] = JB721TierConfig({
             price: uint104(1 * (10 ** decimals)),
             initialSupply: 100,
             votingUnits: 0,
@@ -127,83 +82,8 @@ contract Drop1Script is Script, Sphinx {
             useVotingUnits: false,
             cannotBeRemoved: false
         });
-        // Cheap beer
-        tiers[5] = JB721TierConfig({
-            price: uint104(1 * (10 ** (decimals - 3))),
-            initialSupply: 10_000,
-            votingUnits: 0,
-            reserveFrequency: 0,
-            reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0xba6aacfc67494db3d1b21f812d72fc59d8f6eb5df7102221f4238c43ac8db0d8),
-            category: 14,
-            allowOwnerMint: false,
-            useReserveBeneficiaryAsDefault: false,
-            transfersPausable: false,
-            useVotingUnits: false,
-            cannotBeRemoved: false
-        });
-        // Catana
-        tiers[6] = JB721TierConfig({
-            price: uint104(1 * (10 ** (decimals - 2))),
-            initialSupply: 250,
-            votingUnits: 0,
-            reserveFrequency: 0,
-            reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0xd1982a45f353111302f371e1b2b6a0edb2b2413b5fc38e4b406e856e85e842f7),
-            category: 14,
-            allowOwnerMint: false,
-            useReserveBeneficiaryAsDefault: false,
-            transfersPausable: false,
-            useVotingUnits: false,
-            cannotBeRemoved: false
-        });
-        // Chefs knife
-        tiers[7] = JB721TierConfig({
-            price: uint104(1 * (10 ** (decimals - 3))),
-            initialSupply: 500,
-            votingUnits: 0,
-            reserveFrequency: 0,
-            reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0x777c052bb6782e66234c1c847e6cb88e675301629949c968de4aa304401e9ca9),
-            category: 14,
-            allowOwnerMint: false,
-            useReserveBeneficiaryAsDefault: false,
-            transfersPausable: false,
-            useVotingUnits: false,
-            cannotBeRemoved: false
-        });
-        // Club beanie
-        tiers[8] = JB721TierConfig({
-            price: uint104(1 * (10 ** (decimals - 3))),
-            initialSupply: 1_000,
-            votingUnits: 0,
-            reserveFrequency: 0,
-            reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0xd7f2442faeb9a2221a290a9ec71291fb0296e7deb9e0cc78ef5dd3b215407bff),
-            category: 8,
-            allowOwnerMint: false,
-            useReserveBeneficiaryAsDefault: false,
-            transfersPausable: false,
-            useVotingUnits: false,
-            cannotBeRemoved: false
-        });
-        // Constitution
-        tiers[9] = JB721TierConfig({
-            price: uint104(1 * (10 ** (decimals - 3))),
-            initialSupply: 10_000,
-            votingUnits: 0,
-            reserveFrequency: 0,
-            reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0x40fca04e7a981777cb61cdaa65eb0972ef5ec5fac36d0812143b7938d0d454f2),
-            category: 14,
-            allowOwnerMint: false,
-            useReserveBeneficiaryAsDefault: false,
-            transfersPausable: false,
-            useVotingUnits: false,
-            cannotBeRemoved: false
-        });
         // Cyberpunk glasses 
-        tiers[10] = JB721TierConfig({
+        tiers[2] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 150,
             votingUnits: 0,
@@ -217,75 +97,75 @@ contract Drop1Script is Script, Sphinx {
             useVotingUnits: false,
             cannotBeRemoved: false
         });
-        // Pew pew 
-        tiers[11] = JB721TierConfig({
+        // Investor shades 
+        tiers[3] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
-            initialSupply: 150,
+            initialSupply: 250,
             votingUnits: 0,
             reserveFrequency: 0,
             reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0x074d00adc03e38fbb16fade19890729547b155f7c3e72f14a4136a0de62d0885),
-            category: 14,
+            encodedIPFSUri: bytes32(0xc5a88a1a769d3c44d7ae43ca2bea33911aa2e9fb28bf2a0b3f14563b79d31039),
+            category: 6,
             allowOwnerMint: false,
             useReserveBeneficiaryAsDefault: false,
             transfersPausable: false,
             useVotingUnits: false,
             cannotBeRemoved: false
         });
-        // DJ booth
-        tiers[12] = JB721TierConfig({
+        // Nerd
+        tiers[4] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 1))),
-            initialSupply: 10,
+            initialSupply: 50,
             votingUnits: 0,
-            reserveFrequency: 10,
+            reserveFrequency: 0,
             reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0xb2657b0e4c127a9c8da0dca6381d3c9584beaac5c2da15d2cf1ce053478227f9),
-            category: 14,
+            encodedIPFSUri: bytes32(0xd582b8bb3dff885efd6c4c15418e8fcaed10d97bf0a4b8e58e4fb07fb550c969),
+            category: 6,
             allowOwnerMint: false,
             useReserveBeneficiaryAsDefault: false,
             transfersPausable: false,
             useVotingUnits: false,
             cannotBeRemoved: false
         });
-        // Doc coat
-        tiers[13] = JB721TierConfig({
+        // Proff glasses
+        tiers[5] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
-            initialSupply: 250,
+            initialSupply: 200,
             votingUnits: 0,
             reserveFrequency: 0,
             reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0x56f93601fe3818f09fbac468c37d823d08787a6998080e9a2688c0721af4c3e6),
-            category: 13,
+            encodedIPFSUri: bytes32(0x9f014b202de86447ab15ed58204869bbb0cbe43c3f6e7797e8864d63513ed7d1),
+            category: 6,
             allowOwnerMint: false,
             useReserveBeneficiaryAsDefault: false,
             transfersPausable: false,
             useVotingUnits: false,
             cannotBeRemoved: false
         });
-        // Dorthy dress
-        tiers[14] = JB721TierConfig({
-            price: uint104(1 * (10 ** (decimals - 2))),
-            initialSupply: 250,
+        // Mouthstraw 
+        tiers[6] = JB721TierConfig({
+            price: uint104(1 * (10 ** decimals)),
+            initialSupply: 15,
             votingUnits: 0,
-            reserveFrequency: 0,
+            reserveFrequency: 15,
             reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0x52d8a9562651c1c6d3afc693aec5deee156c0cf0bd606c53be1eb6a5d1734135),
-            category: 11,
+            encodedIPFSUri: bytes32(0xbc0593966b22f3621df9b124eacb2642a0bad60b4207be4236a9dd4922afa1bd),
+            category: 7,
             allowOwnerMint: false,
             useReserveBeneficiaryAsDefault: false,
             transfersPausable: false,
             useVotingUnits: false,
             cannotBeRemoved: false
         });
-        // Dorthy shoes 
-        tiers[15] = JB721TierConfig({
-            price: uint104(1 * (10 ** (decimals - 2))),
-            initialSupply: 250,
+        // Club beanie
+        tiers[7] = JB721TierConfig({
+            price: uint104(1 * (10 ** (decimals - 3))),
+            initialSupply: 1_000,
             votingUnits: 0,
             reserveFrequency: 0,
             reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0x6e2c3c803fd2faa857cbe641071c038ca4b1c4742b0be7f58a5290efd7aa72f9),
-            category: 10,
+            encodedIPFSUri: bytes32(0xd7f2442faeb9a2221a290a9ec71291fb0296e7deb9e0cc78ef5dd3b215407bff),
+            category: 8,
             allowOwnerMint: false,
             useReserveBeneficiaryAsDefault: false,
             transfersPausable: false,
@@ -293,7 +173,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Dorthy hair
-        tiers[16] = JB721TierConfig({
+        tiers[8] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 250,
             votingUnits: 0,
@@ -308,7 +188,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Farmer hat
-        tiers[17] = JB721TierConfig({
+        tiers[9] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 250,
             votingUnits: 0,
@@ -322,38 +202,8 @@ contract Drop1Script is Script, Sphinx {
             useVotingUnits: false,
             cannotBeRemoved: false
         });
-        // Gas can
-        tiers[18] = JB721TierConfig({
-            price: uint104(1 * (10 ** (decimals - 1))),
-            initialSupply: 25,
-            votingUnits: 0,
-            reserveFrequency: 25,
-            reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0xa49c14447402b7c5e7542b515e2d8626d92c03ec528727d95904cbcfe36a0e30),
-            category: 14,
-            allowOwnerMint: false,
-            useReserveBeneficiaryAsDefault: false,
-            transfersPausable: false,
-            useVotingUnits: false,
-            cannotBeRemoved: false
-        });
-        // Geisha body
-        tiers[19] = JB721TierConfig({
-            price: uint104(1 * (10 ** (decimals - 1))),
-            initialSupply: 100,
-            votingUnits: 0,
-            reserveFrequency: 100,
-            reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0xeda629ccb05c28b7ffbd274499d52132c40cd866dc77b5b349ca837fc7340607),
-            category: 11,
-            allowOwnerMint: false,
-            useReserveBeneficiaryAsDefault: false,
-            transfersPausable: false,
-            useVotingUnits: false,
-            cannotBeRemoved: false
-        });
         // Geisha hair
-        tiers[20] = JB721TierConfig({
+        tiers[10] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 1))),
             initialSupply: 100,
             votingUnits: 0,
@@ -367,23 +217,8 @@ contract Drop1Script is Script, Sphinx {
             useVotingUnits: false,
             cannotBeRemoved: false
         });
-        // Goat jersey
-        tiers[21] = JB721TierConfig({
-            price: uint104(1 * (10 ** (decimals - 1))),
-            initialSupply: 50,
-            votingUnits: 0,
-            reserveFrequency: 12,
-            reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0x0e3badd2c4df330aa41fe44ac4c1fde418879072326d0bb653bc109f60f4a72c),
-            category: 13,
-            allowOwnerMint: false,
-            useReserveBeneficiaryAsDefault: false,
-            transfersPausable: false,
-            useVotingUnits: false,
-            cannotBeRemoved: false
-        });
         // Headphones
-        tiers[22] = JB721TierConfig({
+        tiers[11] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 500,
             votingUnits: 0,
@@ -397,83 +232,8 @@ contract Drop1Script is Script, Sphinx {
             useVotingUnits: false,
             cannotBeRemoved: false
         });
-        // Investor shades 
-        tiers[23] = JB721TierConfig({
-            price: uint104(1 * (10 ** (decimals - 2))),
-            initialSupply: 250,
-            votingUnits: 0,
-            reserveFrequency: 0,
-            reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0xc5a88a1a769d3c44d7ae43ca2bea33911aa2e9fb28bf2a0b3f14563b79d31039),
-            category: 6,
-            allowOwnerMint: false,
-            useReserveBeneficiaryAsDefault: false,
-            transfersPausable: false,
-            useVotingUnits: false,
-            cannotBeRemoved: false
-        });
-        // Irie tshirt 
-        tiers[24] = JB721TierConfig({
-            price: uint104(1 * (10 ** (decimals - 3))),
-            initialSupply: 250,
-            votingUnits: 0,
-            reserveFrequency: 0,
-            reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0x80fd71363a83c0e69ef58b647447b91ac765ab091a4d015397552a2414148099),
-            category: 13,
-            allowOwnerMint: false,
-            useReserveBeneficiaryAsDefault: false,
-            transfersPausable: false,
-            useVotingUnits: false,
-            cannotBeRemoved: false
-        });
-        // Jonny utah shirt 
-        tiers[25] = JB721TierConfig({
-            price: uint104(1 * (10 ** (decimals - 3))),
-            initialSupply: 250,
-            votingUnits: 0,
-            reserveFrequency: 0,
-            reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0x4291eee6b32443c1df6b38dc1fb2e9fac00acdda0156d4a167f67d622c8fa1ed),
-            category: 13,
-            allowOwnerMint: false,
-            useReserveBeneficiaryAsDefault: false,
-            transfersPausable: false,
-            useVotingUnits: false,
-            cannotBeRemoved: false
-        });
-        // Lightsaber 
-        tiers[26] = JB721TierConfig({
-            price: uint104(1 * (10 ** (decimals - 3))),
-            initialSupply: 5000,
-            votingUnits: 0,
-            reserveFrequency: 0,
-            reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0x773605e3d0ab2236b5780f22a64783bbc0b938445a1d41f76955ebcd21dae42c),
-            category: 14,
-            allowOwnerMint: false,
-            useReserveBeneficiaryAsDefault: false,
-            transfersPausable: false,
-            useVotingUnits: false,
-            cannotBeRemoved: false
-        });
-        // Mouthstraw 
-        tiers[27] = JB721TierConfig({
-            price: uint104(1 * (10 ** decimals)),
-            initialSupply: 15,
-            votingUnits: 0,
-            reserveFrequency: 15,
-            reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0xbc0593966b22f3621df9b124eacb2642a0bad60b4207be4236a9dd4922afa1bd),
-            category: 7,
-            allowOwnerMint: false,
-            useReserveBeneficiaryAsDefault: false,
-            transfersPausable: false,
-            useVotingUnits: false,
-            cannotBeRemoved: false
-        });
         // Natty dread
-        tiers[28] = JB721TierConfig({
+        tiers[12] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 100,
             votingUnits: 0,
@@ -487,23 +247,8 @@ contract Drop1Script is Script, Sphinx {
             useVotingUnits: false,
             cannotBeRemoved: false
         });
-        // Nerd
-        tiers[29] = JB721TierConfig({
-            price: uint104(1 * (10 ** (decimals - 1))),
-            initialSupply: 50,
-            votingUnits: 0,
-            reserveFrequency: 0,
-            reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0xd582b8bb3dff885efd6c4c15418e8fcaed10d97bf0a4b8e58e4fb07fb550c969),
-            category: 6,
-            allowOwnerMint: false,
-            useReserveBeneficiaryAsDefault: false,
-            transfersPausable: false,
-            useVotingUnits: false,
-            cannotBeRemoved: false
-        });
         // Peachhair 
-        tiers[30] = JB721TierConfig({
+        tiers[13] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 100,
             votingUnits: 0,
@@ -517,38 +262,8 @@ contract Drop1Script is Script, Sphinx {
             useVotingUnits: false,
             cannotBeRemoved: false
         });
-        // Potion 
-        tiers[31] = JB721TierConfig({
-            price: uint104(1 * (10 ** (decimals - 1))),
-            initialSupply: 100,
-            votingUnits: 0,
-            reserveFrequency: 50,
-            reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0xc3ad10afe4e2836882501666642c3d45ae5e5b214fd9167221bfe95a42fbc5c6),
-            category: 14,
-            allowOwnerMint: false,
-            useReserveBeneficiaryAsDefault: false,
-            transfersPausable: false,
-            useVotingUnits: false,
-            cannotBeRemoved: false
-        });
-        // Proff glasses
-        tiers[32] = JB721TierConfig({
-            price: uint104(1 * (10 ** (decimals - 2))),
-            initialSupply: 200,
-            votingUnits: 0,
-            reserveFrequency: 0,
-            reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0x9f014b202de86447ab15ed58204869bbb0cbe43c3f6e7797e8864d63513ed7d1),
-            category: 6,
-            allowOwnerMint: false,
-            useReserveBeneficiaryAsDefault: false,
-            transfersPausable: false,
-            useVotingUnits: false,
-            cannotBeRemoved: false
-        });
         // Proff hair
-        tiers[33] = JB721TierConfig({
+        tiers[14] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 200,
             votingUnits: 0,
@@ -562,23 +277,8 @@ contract Drop1Script is Script, Sphinx {
             useVotingUnits: false,
             cannotBeRemoved: false
         });
-        // Punk jacket
-        tiers[34] = JB721TierConfig({
-            price: uint104(1 * (10 ** (decimals - 1))),
-            initialSupply: 50,
-            votingUnits: 0,
-            reserveFrequency: 0,
-            reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0x227a244f9e0857a0e1acffc80fefca06759323f856e0e19bf6bd39b48a034efc),
-            category: 13,
-            allowOwnerMint: false,
-            useReserveBeneficiaryAsDefault: false,
-            transfersPausable: false,
-            useVotingUnits: false,
-            cannotBeRemoved: false
-        });
         // Quaid helmet
-        tiers[35] = JB721TierConfig({
+        tiers[15] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 3))),
             initialSupply: 100,
             votingUnits: 0,
@@ -592,8 +292,38 @@ contract Drop1Script is Script, Sphinx {
             useVotingUnits: false,
             cannotBeRemoved: false
         });
+        // Astronaut Body
+        tiers[16] = JB721TierConfig({
+            price: uint104(1 * (10 ** (decimals - 2))),
+            initialSupply: 250,
+            votingUnits: 0,
+            reserveFrequency: 0,
+            reserveBeneficiary: address(0),
+            encodedIPFSUri: bytes32(0xadb4f498b101bdfd65030fb597f7f2817d908f034ba25581ca11f8408cc3770a),
+            category: 9,
+            allowOwnerMint: false,
+            useReserveBeneficiaryAsDefault: false,
+            transfersPausable: false,
+            useVotingUnits: false,
+            cannotBeRemoved: false
+        });
+        // Dorthy shoes 
+        tiers[17] = JB721TierConfig({
+            price: uint104(1 * (10 ** (decimals - 2))),
+            initialSupply: 250,
+            votingUnits: 0,
+            reserveFrequency: 0,
+            reserveBeneficiary: address(0),
+            encodedIPFSUri: bytes32(0x6e2c3c803fd2faa857cbe641071c038ca4b1c4742b0be7f58a5290efd7aa72f9),
+            category: 10,
+            allowOwnerMint: false,
+            useReserveBeneficiaryAsDefault: false,
+            transfersPausable: false,
+            useVotingUnits: false,
+            cannotBeRemoved: false
+        });
         // Sweatsuit
-        tiers[36] = JB721TierConfig({
+        tiers[18] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 1))),
             initialSupply: 20,
             votingUnits: 0,
@@ -607,15 +337,120 @@ contract Drop1Script is Script, Sphinx {
             useVotingUnits: false,
             cannotBeRemoved: false
         });
-        // Dagger 
-        tiers[37] = JB721TierConfig({
-            price: uint104(1 * (10 ** (decimals - 3))),
-            initialSupply: 150,
+        // Dorthy dress
+        tiers[19] = JB721TierConfig({
+            price: uint104(1 * (10 ** (decimals - 2))),
+            initialSupply: 250,
             votingUnits: 0,
             reserveFrequency: 0,
             reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0x6381dd96e0bf909f669984648a353b096aa260394933c5db6a960046110386b7),
-            category: 14,
+            encodedIPFSUri: bytes32(0x52d8a9562651c1c6d3afc693aec5deee156c0cf0bd606c53be1eb6a5d1734135),
+            category: 11,
+            allowOwnerMint: false,
+            useReserveBeneficiaryAsDefault: false,
+            transfersPausable: false,
+            useVotingUnits: false,
+            cannotBeRemoved: false
+        });
+        // Geisha body
+        tiers[20] = JB721TierConfig({
+            price: uint104(1 * (10 ** (decimals - 1))),
+            initialSupply: 100,
+            votingUnits: 0,
+            reserveFrequency: 100,
+            reserveBeneficiary: address(0),
+            encodedIPFSUri: bytes32(0xeda629ccb05c28b7ffbd274499d52132c40cd866dc77b5b349ca837fc7340607),
+            category: 11,
+            allowOwnerMint: false,
+            useReserveBeneficiaryAsDefault: false,
+            transfersPausable: false,
+            useVotingUnits: false,
+            cannotBeRemoved: false
+        });
+        // Baggies
+        tiers[21] = JB721TierConfig({
+            price: uint104(15 * (10 ** (decimals - 1))),
+            initialSupply: 30,
+            votingUnits: 0,
+            reserveFrequency: 0,
+            reserveBeneficiary: address(0),
+            encodedIPFSUri: bytes32(0xc9a3b7f6c641966285e345d12a68fb6d962b0e62f5b10398f206ad0282ca31cd),
+            category: 12,
+            allowOwnerMint: false,
+            useReserveBeneficiaryAsDefault: false,
+            transfersPausable: false,
+            useVotingUnits: false,
+            cannotBeRemoved: false
+        });
+        // Jonny utah shirt 
+        tiers[22] = JB721TierConfig({
+            price: uint104(1 * (10 ** (decimals - 3))),
+            initialSupply: 250,
+            votingUnits: 0,
+            reserveFrequency: 0,
+            reserveBeneficiary: address(0),
+            encodedIPFSUri: bytes32(0x4291eee6b32443c1df6b38dc1fb2e9fac00acdda0156d4a167f67d622c8fa1ed),
+            category: 13,
+            allowOwnerMint: false,
+            useReserveBeneficiaryAsDefault: false,
+            transfersPausable: false,
+            useVotingUnits: false,
+            cannotBeRemoved: false
+        });
+        // Doc coat
+        tiers[23] = JB721TierConfig({
+            price: uint104(1 * (10 ** (decimals - 2))),
+            initialSupply: 250,
+            votingUnits: 0,
+            reserveFrequency: 0,
+            reserveBeneficiary: address(0),
+            encodedIPFSUri: bytes32(0x56f93601fe3818f09fbac468c37d823d08787a6998080e9a2688c0721af4c3e6),
+            category: 13,
+            allowOwnerMint: false,
+            useReserveBeneficiaryAsDefault: false,
+            transfersPausable: false,
+            useVotingUnits: false,
+            cannotBeRemoved: false
+        });
+        // Goat jersey
+        tiers[24] = JB721TierConfig({
+            price: uint104(1 * (10 ** (decimals - 1))),
+            initialSupply: 50,
+            votingUnits: 0,
+            reserveFrequency: 12,
+            reserveBeneficiary: address(0),
+            encodedIPFSUri: bytes32(0x0e3badd2c4df330aa41fe44ac4c1fde418879072326d0bb653bc109f60f4a72c),
+            category: 13,
+            allowOwnerMint: false,
+            useReserveBeneficiaryAsDefault: false,
+            transfersPausable: false,
+            useVotingUnits: false,
+            cannotBeRemoved: false
+        });
+        // Irie tshirt 
+        tiers[25] = JB721TierConfig({
+            price: uint104(1 * (10 ** (decimals - 3))),
+            initialSupply: 250,
+            votingUnits: 0,
+            reserveFrequency: 0,
+            reserveBeneficiary: address(0),
+            encodedIPFSUri: bytes32(0x80fd71363a83c0e69ef58b647447b91ac765ab091a4d015397552a2414148099),
+            category: 13,
+            allowOwnerMint: false,
+            useReserveBeneficiaryAsDefault: false,
+            transfersPausable: false,
+            useVotingUnits: false,
+            cannotBeRemoved: false
+        });
+        // Punk jacket
+        tiers[26] = JB721TierConfig({
+            price: uint104(1 * (10 ** (decimals - 1))),
+            initialSupply: 50,
+            votingUnits: 0,
+            reserveFrequency: 0,
+            reserveBeneficiary: address(0),
+            encodedIPFSUri: bytes32(0x227a244f9e0857a0e1acffc80fefca06759323f856e0e19bf6bd39b48a034efc),
+            category: 13,
             allowOwnerMint: false,
             useReserveBeneficiaryAsDefault: false,
             transfersPausable: false,
@@ -623,7 +458,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Zipper jacket
-        tiers[38] = JB721TierConfig({
+        tiers[27] = JB721TierConfig({
             price: uint104(25 * (10 ** (decimals - 2))),
             initialSupply: 25,
             votingUnits: 0,
@@ -638,7 +473,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Zucco tshirt
-        tiers[39] = JB721TierConfig({
+        tiers[28] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 3))),
             initialSupply: 10000,
             votingUnits: 0,
@@ -646,6 +481,171 @@ contract Drop1Script is Script, Sphinx {
             reserveBeneficiary: address(0),
             encodedIPFSUri: bytes32(0x8e21fe91a6b4756e70e006cebfce662ab8861b4a62af8aaed83d35e57956b1dc),
             category: 13,
+            allowOwnerMint: false,
+            useReserveBeneficiaryAsDefault: false,
+            transfersPausable: false,
+            useVotingUnits: false,
+            cannotBeRemoved: false
+        });
+        // Bandolph staff
+        tiers[29] = JB721TierConfig({
+            price: uint104(125 * (10 ** (decimals - 2))),
+            initialSupply: 250,
+            votingUnits: 0,
+            reserveFrequency: 0,
+            reserveBeneficiary: address(0),
+            encodedIPFSUri: bytes32(0xdc278de8567be400acb8d95a5a8bdb921f1802bac54b53637f2ac3edd057d087),
+            category: 14,
+            allowOwnerMint: false,
+            useReserveBeneficiaryAsDefault: false,
+            transfersPausable: false,
+            useVotingUnits: false,
+            cannotBeRemoved: false
+        });
+        // Catana
+        tiers[30] = JB721TierConfig({
+            price: uint104(1 * (10 ** (decimals - 2))),
+            initialSupply: 250,
+            votingUnits: 0,
+            reserveFrequency: 0,
+            reserveBeneficiary: address(0),
+            encodedIPFSUri: bytes32(0xd1982a45f353111302f371e1b2b6a0edb2b2413b5fc38e4b406e856e85e842f7),
+            category: 14,
+            allowOwnerMint: false,
+            useReserveBeneficiaryAsDefault: false,
+            transfersPausable: false,
+            useVotingUnits: false,
+            cannotBeRemoved: false
+        });
+        // Chefs knife
+        tiers[31] = JB721TierConfig({
+            price: uint104(1 * (10 ** (decimals - 3))),
+            initialSupply: 500,
+            votingUnits: 0,
+            reserveFrequency: 0,
+            reserveBeneficiary: address(0),
+            encodedIPFSUri: bytes32(0x777c052bb6782e66234c1c847e6cb88e675301629949c968de4aa304401e9ca9),
+            category: 14,
+            allowOwnerMint: false,
+            useReserveBeneficiaryAsDefault: false,
+            transfersPausable: false,
+            useVotingUnits: false,
+            cannotBeRemoved: false
+        });
+        // Cheap beer
+        tiers[32] = JB721TierConfig({
+            price: uint104(1 * (10 ** (decimals - 3))),
+            initialSupply: 10_000,
+            votingUnits: 0,
+            reserveFrequency: 0,
+            reserveBeneficiary: address(0),
+            encodedIPFSUri: bytes32(0xba6aacfc67494db3d1b21f812d72fc59d8f6eb5df7102221f4238c43ac8db0d8),
+            category: 14,
+            allowOwnerMint: false,
+            useReserveBeneficiaryAsDefault: false,
+            transfersPausable: false,
+            useVotingUnits: false,
+            cannotBeRemoved: false
+        });
+        // Constitution
+        tiers[33] = JB721TierConfig({
+            price: uint104(1 * (10 ** (decimals - 3))),
+            initialSupply: 10_000,
+            votingUnits: 0,
+            reserveFrequency: 0,
+            reserveBeneficiary: address(0),
+            encodedIPFSUri: bytes32(0x40fca04e7a981777cb61cdaa65eb0972ef5ec5fac36d0812143b7938d0d454f2),
+            category: 14,
+            allowOwnerMint: false,
+            useReserveBeneficiaryAsDefault: false,
+            transfersPausable: false,
+            useVotingUnits: false,
+            cannotBeRemoved: false
+        });
+        // Pew pew 
+        tiers[34] = JB721TierConfig({
+            price: uint104(1 * (10 ** (decimals - 2))),
+            initialSupply: 150,
+            votingUnits: 0,
+            reserveFrequency: 0,
+            reserveBeneficiary: address(0),
+            encodedIPFSUri: bytes32(0x074d00adc03e38fbb16fade19890729547b155f7c3e72f14a4136a0de62d0885),
+            category: 14,
+            allowOwnerMint: false,
+            useReserveBeneficiaryAsDefault: false,
+            transfersPausable: false,
+            useVotingUnits: false,
+            cannotBeRemoved: false
+        });
+        // DJ booth
+        tiers[35] = JB721TierConfig({
+            price: uint104(1 * (10 ** (decimals - 1))),
+            initialSupply: 10,
+            votingUnits: 0,
+            reserveFrequency: 10,
+            reserveBeneficiary: address(0),
+            encodedIPFSUri: bytes32(0xb2657b0e4c127a9c8da0dca6381d3c9584beaac5c2da15d2cf1ce053478227f9),
+            category: 14,
+            allowOwnerMint: false,
+            useReserveBeneficiaryAsDefault: false,
+            transfersPausable: false,
+            useVotingUnits: false,
+            cannotBeRemoved: false
+        });
+        // Gas can
+        tiers[36] = JB721TierConfig({
+            price: uint104(1 * (10 ** (decimals - 1))),
+            initialSupply: 25,
+            votingUnits: 0,
+            reserveFrequency: 25,
+            reserveBeneficiary: address(0),
+            encodedIPFSUri: bytes32(0xa49c14447402b7c5e7542b515e2d8626d92c03ec528727d95904cbcfe36a0e30),
+            category: 14,
+            allowOwnerMint: false,
+            useReserveBeneficiaryAsDefault: false,
+            transfersPausable: false,
+            useVotingUnits: false,
+            cannotBeRemoved: false
+        });
+        // Lightsaber 
+        tiers[37] = JB721TierConfig({
+            price: uint104(1 * (10 ** (decimals - 3))),
+            initialSupply: 5000,
+            votingUnits: 0,
+            reserveFrequency: 0,
+            reserveBeneficiary: address(0),
+            encodedIPFSUri: bytes32(0x773605e3d0ab2236b5780f22a64783bbc0b938445a1d41f76955ebcd21dae42c),
+            category: 14,
+            allowOwnerMint: false,
+            useReserveBeneficiaryAsDefault: false,
+            transfersPausable: false,
+            useVotingUnits: false,
+            cannotBeRemoved: false
+        });
+        // Potion 
+        tiers[38] = JB721TierConfig({
+            price: uint104(1 * (10 ** (decimals - 1))),
+            initialSupply: 100,
+            votingUnits: 0,
+            reserveFrequency: 50,
+            reserveBeneficiary: address(0),
+            encodedIPFSUri: bytes32(0xc3ad10afe4e2836882501666642c3d45ae5e5b214fd9167221bfe95a42fbc5c6),
+            category: 14,
+            allowOwnerMint: false,
+            useReserveBeneficiaryAsDefault: false,
+            transfersPausable: false,
+            useVotingUnits: false,
+            cannotBeRemoved: false
+        });
+        // Dagger 
+        tiers[39] = JB721TierConfig({
+            price: uint104(1 * (10 ** (decimals - 3))),
+            initialSupply: 150,
+            votingUnits: 0,
+            reserveFrequency: 0,
+            reserveBeneficiary: address(0),
+            encodedIPFSUri: bytes32(0x6381dd96e0bf909f669984648a353b096aa260394933c5db6a960046110386b7),
+            category: 14,
             allowOwnerMint: false,
             useReserveBeneficiaryAsDefault: false,
             transfersPausable: false,
