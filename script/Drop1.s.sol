@@ -706,8 +706,8 @@ contract Drop1Script is Script, Sphinx {
         bannyverse.resolver.setSvgHashsOf(tierIds, svgHashes);
 
         string[] memory names = new string[](1);
-        // names[0] = "Astronaut Body";
-        names[0] = "Astronaut Helmet";
+        names[0] = "Astronaut Body";
+        // names[0] = "Astronaut Helmet";
         // names[2] = "Baggies";
         // names[3] = "Bandolph Staff";
         // names[4] = "Banny Vision Pro";
