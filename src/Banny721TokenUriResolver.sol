@@ -23,7 +23,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     event SetSvgHashes(uint256[] indexed tierIds, bytes32[] indexed svgHashs, address caller);
     event SetSvgBaseUri(string baseUri, address caller);
     event SetTierNames(uint256[] indexed tierIds, string[] names, address caller);
-    
+
     error ASSET_IS_ALREADY_BEING_WORN();
     error HEAD_ALREADY_ADDED();
     error FACE_ALREADY_ADDED();
@@ -104,14 +104,13 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     /// @custom:param nakedBannyId The ID of the Naked Banny of the world.
     mapping(uint256 nakedBannyId => uint256) internal _attachedWorldIdOf;
 
-    
     /// @notice The ID of the naked banny each world is being used by.
     /// @custom:param worldId The ID of the world.
     mapping(uint256 worldId => uint256) internal _worldIsBeingUsedBy;
 
     /// @notice The ID of the naked banny each outfit is being worn by.
     /// @custom:param outfitId The ID of the outfit.
-    mapping(uint256 outfitId => uint256) internal _outfitIsBeingWornBy;    
+    mapping(uint256 outfitId => uint256) internal _outfitIsBeingWornBy;
 
     /// @notice The assets currently attached to each Naked Banny, owned by the naked Banny's owner.
     /// @param nakedBannyId The ID of the naked banny shows with the associated assets.
@@ -149,7 +148,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     function worldIsBeingUsedBy(uint256 worldId) public view returns (uint256) {
         // Get a reference to the naked banny using the world.
         uint256 nakedBannyId = _worldIsBeingUsedBy[worldId];
-        
+
         // If no naked banny is wearing the outfit, or if its no longer the world attached, return 0.
         if (nakedBannyId == 0 || _attachedWorldIdOf[nakedBannyId] != worldId) return 0;
 
@@ -163,7 +162,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     function outfitIsBeingWornBy(uint256 outfitId) public view returns (uint256) {
         // Get a reference to the naked banny wearing the outfit.
         uint256 nakedBannyId = _outfitIsBeingWornBy[outfitId];
-        
+
         // If no naked banny is wearing the outfit, return 0.
         if (nakedBannyId == 0) return 0;
 
@@ -301,7 +300,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         // Return the SVG contents.
         return _layeredSvg(contents);
     }
-  
+
     /// @notice Returns the name of the token.
     /// @param hook The hook storing the assets.
     /// @param tokenId The ID of the token to show.
@@ -410,11 +409,17 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             } else if (outfitTier.category == _ONESIE_CATEGORY) {
                 hasOnesie = true;
             } else if (
-                (outfitTier.category == _SUIT_CATEGORY || outfitTier.category == _SUIT_TOP_CATEGORY || outfitTier.category == _SUIT_BOTTOM_CATEGORY || outfitTier.category == _SHOE_CATEGORY) && hasOnesie
+                (
+                    outfitTier.category == _SUIT_CATEGORY || outfitTier.category == _SUIT_TOP_CATEGORY
+                        || outfitTier.category == _SUIT_BOTTOM_CATEGORY || outfitTier.category == _SHOE_CATEGORY
+                ) && hasOnesie
             ) {
                 revert ONESIE_ALREADY_ADDED();
             } else if (
-                (outfitTier.category == _FACE_CATEGORY || outfitTier.category == _FACE_EYES_CATEGORY || outfitTier.category == _FACE_MOUTH_CATEGORY || outfitTier.category == _HEADGEAR_CATEGORY) && hasHead
+                (
+                    outfitTier.category == _FACE_CATEGORY || outfitTier.category == _FACE_EYES_CATEGORY
+                        || outfitTier.category == _FACE_MOUTH_CATEGORY || outfitTier.category == _HEADGEAR_CATEGORY
+                ) && hasHead
             ) {
                 revert HEAD_ALREADY_ADDED();
             } else if (
@@ -499,7 +504,6 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     /// @param tierIds The IDs of the tiers having their name stored.
     /// @param names The names of the tiers.
     function setTierNames(uint256[] memory tierIds, string[] memory names) external onlyOwner {
-
         uint256 numberOfTiers = tierIds.length;
 
         uint256 tierId;

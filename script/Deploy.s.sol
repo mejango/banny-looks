@@ -117,7 +117,7 @@ contract DeployScript is Script, Sphinx {
         deploy();
     }
 
-    function getBannyverseRevnetConfig() internal view returns (BannyverseRevnetConfig memory){
+    function getBannyverseRevnetConfig() internal view returns (BannyverseRevnetConfig memory) {
         // Define constants
         string memory name = "Bannyverse";
         string memory symbol = "BANNY";
@@ -129,7 +129,7 @@ contract DeployScript is Script, Sphinx {
         uint256 decimalMultiplier = 10 ** decimals;
         uint24 nakedBannyCategory = 0;
         uint40 oneDay = 86_400;
-        uint40 start = uint40(1710875417); // 15 minutes from now
+        uint40 start = uint40(1_710_875_417); // 15 minutes from now
 
         // The terminals that the project will accept funds through.
         JBTerminalConfig[] memory terminalConfigurations = new JBTerminalConfig[](1);
@@ -137,8 +137,7 @@ contract DeployScript is Script, Sphinx {
 
         // Accept the chain's native currency through the multi terminal.
         tokensToAccept[0] = JBConstants.NATIVE_TOKEN;
-        terminalConfigurations[0] =
-            JBTerminalConfig({terminal: core.terminal, tokensToAccept: tokensToAccept});
+        terminalConfigurations[0] = JBTerminalConfig({terminal: core.terminal, tokensToAccept: tokensToAccept});
 
         // The project's revnet stage configurations.
         REVStageConfig[] memory stageConfigurations = new REVStageConfig[](2);
@@ -177,10 +176,8 @@ contract DeployScript is Script, Sphinx {
             twapWindow: 2 days,
             twapSlippageTolerance: 9000
         });
-        REVBuybackHookConfig memory buybackHookConfiguration = REVBuybackHookConfig({
-            hook: buybackHook.hook,
-            poolConfigurations: buybackPoolConfigurations
-        });
+        REVBuybackHookConfig memory buybackHookConfiguration =
+            REVBuybackHookConfig({hook: buybackHook.hook, poolConfigurations: buybackPoolConfigurations});
 
         // The project's NFT tiers.
         JB721TierConfig[] memory tiers = new JB721TierConfig[](4);
@@ -283,14 +280,13 @@ contract DeployScript is Script, Sphinx {
         });
 
         // Specify the optimism sucker.
-        if(address(suckers.optimismDeployer) == address(0))
+        if (address(suckers.optimismDeployer) == address(0)) {
             revert("Optimism sucker deployer is not configured on this network.");
+        }
 
         BPSuckerDeployerConfig[] memory suckerDeployerConfigurations = new BPSuckerDeployerConfig[](1);
-        suckerDeployerConfigurations[0] = BPSuckerDeployerConfig({
-            deployer: IBPSuckerDeployer(suckers.optimismDeployer),
-            mappings: tokenMappings
-        });
+        suckerDeployerConfigurations[0] =
+            BPSuckerDeployerConfig({deployer: IBPSuckerDeployer(suckers.optimismDeployer), mappings: tokenMappings});
 
         // Specify all sucker deployments.
         REVSuckerDeploymentConfig memory suckerDeploymentConfiguration =
@@ -338,8 +334,9 @@ contract DeployScript is Script, Sphinx {
         Banny721TokenUriResolver resolver;
         {
             // Perform the check for the resolver..
-            (address _resolver, bool _resolverIsDeployed) =
-                _isDeployed(RESOLVER_SALT, type(Banny721TokenUriResolver).creationCode, abi.encode(OPERATOR, TRUSTED_FORWARDER));
+            (address _resolver, bool _resolverIsDeployed) = _isDeployed(
+                RESOLVER_SALT, type(Banny721TokenUriResolver).creationCode, abi.encode(OPERATOR, TRUSTED_FORWARDER)
+            );
             // Deploy it if it has not been deployed yet.
             resolver = !_resolverIsDeployed
                 ? new Banny721TokenUriResolver{salt: RESOLVER_SALT}(OPERATOR, TRUSTED_FORWARDER)
@@ -357,26 +354,32 @@ contract DeployScript is Script, Sphinx {
         _permissions[0] = JBPermissionIds.QUEUE_RULESETS;
         _permissions[1] = JBPermissionIds.DEPLOY_ERC20;
         _permissions[2] = JBPermissionIds.SET_BUYBACK_POOL;
-        _permissions[3] = JBPermissionIds.SET_SPLIT_GROUPS; 
-        _permissions[4] = JBPermissionIds.MAP_SUCKER_TOKEN; 
-        _permissions[5] = JBPermissionIds.DEPLOY_SUCKERS; 
+        _permissions[3] = JBPermissionIds.SET_SPLIT_GROUPS;
+        _permissions[4] = JBPermissionIds.MAP_SUCKER_TOKEN;
+        _permissions[5] = JBPermissionIds.DEPLOY_SUCKERS;
 
         // Give the permissions to the croptop deployer.
-        core.permissions.setPermissionsFor(safeAddress(), JBPermissionsData({
-            operator: address(revnet.croptop_deployer),
-            projectId: _projectId,
-            permissionIds: _permissions
-        }));
+        core.permissions.setPermissionsFor(
+            safeAddress(),
+            JBPermissionsData({
+                operator: address(revnet.croptop_deployer),
+                projectId: _projectId,
+                permissionIds: _permissions
+            })
+        );
 
         // Give the permissions to the sucker registry.
         // TODO: Check if this is actually needed. And if it is, why is it needed?
         uint256[] memory _registryPermissions = new uint256[](1);
-        _registryPermissions[0] = JBPermissionIds.MAP_SUCKER_TOKEN; 
-        core.permissions.setPermissionsFor(safeAddress(), JBPermissionsData({
-            operator: address(suckers.registry),
-            projectId: _projectId,
-            permissionIds: _registryPermissions
-        }));
+        _registryPermissions[0] = JBPermissionIds.MAP_SUCKER_TOKEN;
+        core.permissions.setPermissionsFor(
+            safeAddress(),
+            JBPermissionsData({
+                operator: address(suckers.registry),
+                projectId: _projectId,
+                permissionIds: _registryPermissions
+            })
+        );
 
         // Deploy the $BANNY Revnet.
         revnet.croptop_deployer.launchCroptopRevnetFor({
