@@ -26,7 +26,6 @@ import {JB721InitTiersConfig} from "@bananapus/721-hook/src/structs/JB721InitTie
 import {JB721TiersHookFlags} from "@bananapus/721-hook/src/structs/JB721TiersHookFlags.sol";
 import {REVDescription} from "@rev-net/core/src/structs/REVDescription.sol";
 import {IJBPrices} from "@bananapus/core/src/interfaces/IJBPrices.sol";
-import {IJBBuybackHook} from "@bananapus/buyback-hook/src/interfaces/IJBBuybackHook.sol";
 import {REVDeploy721TiersHookConfig} from "@rev-net/core/src/structs/REVDeploy721TiersHookConfig.sol";
 import {JBDeploy721TiersHookConfig} from "@bananapus/721-hook/src/structs/JBDeploy721TiersHookConfig.sol";
 import {IJB721TokenUriResolver} from "@bananapus/721-hook/src/interfaces/IJB721TokenUriResolver.sol";
