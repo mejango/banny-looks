@@ -22,7 +22,7 @@ contract Drop1Script is Script, Sphinx {
         // TODO: Update to contain revnet devs.
         sphinxConfig.owners = [0x26416423d530b1931A2a7a6b7D435Fac65eED27d];
         sphinxConfig.orgId = "cltepuu9u0003j58rjtbd0hvu";
-        sphinxConfig.projectName = "bannyverse-core";
+        sphinxConfig.projectName = "bannyverse-drop-1";
         sphinxConfig.threshold = 1;
         sphinxConfig.mainnets = ["ethereum", "optimism"];
         sphinxConfig.testnets = ["ethereum_sepolia", "optimism_sepolia"];
@@ -36,23 +36,20 @@ contract Drop1Script is Script, Sphinx {
         );
 
         // Get the deployment addresses for the 721 hook contracts for this chain.
-        bannyverse = BannyverseDeploymentLib.getDeployment(
-            vm.envOr("BANNYVERSE_CORE_DEPLOYMENT_PATH", string("deployments/"))
-        );
+        bannyverse =
+            BannyverseDeploymentLib.getDeployment(vm.envOr("BANNYVERSE_CORE_DEPLOYMENT_PATH", string("deployments/")));
 
-        // Get the hook address by using the deployer. 
+        // Get the hook address by using the deployer.
         hook = JB721TiersHook(address(revnet.croptop_deployer.payHookSpecificationsOf(bannyverse.revnetId)[0].hook));
         deploy();
     }
 
     function deploy() public sphinx {
-        // TODO: ?
-        // TODO: Define decimals
-        address producer;
+        address producer = safeAddress();
         uint256 decimals = 18;
 
         // The project's NFT tiers.
-        JB721TierConfig[] memory tiers = new JB721TierConfig[](1)//(30);
+        JB721TierConfig[] memory tiers = new JB721TierConfig[](1); //(40);
 
         // Astronaut Head
         tiers[0] = JB721TierConfig({
@@ -69,7 +66,7 @@ contract Drop1Script is Script, Sphinx {
             useVotingUnits: false,
             cannotBeRemoved: false
         });
-        // // Banny vision pro 
+        // // Banny vision pro
         // tiers[1] = JB721TierConfig({
         //     price: uint104(1 * (10 ** decimals)),
         //     initialSupply: 100,
@@ -84,7 +81,7 @@ contract Drop1Script is Script, Sphinx {
         //     useVotingUnits: false,
         //     cannotBeRemoved: false
         // });
-        // // Cyberpunk glasses 
+        // // Cyberpunk glasses
         // tiers[2] = JB721TierConfig({
         //     price: uint104(1 * (10 ** (decimals - 2))),
         //     initialSupply: 150,
@@ -99,7 +96,7 @@ contract Drop1Script is Script, Sphinx {
         //     useVotingUnits: false,
         //     cannotBeRemoved: false
         // });
-        // // Investor shades 
+        // // Investor shades
         // tiers[3] = JB721TierConfig({
         //     price: uint104(1 * (10 ** (decimals - 2))),
         //     initialSupply: 250,
@@ -144,7 +141,7 @@ contract Drop1Script is Script, Sphinx {
         //     useVotingUnits: false,
         //     cannotBeRemoved: false
         // });
-        // // Mouthstraw 
+        // // Mouthstraw
         // tiers[6] = JB721TierConfig({
         //     price: uint104(1 * (10 ** decimals)),
         //     initialSupply: 15,
@@ -249,7 +246,7 @@ contract Drop1Script is Script, Sphinx {
         //     useVotingUnits: false,
         //     cannotBeRemoved: false
         // });
-        // // Peachhair 
+        // // Peachhair
         // tiers[13] = JB721TierConfig({
         //     price: uint104(1 * (10 ** (decimals - 2))),
         //     initialSupply: 100,
@@ -309,7 +306,7 @@ contract Drop1Script is Script, Sphinx {
         //     useVotingUnits: false,
         //     cannotBeRemoved: false
         // });
-        // // Dorthy shoes 
+        // // Dorthy shoes
         // tiers[17] = JB721TierConfig({
         //     price: uint104(1 * (10 ** (decimals - 2))),
         //     initialSupply: 250,
@@ -384,7 +381,7 @@ contract Drop1Script is Script, Sphinx {
         //     useVotingUnits: false,
         //     cannotBeRemoved: false
         // });
-        // // Jonny utah shirt 
+        // // Jonny utah shirt
         // tiers[22] = JB721TierConfig({
         //     price: uint104(1 * (10 ** (decimals - 3))),
         //     initialSupply: 250,
@@ -429,7 +426,7 @@ contract Drop1Script is Script, Sphinx {
         //     useVotingUnits: false,
         //     cannotBeRemoved: false
         // });
-        // // Irie tshirt 
+        // // Irie tshirt
         // tiers[25] = JB721TierConfig({
         //     price: uint104(1 * (10 ** (decimals - 3))),
         //     initialSupply: 250,
@@ -564,7 +561,7 @@ contract Drop1Script is Script, Sphinx {
         //     useVotingUnits: false,
         //     cannotBeRemoved: false
         // });
-        // // Pew pew 
+        // // Pew pew
         // tiers[34] = JB721TierConfig({
         //     price: uint104(1 * (10 ** (decimals - 2))),
         //     initialSupply: 150,
@@ -609,7 +606,7 @@ contract Drop1Script is Script, Sphinx {
         //     useVotingUnits: false,
         //     cannotBeRemoved: false
         // });
-        // // Lightsaber 
+        // // Lightsaber
         // tiers[37] = JB721TierConfig({
         //     price: uint104(1 * (10 ** (decimals - 3))),
         //     initialSupply: 5000,
@@ -624,7 +621,7 @@ contract Drop1Script is Script, Sphinx {
         //     useVotingUnits: false,
         //     cannotBeRemoved: false
         // });
-        // // Potion 
+        // // Potion
         // tiers[38] = JB721TierConfig({
         //     price: uint104(1 * (10 ** (decimals - 1))),
         //     initialSupply: 100,
@@ -639,7 +636,7 @@ contract Drop1Script is Script, Sphinx {
         //     useVotingUnits: false,
         //     cannotBeRemoved: false
         // });
-        // // Dagger 
+        // // Dagger
         // tiers[39] = JB721TierConfig({
         //     price: uint104(1 * (10 ** (decimals - 3))),
         //     initialSupply: 150,
@@ -657,8 +654,8 @@ contract Drop1Script is Script, Sphinx {
 
         hook.adjustTiers(tiers, new uint256[](0));
 
-        uint256[] memory tierIds = new uint256[](1)//(40);
-        bytes32[] memory svgHashes = new bytes32[](1)//(40);
+        uint256[] memory tierIds = new uint256[](1); //(40);
+        bytes32[] memory svgHashes = new bytes32[](1); //(40);
         tierIds[0] = 5;
         // for (uint256 i; i < 40; i++) {
         //   tierIds[i] = i + 5;
@@ -752,25 +749,5 @@ contract Drop1Script is Script, Sphinx {
         bannyverse.resolver.setTierNames(tierIds, names);
 
         bannyverse.resolver.setSvgBaseUri("https://bannyverse.infura-ipfs.io/");
-    }
-
-    function _isDeployed(
-        bytes32 salt,
-        bytes memory creationCode,
-        bytes memory arguments
-    )
-        internal
-        view
-        returns (address, bool)
-    {
-        address _deployedTo = vm.computeCreate2Address({
-            salt: salt,
-            initCodeHash: keccak256(abi.encodePacked(creationCode, arguments)),
-            // Arachnid/deterministic-deployment-proxy address.
-            deployer: address(0x4e59b44847b379578588920cA78FbF26c0B4956C)
-        });
-
-        // Return if code is already present at this address.
-        return (_deployedTo, address(_deployedTo).code.length != 0);
     }
 }

@@ -8,6 +8,8 @@ import "@croptop/core/script/helpers/CroptopDeploymentLib.sol";
 import "@rev-net/core/script/helpers/RevnetCoreDeploymentLib.sol";
 import "@bananapus/buyback-hook/script/helpers/BuybackDeploymentLib.sol";
 
+import {JBPermissionIds} from "@bananapus/permission-ids/src/JBPermissionIds.sol";
+import {JBPermissionsData} from "@bananapus/core/src/structs/JBPermissionsData.sol";
 import {JBConstants} from "@bananapus/core/src/libraries/JBConstants.sol";
 import {JBTerminalConfig} from "@bananapus/core/src/structs/JBTerminalConfig.sol";
 import {REVStageConfig} from "@rev-net/core/src/structs/REVStageConfig.sol";
@@ -24,7 +26,6 @@ import {JB721InitTiersConfig} from "@bananapus/721-hook/src/structs/JB721InitTie
 import {JB721TiersHookFlags} from "@bananapus/721-hook/src/structs/JB721TiersHookFlags.sol";
 import {REVDescription} from "@rev-net/core/src/structs/REVDescription.sol";
 import {IJBPrices} from "@bananapus/core/src/interfaces/IJBPrices.sol";
-import {IJBBuybackHook} from "@bananapus/buyback-hook/src/interfaces/IJBBuybackHook.sol";
 import {REVDeploy721TiersHookConfig} from "@rev-net/core/src/structs/REVDeploy721TiersHookConfig.sol";
 import {JBDeploy721TiersHookConfig} from "@bananapus/721-hook/src/structs/JBDeploy721TiersHookConfig.sol";
 import {IJB721TokenUriResolver} from "@bananapus/721-hook/src/interfaces/IJB721TokenUriResolver.sol";
@@ -62,11 +63,11 @@ contract DeployScript is Script, Sphinx {
     BannyverseRevnetConfig bannyverseConfig;
 
     uint256 PREMINT_CHAIN_ID = 1;
-    bytes32 SALT = "BANNYVERSE";
+    bytes32 SALT = "BANNY_VERSE";
     bytes32 SUCKER_SALT = "BANNYVERSE_SUCKER";
     bytes32 RESOLVER_SALT = "Banny721TokenUriResolver";
 
-    address OPERATOR = 0x817738DC393d682Ca5fBb268707b99F2aAe96baE;
+    address OPERATOR;
     address TRUSTED_FORWARDER = 0xB2b5841DBeF766d4b521221732F9B618fCf34A87;
 
     function configureSphinx() public override {
@@ -107,13 +108,16 @@ contract DeployScript is Script, Sphinx {
             vm.envOr("NANA_BUYBACK_HOOK_DEPLOYMENT_PATH", string("node_modules/@bananapus/buyback-hook/deployments/"))
         );
 
+        // Set the operator to be this safe.
+        OPERATOR = safeAddress();
+
         bannyverseConfig = getBannyverseRevnetConfig();
 
         // Perform the deployment transactions.
         deploy();
     }
 
-    function getBannyverseRevnetConfig() internal view returns (BannyverseRevnetConfig memory){
+    function getBannyverseRevnetConfig() internal view returns (BannyverseRevnetConfig memory) {
         // Define constants
         string memory name = "Bannyverse";
         string memory symbol = "BANNY";
@@ -125,7 +129,7 @@ contract DeployScript is Script, Sphinx {
         uint256 decimalMultiplier = 10 ** decimals;
         uint24 nakedBannyCategory = 0;
         uint40 oneDay = 86_400;
-        uint40 start = uint40(1710875417); // 15 minutes from now
+        uint40 start = uint40(1_710_875_417); // 15 minutes from now
 
         // The terminals that the project will accept funds through.
         JBTerminalConfig[] memory terminalConfigurations = new JBTerminalConfig[](1);
@@ -133,8 +137,7 @@ contract DeployScript is Script, Sphinx {
 
         // Accept the chain's native currency through the multi terminal.
         tokensToAccept[0] = JBConstants.NATIVE_TOKEN;
-        terminalConfigurations[0] =
-            JBTerminalConfig({terminal: core.terminal, tokensToAccept: tokensToAccept});
+        terminalConfigurations[0] = JBTerminalConfig({terminal: core.terminal, tokensToAccept: tokensToAccept});
 
         // The project's revnet stage configurations.
         REVStageConfig[] memory stageConfigurations = new REVStageConfig[](2);
@@ -173,10 +176,8 @@ contract DeployScript is Script, Sphinx {
             twapWindow: 2 days,
             twapSlippageTolerance: 9000
         });
-        REVBuybackHookConfig memory buybackHookConfiguration = REVBuybackHookConfig({
-            hook: buybackHook.hook,
-            poolConfigurations: buybackPoolConfigurations
-        });
+        REVBuybackHookConfig memory buybackHookConfiguration =
+            REVBuybackHookConfig({hook: buybackHook.hook, poolConfigurations: buybackPoolConfigurations});
 
         // The project's NFT tiers.
         JB721TierConfig[] memory tiers = new JB721TierConfig[](4);
@@ -279,14 +280,13 @@ contract DeployScript is Script, Sphinx {
         });
 
         // Specify the optimism sucker.
-        if(address(suckers.optimismDeployer) == address(0))
+        if (address(suckers.optimismDeployer) == address(0)) {
             revert("Optimism sucker deployer is not configured on this network.");
+        }
 
         BPSuckerDeployerConfig[] memory suckerDeployerConfigurations = new BPSuckerDeployerConfig[](1);
-        suckerDeployerConfigurations[0] = BPSuckerDeployerConfig({
-            deployer: IBPSuckerDeployer(suckers.optimismDeployer),
-            mappings: tokenMappings
-        });
+        suckerDeployerConfigurations[0] =
+            BPSuckerDeployerConfig({deployer: IBPSuckerDeployer(suckers.optimismDeployer), mappings: tokenMappings});
 
         // Specify all sucker deployments.
         REVSuckerDeploymentConfig memory suckerDeploymentConfiguration =
@@ -334,8 +334,9 @@ contract DeployScript is Script, Sphinx {
         Banny721TokenUriResolver resolver;
         {
             // Perform the check for the resolver..
-            (address _resolver, bool _resolverIsDeployed) =
-                _isDeployed(RESOLVER_SALT, type(Banny721TokenUriResolver).creationCode, abi.encode(OPERATOR, TRUSTED_FORWARDER));
+            (address _resolver, bool _resolverIsDeployed) = _isDeployed(
+                RESOLVER_SALT, type(Banny721TokenUriResolver).creationCode, abi.encode(OPERATOR, TRUSTED_FORWARDER)
+            );
             // Deploy it if it has not been deployed yet.
             resolver = !_resolverIsDeployed
                 ? new Banny721TokenUriResolver{salt: RESOLVER_SALT}(OPERATOR, TRUSTED_FORWARDER)
@@ -345,8 +346,44 @@ contract DeployScript is Script, Sphinx {
         // Update our config with its address.
         bannyverseConfig.hookConfiguration.baseline721HookConfiguration.tokenUriResolver = resolver;
 
+        // Mint a new project.
+        uint256 _projectId = core.projects.createFor(safeAddress());
+
+        // The permissions required to configure a revnet.
+        uint256[] memory _permissions = new uint256[](6);
+        _permissions[0] = JBPermissionIds.QUEUE_RULESETS;
+        _permissions[1] = JBPermissionIds.DEPLOY_ERC20;
+        _permissions[2] = JBPermissionIds.SET_BUYBACK_POOL;
+        _permissions[3] = JBPermissionIds.SET_SPLIT_GROUPS;
+        _permissions[4] = JBPermissionIds.MAP_SUCKER_TOKEN;
+        _permissions[5] = JBPermissionIds.DEPLOY_SUCKERS;
+
+        // Give the permissions to the croptop deployer.
+        core.permissions.setPermissionsFor(
+            safeAddress(),
+            JBPermissionsData({
+                operator: address(revnet.croptop_deployer),
+                projectId: _projectId,
+                permissionIds: _permissions
+            })
+        );
+
+        // Give the permissions to the sucker registry.
+        // TODO: Check if this is actually needed. And if it is, why is it needed?
+        uint256[] memory _registryPermissions = new uint256[](1);
+        _registryPermissions[0] = JBPermissionIds.MAP_SUCKER_TOKEN;
+        core.permissions.setPermissionsFor(
+            safeAddress(),
+            JBPermissionsData({
+                operator: address(suckers.registry),
+                projectId: _projectId,
+                permissionIds: _registryPermissions
+            })
+        );
+
         // Deploy the $BANNY Revnet.
-        revnet.croptop_deployer.deployCroptopRevnetWith({
+        revnet.croptop_deployer.launchCroptopRevnetFor({
+            revnetId: _projectId,
             configuration: bannyverseConfig.configuration,
             terminalConfigurations: bannyverseConfig.terminalConfigurations,
             buybackHookConfiguration: bannyverseConfig.buybackHookConfiguration,
@@ -356,6 +393,9 @@ contract DeployScript is Script, Sphinx {
             extraHookMetadata: bannyverseConfig.extraHookMetadata,
             allowedPosts: bannyverseConfig.allowedPosts
         });
+
+        // Tranfer ownership.
+        core.projects.transferFrom(safeAddress(), address(revnet.croptop_deployer), _projectId);
     }
 
     function _isDeployed(

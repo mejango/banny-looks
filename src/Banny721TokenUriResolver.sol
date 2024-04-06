@@ -23,7 +23,8 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     event SetSvgHashes(uint256[] indexed tierIds, bytes32[] indexed svgHashs, address caller);
     event SetSvgBaseUri(string baseUri, address caller);
     event SetTierNames(uint256[] indexed tierIds, string[] names, address caller);
-    
+
+    error ASSET_IS_ALREADY_BEING_WORN();
     error HEAD_ALREADY_ADDED();
     error FACE_ALREADY_ADDED();
     error SUIT_ALREADY_ADDED();
@@ -103,6 +104,14 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     /// @custom:param nakedBannyId The ID of the Naked Banny of the world.
     mapping(uint256 nakedBannyId => uint256) internal _attachedWorldIdOf;
 
+    /// @notice The ID of the naked banny each world is being used by.
+    /// @custom:param worldId The ID of the world.
+    mapping(uint256 worldId => uint256) internal _worldIsBeingUsedBy;
+
+    /// @notice The ID of the naked banny each outfit is being worn by.
+    /// @custom:param outfitId The ID of the outfit.
+    mapping(uint256 outfitId => uint256) internal _outfitIsBeingWornBy;
+
     /// @notice The assets currently attached to each Naked Banny, owned by the naked Banny's owner.
     /// @param nakedBannyId The ID of the naked banny shows with the associated assets.
     /// @return worldId The world attached to the Naked Banny.
@@ -131,6 +140,44 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             // Return the outfit.
             outfitIds[counter++] = attachedOutfitId;
         }
+    }
+
+    /// @notice Checks to see which naked banny is currently using a particular world.
+    /// @param worldId The ID of the world being used.
+    /// @return The ID of the naked banny using the world.
+    function worldIsBeingUsedBy(uint256 worldId) public view returns (uint256) {
+        // Get a reference to the naked banny using the world.
+        uint256 nakedBannyId = _worldIsBeingUsedBy[worldId];
+
+        // If no naked banny is wearing the outfit, or if its no longer the world attached, return 0.
+        if (nakedBannyId == 0 || _attachedWorldIdOf[nakedBannyId] != worldId) return 0;
+
+        // Return the naked banny ID.
+        return nakedBannyId;
+    }
+
+    /// @notice Checks to see which naked banny is currently wearing a particular outfit.
+    /// @param outfitId The ID of the outfit being worn.
+    /// @return The ID of the naked banny wearing the outfit.
+    function outfitIsBeingWornBy(uint256 outfitId) public view returns (uint256) {
+        // Get a reference to the naked banny wearing the outfit.
+        uint256 nakedBannyId = _outfitIsBeingWornBy[outfitId];
+
+        // If no naked banny is wearing the outfit, return 0.
+        if (nakedBannyId == 0) return 0;
+
+        // Keep a reference to the outfit IDs currently attached to a naked banny.
+        uint256[] memory attachedOutfitIds = _attachedOutfitIdsOf[nakedBannyId];
+
+        // Keep a reference to the number of outfit IDs currently attached.
+        uint256 numberOfAttachedOutfitIds = attachedOutfitIds.length;
+        for (uint256 i; i < numberOfAttachedOutfitIds; i++) {
+            // If the outfit is still attached, return the naked banny ID.
+            if (attachedOutfitIds[i] == outfitId) return nakedBannyId;
+        }
+
+        // If the outfit is no longer attached, return 0.
+        return 0;
     }
 
     /// @notice Returns the SVG showing a dressed Naked Banny in a world.
@@ -254,6 +301,10 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         return _layeredSvg(contents);
     }
 
+    /// @notice Returns the name of the token.
+    /// @param hook The hook storing the assets.
+    /// @param tokenId The ID of the token to show.
+    /// @return The name of the token.
     function nameOf(address hook, uint256 tokenId) public view returns (string memory) {
         // Get a reference to the tier for the given token ID.
         JB721Tier memory tier = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, tokenId, false);
@@ -289,6 +340,9 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             // Check if the owner matched.
             if (IERC721(hook).ownerOf(worldId) != _msgSender()) revert UNAUTHORIZED_WORLD();
 
+            // Make sure the world is not already being shown on another Naked banny.
+            if (worldIsBeingUsedBy(worldId) != 0) revert ASSET_IS_ALREADY_BEING_WORN();
+
             // Get the world's tier.
             JB721Tier memory worldTier = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, worldId, false);
 
@@ -297,6 +351,9 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
 
             // Store the world for the banny.
             _attachedWorldIdOf[nakedBannyId] = worldId;
+
+            // Store the banny that's in the world.
+            _worldIsBeingUsedBy[worldId] = nakedBannyId;
         } else {
             _attachedWorldIdOf[nakedBannyId] = 0;
         }
@@ -326,6 +383,9 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             // Check if the owner matched.
             if (IERC721(hook).ownerOf(outfitId) != _msgSender()) revert UNAUTHORIZED_OUTFIT();
 
+            // Make sure the outfit is not already being worn.
+            if (outfitIsBeingWornBy(outfitId) != 0) revert ASSET_IS_ALREADY_BEING_WORN();
+
             // Get the outfit's tier.
             outfitTier = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, outfitId, false);
 
@@ -349,11 +409,17 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             } else if (outfitTier.category == _ONESIE_CATEGORY) {
                 hasOnesie = true;
             } else if (
-                (outfitTier.category == _SUIT_CATEGORY || outfitTier.category == _SUIT_TOP_CATEGORY || outfitTier.category == _SUIT_BOTTOM_CATEGORY || outfitTier.category == _SHOE_CATEGORY) && hasOnesie
+                (
+                    outfitTier.category == _SUIT_CATEGORY || outfitTier.category == _SUIT_TOP_CATEGORY
+                        || outfitTier.category == _SUIT_BOTTOM_CATEGORY || outfitTier.category == _SHOE_CATEGORY
+                ) && hasOnesie
             ) {
                 revert ONESIE_ALREADY_ADDED();
             } else if (
-                (outfitTier.category == _FACE_CATEGORY || outfitTier.category == _FACE_EYES_CATEGORY || outfitTier.category == _FACE_MOUTH_CATEGORY || outfitTier.category == _HEADGEAR_CATEGORY) && hasHead
+                (
+                    outfitTier.category == _FACE_CATEGORY || outfitTier.category == _FACE_EYES_CATEGORY
+                        || outfitTier.category == _FACE_MOUTH_CATEGORY || outfitTier.category == _HEADGEAR_CATEGORY
+                ) && hasHead
             ) {
                 revert HEAD_ALREADY_ADDED();
             } else if (
@@ -368,6 +434,9 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
 
             // Keep a reference to the last outfit's category.
             lastAssetCategory = outfitTier.category;
+
+            // Store the banny that's in the world.
+            _outfitIsBeingWornBy[outfitId] = nakedBannyId;
         }
 
         // Store the outfits.
@@ -435,7 +504,6 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     /// @param tierIds The IDs of the tiers having their name stored.
     /// @param names The names of the tiers.
     function setTierNames(uint256[] memory tierIds, string[] memory names) external onlyOwner {
-
         uint256 numberOfTiers = tierIds.length;
 
         uint256 tierId;
