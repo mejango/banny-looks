@@ -5,13 +5,13 @@
 For `npm` projects (recommended):
 
 ```bash
-npm install @bananapus/721-hook
+npm install @bannyverse/core
 ```
 
 For `forge` projects (not recommended):
 
 ```bash
-forge install Bananapus/nana-721-hook
+forge install mejango/banny-contract
 ```
 
 Add `@bananapus/721-hook/=lib/nana-721-hook/` to `remappings.txt`. You'll also need to install `nana-721-hook`'s dependencies and add similar remappings for them.
