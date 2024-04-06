@@ -50,7 +50,7 @@ contract Drop1Script is Script, Sphinx {
         uint256 decimals = 18;
 
         // The project's NFT tiers.
-        JB721TierConfig[] memory tiers = new JB721TierConfig[](1);//(30);
+        JB721TierConfig[] memory tiers = new JB721TierConfig[](1);//(40);
 
         // Astronaut Head
         tiers[0] = JB721TierConfig({
