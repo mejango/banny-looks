@@ -751,24 +751,4 @@ contract Drop1Script is Script, Sphinx {
 
         bannyverse.resolver.setSvgBaseUri("https://bannyverse.infura-ipfs.io/");
     }
-
-    function _isDeployed(
-        bytes32 salt,
-        bytes memory creationCode,
-        bytes memory arguments
-    )
-        internal
-        view
-        returns (address, bool)
-    {
-        address _deployedTo = vm.computeCreate2Address({
-            salt: salt,
-            initCodeHash: keccak256(abi.encodePacked(creationCode, arguments)),
-            // Arachnid/deterministic-deployment-proxy address.
-            deployer: address(0x4e59b44847b379578588920cA78FbF26c0B4956C)
-        });
-
-        // Return if code is already present at this address.
-        return (_deployedTo, address(_deployedTo).code.length != 0);
-    }
 }
