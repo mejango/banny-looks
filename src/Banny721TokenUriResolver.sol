@@ -193,7 +193,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
 
         string memory contents;
 
-        // If this isn't a Naked Banny and there's an SVG available, return the asset SVG alone (or on a manakin banny).
+        // If this isn't a Naked Banny, return the asset SVG alone (or on a manakin banny).
         if (tier.category > _NAKED_CATEGORY) {
             // Keep a reference to the SVG contents.
             contents = _svgOf(hook, tier.id);
@@ -744,7 +744,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         if (bytes(svgContents).length != 0) return svgContents;
 
         return string.concat(
-            '<g><image xlink:href="',
+            '<g><image href="',
             JBIpfsDecoder.decode(svgBaseUri, IJB721TiersHook(hook).STORE().encodedIPFSUriOf(hook, tierId)),
             '" width="400" height="400"/></g>'
         );
