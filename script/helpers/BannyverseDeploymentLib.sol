@@ -49,7 +49,7 @@ library BannyverseDeploymentLib {
         );
 
         // TODO: Update after every deployment and/or verify that it is 2 on every chain.
-        deployment.revnetId = 3;
+        deployment.revnetId = 2;
     }
 
     /// @notice Get the address of a contract that was deployed by the Deploy script.

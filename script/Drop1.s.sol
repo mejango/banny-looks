@@ -22,7 +22,7 @@ contract Drop1Script is Script, Sphinx {
         // TODO: Update to contain revnet devs.
         sphinxConfig.owners = [0x26416423d530b1931A2a7a6b7D435Fac65eED27d];
         sphinxConfig.orgId = "cltepuu9u0003j58rjtbd0hvu";
-        sphinxConfig.projectName = "bannyverse-drop-1";
+        sphinxConfig.projectName = "bannyverse-core";
         sphinxConfig.threshold = 1;
         sphinxConfig.mainnets = ["ethereum", "optimism"];
         sphinxConfig.testnets = ["ethereum_sepolia", "optimism_sepolia"];
