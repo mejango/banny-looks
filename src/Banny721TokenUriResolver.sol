@@ -747,9 +747,9 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         if (bytes(svgContents).length != 0) return svgContents;
 
         return string.concat(
-            '<g><object href="',
+            '<image href="',
             JBIpfsDecoder.decode(svgBaseUri, IJB721TiersHook(hook).STORE().encodedIPFSUriOf(hook, tierId)),
-            '" width="400" height="400"/></g>'
+            '" width="400" height="400"/>'
         );
     }
 
