@@ -208,7 +208,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             }
         } else {
             // Compose the contents.
-            contents = bannySvgOf({hook: hook, tokenId: tokenId, shouldBeDressed: true, shouldIncludeWorld: true});
+            contents = svgOf({hook: hook, tokenId: tokenId, shouldDressNakedBanny: true, shouldIncludeWorldOnNakedBanny: true});
         }
 
         if (bytes(contents).length == 0) {
@@ -236,16 +236,18 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         );
     }
 
-    /// @notice Returns the SVG showing a dressed Naked Banny.
+    /// @notice Returns the SVG showing either a naked banny with/without outfits and a world, or the stand alone outfit or world.
     /// @param hook The hook storing the assets.
     /// @param tokenId The ID of the token to show. If the ID belongs to a Naked Banny, it will be shown with its
-    /// current outfits in its current world.
-    /// @return bannySvg The SVG.
-    function bannySvgOf(
+    /// current outfits in its current world if specified.
+    /// @param shouldDressNakedBanny Whether the naked banny should be dressed.
+    /// @param shouldIncludeWorldOnNakedBanny Whether the world should be included on the naked banny.
+    /// @return svg The SVG.
+    function svgOf(
         address hook,
         uint256 tokenId,
-        bool shouldBeDressed,
-        bool shouldIncludeWorld
+        bool shouldDressNakedBanny,
+        bool shouldIncludeWorldOnNakedBanny
     )
         public
         view
@@ -260,18 +262,19 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         // Compose the contents.
         string memory contents;
 
-        // If this isn't a Naked Banny and there's an SVG available, return the asset SVG alone (or on a manakin banny).
+        // If this isn't a Naked Banny and there's an SVG available, return the asset SVG alone.
         if (tier.category > _NAKED_CATEGORY) {
             // Keep a reference to the SVG contents.
             contents = _svgOf(hook, tier.id);
 
-            if (bytes(contents).length == 0) return "";
-
-            // Return the SVG.
-            return _layeredSvg(contents);
+            // Return the svg if it exists.
+            return (bytes(contents).length == 0) ? "" : _layeredSvg(contents);
         }
 
+        // Keep a reference to the world ID.
         uint256 worldId;
+
+        // Keep a reference to the outfit IDs.
         uint256[] memory outfitIds;
 
         // Get a reference to each asset ID currently attached to the Naked Banny.
@@ -281,12 +284,12 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         } catch (bytes memory) {}
 
         // Add the world if needed.
-        if (worldId != 0 && shouldIncludeWorld) contents = string.concat(contents, _svgOf(hook, worldId));
+        if (worldId != 0 && shouldIncludeWorldOnNakedBanny) contents = string.concat(contents, _svgOf(hook, worldId));
 
         // Start with the Naked Banny.
         contents = string.concat(contents, _nakedBannySvgOf(tier.id));
 
-        if (shouldBeDressed) {
+        if (shouldDressNakedBanny) {
             // Get the outfit contents.
             string memory outfitContents =
                 _outfitContentsFor({hook: hook, nakedBannyTier: tier.id, outfitIds: outfitIds});
@@ -744,7 +747,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         if (bytes(svgContents).length != 0) return svgContents;
 
         return string.concat(
-            '<g><image href="',
+            '<g><object href="',
             JBIpfsDecoder.decode(svgBaseUri, IJB721TiersHook(hook).STORE().encodedIPFSUriOf(hook, tierId)),
             '" width="400" height="400"/></g>'
         );
