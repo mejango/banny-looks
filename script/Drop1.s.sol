@@ -103,10 +103,27 @@ contract Drop1Script is Script, Sphinx {
             useVotingUnits: false,
             cannotBeRemoved: false
         });
-        // Banny vision pro
-        names[3] = "Banny Vision Pro";
-        svgHashes[3] = bytes32(0x48722804c2fb5388619745793bb4664aa99a58b33809093db0023cf6c2a94dfb);
+        // Nerd
+        names[3] = "Nerd";
+        svgHashes[3] = bytes32(0x55e4e915c0642002cfedef043154b00b0f5c9b084ee241e2f283f8040ab3af92);
         tiers[3] = JB721TierConfig({
+            price: uint104(1 * (10 ** (decimals - 1))),
+            initialSupply: 50,
+            votingUnits: 0,
+            reserveFrequency: 0,
+            reserveBeneficiary: address(0),
+            encodedIPFSUri: bytes32(0x035a3585ec319463ec6a1a172308b3555d109805bd37d004e5f946044d21a4e8),
+            category: 5,
+            allowOwnerMint: false,
+            useReserveBeneficiaryAsDefault: false,
+            transfersPausable: false,
+            useVotingUnits: false,
+            cannotBeRemoved: false
+        });
+        // Banny vision pro
+        names[4] = "Banny Vision Pro";
+        svgHashes[4] = bytes32(0x48722804c2fb5388619745793bb4664aa99a58b33809093db0023cf6c2a94dfb);
+        tiers[4] = JB721TierConfig({
             price: uint104(1 * (10 ** decimals)),
             initialSupply: 100,
             votingUnits: 0,
@@ -121,9 +138,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Cyberpunk glasses
-        names[4] = "Cyberpunk Glasses";
-        svgHashes[4] = bytes32(0x74ce81a55d03e0a3cb769df5723243f5ffc879b5af3960ecc6eafddbfe03e319);
-        tiers[4] = JB721TierConfig({
+        names[5] = "Cyberpunk Glasses";
+        svgHashes[5] = bytes32(0x74ce81a55d03e0a3cb769df5723243f5ffc879b5af3960ecc6eafddbfe03e319);
+        tiers[5] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 150,
             votingUnits: 0,
@@ -138,32 +155,15 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Investor shades
-        names[5] = "Investor Shades";
-        svgHashes[5] = bytes32(0x8ea063476043ea13f2c5234c5c436904910ffc2057160f0107ee9e282f19e297);
-        tiers[5] = JB721TierConfig({
+        names[6] = "Investor Shades";
+        svgHashes[6] = bytes32(0x8ea063476043ea13f2c5234c5c436904910ffc2057160f0107ee9e282f19e297);
+        tiers[6] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 250,
             votingUnits: 0,
             reserveFrequency: 0,
             reserveBeneficiary: address(0),
             encodedIPFSUri: bytes32(0x80fd71363a83c0e69ef58b647447b91ac765ab091a4d015397552a2414148099),
-            category: 6,
-            allowOwnerMint: false,
-            useReserveBeneficiaryAsDefault: false,
-            transfersPausable: false,
-            useVotingUnits: false,
-            cannotBeRemoved: false
-        });
-        // Nerd
-        names[6] = "Nerd";
-        svgHashes[6] = bytes32(0x55e4e915c0642002cfedef043154b00b0f5c9b084ee241e2f283f8040ab3af92);
-        tiers[6] = JB721TierConfig({
-            price: uint104(1 * (10 ** (decimals - 1))),
-            initialSupply: 50,
-            votingUnits: 0,
-            reserveFrequency: 0,
-            reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0x035a3585ec319463ec6a1a172308b3555d109805bd37d004e5f946044d21a4e8),
             category: 6,
             allowOwnerMint: false,
             useReserveBeneficiaryAsDefault: false,
