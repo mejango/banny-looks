@@ -52,10 +52,44 @@ contract Drop1Script is Script, Sphinx {
         bytes32[] memory svgHashes = new bytes32[](40);
         JB721TierConfig[] memory tiers = new JB721TierConfig[](40);
 
-        // Astronaut Head
-        names[0] = "Astronaut Head";
-        svgHashes[0] = bytes32(0x3912f3b815511f3fc935703669624b1efb9ab6afdbd308f66edcb2960ac8f93f);
+        // Pew pew
+        names[0] = "Pew Pew";
+        svgHashes[0] = bytes32(0xfd3ac98d3d60677cbcbf1c3f88d97214618ee15839616c916c0ef954e62ca13a);
         tiers[0] = JB721TierConfig({
+            price: uint104(1 * (10 ** (decimals - 2))),
+            initialSupply: 150,
+            votingUnits: 0,
+            reserveFrequency: 0,
+            reserveBeneficiary: address(0),
+            encodedIPFSUri: bytes32(0x074d00adc03e38fbb16fade19890729547b155f7c3e72f14a4136a0de62d0885),
+            category: 2,
+            allowOwnerMint: false,
+            useReserveBeneficiaryAsDefault: false,
+            transfersPausable: false,
+            useVotingUnits: false,
+            cannotBeRemoved: false
+        });
+        // Bandolph staff
+        names[1] = "Bandolph Staff";
+        svgHashes[1] = bytes32(0xacfbffe21e3de73825eaf11dd666d7ac1ed3dce71c40e2f78abfdcc61de6e231);
+        tiers[1] = JB721TierConfig({
+            price: uint104(125 * (10 ** (decimals - 2))),
+            initialSupply: 250,
+            votingUnits: 0,
+            reserveFrequency: 0,
+            reserveBeneficiary: address(0),
+            encodedIPFSUri: bytes32(0xdc278de8567be400acb8d95a5a8bdb921f1802bac54b53637f2ac3edd057d087),
+            category: 2,
+            allowOwnerMint: false,
+            useReserveBeneficiaryAsDefault: false,
+            transfersPausable: false,
+            useVotingUnits: false,
+            cannotBeRemoved: false
+        });
+        // Astronaut Head
+        names[2] = "Astronaut Head";
+        svgHashes[2] = bytes32(0x3912f3b815511f3fc935703669624b1efb9ab6afdbd308f66edcb2960ac8f93f);
+        tiers[2] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 3))),
             initialSupply: 10_000,
             votingUnits: 0,
@@ -70,9 +104,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Banny vision pro
-        names[1] = "Banny Vision Pro";
-        svgHashes[1] = bytes32(0x48722804c2fb5388619745793bb4664aa99a58b33809093db0023cf6c2a94dfb);
-        tiers[1] = JB721TierConfig({
+        names[3] = "Banny Vision Pro";
+        svgHashes[3] = bytes32(0x48722804c2fb5388619745793bb4664aa99a58b33809093db0023cf6c2a94dfb);
+        tiers[3] = JB721TierConfig({
             price: uint104(1 * (10 ** decimals)),
             initialSupply: 100,
             votingUnits: 0,
@@ -87,9 +121,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Cyberpunk glasses
-        names[2] = "Cyberpunk Glasses";
-        svgHashes[2] = bytes32(0x74ce81a55d03e0a3cb769df5723243f5ffc879b5af3960ecc6eafddbfe03e319);
-        tiers[2] = JB721TierConfig({
+        names[4] = "Cyberpunk Glasses";
+        svgHashes[4] = bytes32(0x74ce81a55d03e0a3cb769df5723243f5ffc879b5af3960ecc6eafddbfe03e319);
+        tiers[4] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 150,
             votingUnits: 0,
@@ -104,9 +138,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Investor shades
-        names[3] = "Investor Shades";
-        svgHashes[3] = bytes32(0x8ea063476043ea13f2c5234c5c436904910ffc2057160f0107ee9e282f19e297);
-        tiers[3] = JB721TierConfig({
+        names[5] = "Investor Shades";
+        svgHashes[5] = bytes32(0x8ea063476043ea13f2c5234c5c436904910ffc2057160f0107ee9e282f19e297);
+        tiers[5] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 250,
             votingUnits: 0,
@@ -121,9 +155,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Nerd
-        names[4] = "Nerd";
-        svgHashes[4] = bytes32(0x55e4e915c0642002cfedef043154b00b0f5c9b084ee241e2f283f8040ab3af92);
-        tiers[4] = JB721TierConfig({
+        names[6] = "Nerd";
+        svgHashes[6] = bytes32(0x55e4e915c0642002cfedef043154b00b0f5c9b084ee241e2f283f8040ab3af92);
+        tiers[6] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 1))),
             initialSupply: 50,
             votingUnits: 0,
@@ -138,9 +172,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Proff glasses
-        names[5] = "Proff Glasses";
-        svgHashes[5] = bytes32(0x8bc333f872da87d8f11875a1f8cbb5947759ec69484fdd25b6e927ffe2547346);
-        tiers[5] = JB721TierConfig({
+        names[7] = "Proff Glasses";
+        svgHashes[7] = bytes32(0x8bc333f872da87d8f11875a1f8cbb5947759ec69484fdd25b6e927ffe2547346);
+        tiers[7] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 200,
             votingUnits: 0,
@@ -155,9 +189,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Mouthstraw
-        names[6] = "Mouthstraw";
-        svgHashes[6] = bytes32(0x310312dbf88bcd24550fe00ceacc2df4e58741f99f9f48a07f34a57b4e3bf57f);
-        tiers[6] = JB721TierConfig({
+        names[8] = "Mouthstraw";
+        svgHashes[8] = bytes32(0x310312dbf88bcd24550fe00ceacc2df4e58741f99f9f48a07f34a57b4e3bf57f);
+        tiers[8] = JB721TierConfig({
             price: uint104(1 * (10 ** decimals)),
             initialSupply: 15,
             votingUnits: 0,
@@ -172,9 +206,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Club beanie
-        names[7] = "Club Beanie";
-        svgHashes[7] = bytes32(0x5aeb94cf89e7be61849b77d4fb32a105473048d7a4a35bccbf87bee0f48e4c71);
-        tiers[7] = JB721TierConfig({
+        names[9] = "Club Beanie";
+        svgHashes[9] = bytes32(0x5aeb94cf89e7be61849b77d4fb32a105473048d7a4a35bccbf87bee0f48e4c71);
+        tiers[9] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 3))),
             initialSupply: 1_000,
             votingUnits: 0,
@@ -189,9 +223,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Dorthy hair
-        names[8] = "Dorthy Hair";
-        svgHashes[8] = bytes32(0x1417655d1e83bb653e865f7a8653c065c9677ec42c0fac7ea75d9142099ee04d);
-        tiers[8] = JB721TierConfig({
+        names[10] = "Dorthy Hair";
+        svgHashes[10] = bytes32(0x1417655d1e83bb653e865f7a8653c065c9677ec42c0fac7ea75d9142099ee04d);
+        tiers[10] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 250,
             votingUnits: 0,
@@ -206,9 +240,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Farmer hat
-        names[9] = "Farmer Hat";
-        svgHashes[9] = bytes32(0xcc63099a7a1172d04db284be80a6b14c2b2c44f546837fd2864e9f10d7fd32aa);
-        tiers[9] = JB721TierConfig({
+        names[11] = "Farmer Hat";
+        svgHashes[11] = bytes32(0xcc63099a7a1172d04db284be80a6b14c2b2c44f546837fd2864e9f10d7fd32aa);
+        tiers[11] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 250,
             votingUnits: 0,
@@ -223,9 +257,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Geisha hair
-        names[10] = "Geisha Hair";
-        svgHashes[10] = bytes32(0x1d8a511b9f64f91ba487c3f154b72a27e6e0006b5fcd936d4144b840c4c89e17);
-        tiers[10] = JB721TierConfig({
+        names[12] = "Geisha Hair";
+        svgHashes[12] = bytes32(0x1d8a511b9f64f91ba487c3f154b72a27e6e0006b5fcd936d4144b840c4c89e17);
+        tiers[12] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 1))),
             initialSupply: 100,
             votingUnits: 0,
@@ -240,9 +274,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Headphones
-        names[11] = "Headphones";
-        svgHashes[11] = bytes32(0x99f076bd58bcd99698984eddbf98c26fe2724279bb251273ffe33d3ba70841b3);
-        tiers[11] = JB721TierConfig({
+        names[13] = "Headphones";
+        svgHashes[13] = bytes32(0x99f076bd58bcd99698984eddbf98c26fe2724279bb251273ffe33d3ba70841b3);
+        tiers[13] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 500,
             votingUnits: 0,
@@ -257,9 +291,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Natty dread
-        names[12] = "Natty Dred";
-        svgHashes[12] = bytes32(0xcca9b51edef8e733b928028b3f9a61619b72ce937cd47d25fe0f15b9cb5f2ec3);
-        tiers[12] = JB721TierConfig({
+        names[14] = "Natty Dred";
+        svgHashes[14] = bytes32(0xcca9b51edef8e733b928028b3f9a61619b72ce937cd47d25fe0f15b9cb5f2ec3);
+        tiers[14] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 100,
             votingUnits: 0,
@@ -274,9 +308,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Peachhair
-        names[13] = "Peach Hair";
-        svgHashes[13] = bytes32(0x22dd4da99647543397cbd8afa162b9bf3243a774c3db1ab2130251ab4c47eb48);
-        tiers[13] = JB721TierConfig({
+        names[15] = "Peach Hair";
+        svgHashes[15] = bytes32(0x22dd4da99647543397cbd8afa162b9bf3243a774c3db1ab2130251ab4c47eb48);
+        tiers[15] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 100,
             votingUnits: 0,
@@ -291,9 +325,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Proff hair
-        names[14] = "Proff Hair";
-        svgHashes[14] = bytes32(0xa60f89b538e91947a1c3902527d8258816c55d8cce027c24c317d7194f780588);
-        tiers[14] = JB721TierConfig({
+        names[16] = "Proff Hair";
+        svgHashes[16] = bytes32(0xa60f89b538e91947a1c3902527d8258816c55d8cce027c24c317d7194f780588);
+        tiers[16] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 200,
             votingUnits: 0,
@@ -308,9 +342,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Quaid helmet
-        names[15] = "Quaid Helmet";
-        svgHashes[15] = bytes32(0xdb88f7db87040a94e91ad12bf12a59dcb6324a9f47d56325a787ddc28d1e3b3e);
-        tiers[15] = JB721TierConfig({
+        names[17] = "Quaid Helmet";
+        svgHashes[17] = bytes32(0xdb88f7db87040a94e91ad12bf12a59dcb6324a9f47d56325a787ddc28d1e3b3e);
+        tiers[17] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 3))),
             initialSupply: 100,
             votingUnits: 0,
@@ -325,9 +359,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Astronaut Body
-        names[16] = "Astronaut Body";
-        svgHashes[16] = bytes32(0x72c967fccb0ecfb66d8b5902c00b28cd19b7fabb0396cc8d110d2c7b1c5be369);
-        tiers[16] = JB721TierConfig({
+        names[18] = "Astronaut Body";
+        svgHashes[18] = bytes32(0x72c967fccb0ecfb66d8b5902c00b28cd19b7fabb0396cc8d110d2c7b1c5be369);
+        tiers[18] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 250,
             votingUnits: 0,
@@ -342,9 +376,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Dorthy shoes
-        names[17] = "Dorthy Shoes";
-        svgHashes[17] = bytes32(0x294170bd6598f1e1ec50f9b4fc8e13195595581017f4f5eecc67e15a7c22bbf3);
-        tiers[17] = JB721TierConfig({
+        names[19] = "Dorthy Shoes";
+        svgHashes[19] = bytes32(0x294170bd6598f1e1ec50f9b4fc8e13195595581017f4f5eecc67e15a7c22bbf3);
+        tiers[19] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 250,
             votingUnits: 0,
@@ -359,9 +393,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Sweatsuit
-        names[18] = "Sweatsuit";
-        svgHashes[18] = bytes32(0x7e95e4f07ff7b2fa2b1afce8729079119a43ab865a691166ba9c6b6bb99e79f0);
-        tiers[18] = JB721TierConfig({
+        names[20] = "Sweatsuit";
+        svgHashes[20] = bytes32(0x7e95e4f07ff7b2fa2b1afce8729079119a43ab865a691166ba9c6b6bb99e79f0);
+        tiers[20] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 1))),
             initialSupply: 20,
             votingUnits: 0,
@@ -376,9 +410,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Dorthy dress
-        names[19] = "Dorthy Dress";
-        svgHashes[19] = bytes32(0xef34613334ea81f3e6394fb3156f029810341f422ce553187483cc11a05ee06b);
-        tiers[19] = JB721TierConfig({
+        names[21] = "Dorthy Dress";
+        svgHashes[21] = bytes32(0xef34613334ea81f3e6394fb3156f029810341f422ce553187483cc11a05ee06b);
+        tiers[21] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 250,
             votingUnits: 0,
@@ -393,9 +427,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Geisha body
-        names[20] = "Geisha Body";
-        svgHashes[20] = bytes32(0x27cb2a6eaba1ed713e06759a2cbbeb202b9c30d14b3277650112c4a33b904abe);
-        tiers[20] = JB721TierConfig({
+        names[22] = "Geisha Body";
+        svgHashes[22] = bytes32(0x27cb2a6eaba1ed713e06759a2cbbeb202b9c30d14b3277650112c4a33b904abe);
+        tiers[22] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 1))),
             initialSupply: 100,
             votingUnits: 0,
@@ -410,9 +444,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Baggies
-        names[21] = "Baggies";
-        svgHashes[21] = bytes32(0xa056a061d44fe1d02ee153c030afaaa773521056bc591ec9ed3290fe7a3b9917);
-        tiers[21] = JB721TierConfig({
+        names[23] = "Baggies";
+        svgHashes[23] = bytes32(0xa056a061d44fe1d02ee153c030afaaa773521056bc591ec9ed3290fe7a3b9917);
+        tiers[23] = JB721TierConfig({
             price: uint104(15 * (10 ** (decimals - 1))),
             initialSupply: 30,
             votingUnits: 0,
@@ -427,9 +461,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Jonny utah shirt
-        names[22] = "Jonny Utah Shirt";
-        svgHashes[22] = bytes32(0xa6292ef611888f53067dff30033f1e20d7fc53d21111a18537b5932639b20fe1);
-        tiers[22] = JB721TierConfig({
+        names[24] = "Jonny Utah Shirt";
+        svgHashes[24] = bytes32(0xa6292ef611888f53067dff30033f1e20d7fc53d21111a18537b5932639b20fe1);
+        tiers[24] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 3))),
             initialSupply: 250,
             votingUnits: 0,
@@ -444,9 +478,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Doc coat
-        names[23] = "Doc Coat";
-        svgHashes[23] = bytes32(0xafb136b2e279fab66ebc2ad03f254a6bb15845cfd2d02659b67b05b0cb212171);
-        tiers[23] = JB721TierConfig({
+        names[25] = "Doc Coat";
+        svgHashes[25] = bytes32(0xafb136b2e279fab66ebc2ad03f254a6bb15845cfd2d02659b67b05b0cb212171);
+        tiers[25] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 250,
             votingUnits: 0,
@@ -461,9 +495,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Goat jersey
-        names[24] = "Goat Jersey";
-        svgHashes[24] = bytes32(0x660274af6d3a0cbf6eb5c17653dc987ff5ffeae0cbd4f43217c69bf855ae6f60);
-        tiers[24] = JB721TierConfig({
+        names[26] = "Goat Jersey";
+        svgHashes[26] = bytes32(0x660274af6d3a0cbf6eb5c17653dc987ff5ffeae0cbd4f43217c69bf855ae6f60);
+        tiers[26] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 1))),
             initialSupply: 50,
             votingUnits: 0,
@@ -478,9 +512,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Irie tshirt
-        names[25] = "Irie Shirt";
-        svgHashes[25] = bytes32(0x9f0084ae54058a1501ab4475406829effc1b720c43a1eff64f7528be3d5233fb);
-        tiers[25] = JB721TierConfig({
+        names[27] = "Irie Shirt";
+        svgHashes[27] = bytes32(0x9f0084ae54058a1501ab4475406829effc1b720c43a1eff64f7528be3d5233fb);
+        tiers[27] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 3))),
             initialSupply: 250,
             votingUnits: 0,
@@ -495,9 +529,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Punk jacket
-        names[26] = "Punk Jacket";
-        svgHashes[26] = bytes32(0xacd990609f9ecced2b7baa0d251f8561a78793e4bd80c82ced2c7d6e305ed1ef);
-        tiers[26] = JB721TierConfig({
+        names[28] = "Punk Jacket";
+        svgHashes[28] = bytes32(0xacd990609f9ecced2b7baa0d251f8561a78793e4bd80c82ced2c7d6e305ed1ef);
+        tiers[28] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 1))),
             initialSupply: 50,
             votingUnits: 0,
@@ -512,9 +546,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Zipper jacket
-        names[27] = "Zipper Jacket";
-        svgHashes[27] = bytes32(0x0dbc34cc734039dae91309142c5042a9ffc46f14a6c3a11eb8c74fa7d7b23e55);
-        tiers[27] = JB721TierConfig({
+        names[29] = "Zipper Jacket";
+        svgHashes[29] = bytes32(0x0dbc34cc734039dae91309142c5042a9ffc46f14a6c3a11eb8c74fa7d7b23e55);
+        tiers[29] = JB721TierConfig({
             price: uint104(25 * (10 ** (decimals - 2))),
             initialSupply: 25,
             votingUnits: 0,
@@ -529,9 +563,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Zucco tshirt
-        names[28] = "Zucco Tshirt";
-        svgHashes[28] = bytes32(0x63ecce624ab9c586fed702aee4496063482ad846b8e685767dfc2509f6bdfb12);
-        tiers[28] = JB721TierConfig({
+        names[30] = "Zucco Tshirt";
+        svgHashes[30] = bytes32(0x63ecce624ab9c586fed702aee4496063482ad846b8e685767dfc2509f6bdfb12);
+        tiers[30] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 3))),
             initialSupply: 10000,
             votingUnits: 0,
@@ -545,27 +579,10 @@ contract Drop1Script is Script, Sphinx {
             useVotingUnits: false,
             cannotBeRemoved: false
         });
-        // Bandolph staff
-        names[29] = "Bandolph Staff";
-        svgHashes[29] = bytes32(0xacfbffe21e3de73825eaf11dd666d7ac1ed3dce71c40e2f78abfdcc61de6e231);
-        tiers[29] = JB721TierConfig({
-            price: uint104(125 * (10 ** (decimals - 2))),
-            initialSupply: 250,
-            votingUnits: 0,
-            reserveFrequency: 0,
-            reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0xdc278de8567be400acb8d95a5a8bdb921f1802bac54b53637f2ac3edd057d087),
-            category: 14,
-            allowOwnerMint: false,
-            useReserveBeneficiaryAsDefault: false,
-            transfersPausable: false,
-            useVotingUnits: false,
-            cannotBeRemoved: false
-        });
         // Catana
-        names[30] = "Catana";
-        svgHashes[30] = bytes32(0x4bacb12fd3dac3a392d8edca1c4ddb9f480619f4c7e18c3fbda6fa44f59f2080);
-        tiers[30] = JB721TierConfig({
+        names[31] = "Catana";
+        svgHashes[31] = bytes32(0x4bacb12fd3dac3a392d8edca1c4ddb9f480619f4c7e18c3fbda6fa44f59f2080);
+        tiers[31] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 250,
             votingUnits: 0,
@@ -580,9 +597,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Chefs knife
-        names[31] = "Chefs Knife";
-        svgHashes[31] = bytes32(0xe2a349c0acba1d273ba01e9ad266bbdad652cec5184ad73ee82c11044ac28558);
-        tiers[31] = JB721TierConfig({
+        names[32] = "Chefs Knife";
+        svgHashes[32] = bytes32(0xe2a349c0acba1d273ba01e9ad266bbdad652cec5184ad73ee82c11044ac28558);
+        tiers[32] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 3))),
             initialSupply: 500,
             votingUnits: 0,
@@ -597,9 +614,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Cheap beer
-        names[32] = "Cheap Beer";
-        svgHashes[32] = bytes32(0x40e6ae57605ea4bc547bafafb1dc8b00f0235070ca4005a4f277ac6197612b28);
-        tiers[32] = JB721TierConfig({
+        names[33] = "Cheap Beer";
+        svgHashes[33] = bytes32(0x40e6ae57605ea4bc547bafafb1dc8b00f0235070ca4005a4f277ac6197612b28);
+        tiers[33] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 3))),
             initialSupply: 10_000,
             votingUnits: 0,
@@ -614,32 +631,15 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Constitution
-        names[33] = "Constitution";
-        svgHashes[33] = bytes32(0xd571397055350d3338d73f7594ba5d12deb1345ee16dffaa6d108bb0b2e50e4a);
-        tiers[33] = JB721TierConfig({
+        names[34] = "Constitution";
+        svgHashes[34] = bytes32(0xd571397055350d3338d73f7594ba5d12deb1345ee16dffaa6d108bb0b2e50e4a);
+        tiers[34] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 3))),
             initialSupply: 10_000,
             votingUnits: 0,
             reserveFrequency: 0,
             reserveBeneficiary: address(0),
             encodedIPFSUri: bytes32(0x40fca04e7a981777cb61cdaa65eb0972ef5ec5fac36d0812143b7938d0d454f2),
-            category: 14,
-            allowOwnerMint: false,
-            useReserveBeneficiaryAsDefault: false,
-            transfersPausable: false,
-            useVotingUnits: false,
-            cannotBeRemoved: false
-        });
-        // Pew pew
-        names[34] = "Pew Pew";
-        svgHashes[34] = bytes32(0xfd3ac98d3d60677cbcbf1c3f88d97214618ee15839616c916c0ef954e62ca13a);
-        tiers[34] = JB721TierConfig({
-            price: uint104(1 * (10 ** (decimals - 2))),
-            initialSupply: 150,
-            votingUnits: 0,
-            reserveFrequency: 0,
-            reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0x074d00adc03e38fbb16fade19890729547b155f7c3e72f14a4136a0de62d0885),
             category: 14,
             allowOwnerMint: false,
             useReserveBeneficiaryAsDefault: false,
