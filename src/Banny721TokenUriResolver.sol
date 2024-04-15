@@ -66,7 +66,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     uint8 private constant _FACE_EYES_CATEGORY = 6;
     uint8 private constant _FACE_MOUTH_CATEGORY = 7;
     uint8 private constant _HEADGEAR_CATEGORY = 8;
-    uint8 private constant _SHOE_CATEGORY = 9;
+    uint8 private constant _LEGS_CATEGORY = 9;
     uint8 private constant _SUIT_CATEGORY = 10;
     uint8 private constant _SUIT_BOTTOM_CATEGORY = 11;
     uint8 private constant _SUIT_TOP_CATEGORY = 12;
@@ -413,7 +413,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             } else if (
                 (
                     outfitTier.category == _SUIT_CATEGORY || outfitTier.category == _SUIT_TOP_CATEGORY
-                        || outfitTier.category == _SUIT_BOTTOM_CATEGORY || outfitTier.category == _SHOE_CATEGORY
+                        || outfitTier.category == _SUIT_BOTTOM_CATEGORY || outfitTier.category == _LEGS_CATEGORY
                 ) && hasOnesie
             ) {
                 revert ONESIE_ALREADY_ADDED();
@@ -708,8 +708,8 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
                 return string.concat("World: ", name);
             } else if (category == _BACKSIDE_CATEGORY) {
                 return string.concat("Backside: ", name);
-            } else if (category == _SHOE_CATEGORY) {
-                return string.concat("Shoe: ", name);
+            } else if (category == _LEGS_CATEGORY) {
+                return string.concat("Legs: ", name);
             } else if (category == _NECKLACE_CATEGORY) {
                 return string.concat("Necklace: ", name);
             } else if (category == _FACE_CATEGORY) {
