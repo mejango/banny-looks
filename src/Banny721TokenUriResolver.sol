@@ -66,13 +66,12 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     uint8 private constant _FACE_EYES_CATEGORY = 6;
     uint8 private constant _FACE_MOUTH_CATEGORY = 7;
     uint8 private constant _HEADGEAR_CATEGORY = 8;
-    uint8 private constant _ONESIE_CATEGORY = 9;
-    uint8 private constant _SHOE_CATEGORY = 10;
-    uint8 private constant _SUIT_CATEGORY = 11;
-    uint8 private constant _SUIT_BOTTOM_CATEGORY = 12;
-    uint8 private constant _SUIT_TOP_CATEGORY = 13;
-    uint8 private constant _FIST_CATEGORY = 14;
-    uint8 private constant _TOPPING_CATEGORY = 15;
+    uint8 private constant _SHOE_CATEGORY = 9;
+    uint8 private constant _SUIT_CATEGORY = 10;
+    uint8 private constant _SUIT_BOTTOM_CATEGORY = 11;
+    uint8 private constant _SUIT_TOP_CATEGORY = 12;
+    uint8 private constant _FIST_CATEGORY = 13;
+    uint8 private constant _TOPPING_CATEGORY = 14;
 
     uint8 private constant ALIEN_TIER = 1;
     uint8 private constant PINK_TIER = 2;
