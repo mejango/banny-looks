@@ -28,9 +28,8 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     error HEAD_ALREADY_ADDED();
     error FACE_ALREADY_ADDED();
     error SUIT_ALREADY_ADDED();
-    error ONESIE_ALREADY_ADDED();
     error UNRECOGNIZED_WORLD();
-    error UNAUTHORIZED__NAKED_BANNY();
+    error UNAUTHORIZED_NAKED_BANNY();
     error UNAUTHORIZED_WORLD();
     error UNAUTHORIZED_OUTFIT();
     error UNRECOGNIZED_CATEGORY();
@@ -335,7 +334,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         external
     {
         // Make sure call is being made by owner of Naked Banny.
-        if (IERC721(hook).ownerOf(nakedBannyId) != _msgSender()) revert UNAUTHORIZED__NAKED_BANNY();
+        if (IERC721(hook).ownerOf(nakedBannyId) != _msgSender()) revert UNAUTHORIZED_NAKED_BANNY();
 
         // Add the world if needed.
         if (worldId != 0) {
@@ -374,7 +373,6 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
 
         bool hasHead;
         bool hasFace;
-        bool hasOnesie;
         bool hasSuit;
 
         // Iterate through each outfit checking to see if the message sender owns them all.
@@ -408,15 +406,6 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
                 hasFace = true;
             } else if (outfitTier.category == _SUIT_CATEGORY) {
                 hasSuit = true;
-            } else if (outfitTier.category == _ONESIE_CATEGORY) {
-                hasOnesie = true;
-            } else if (
-                (
-                    outfitTier.category == _SUIT_CATEGORY || outfitTier.category == _SUIT_TOP_CATEGORY
-                        || outfitTier.category == _SUIT_BOTTOM_CATEGORY || outfitTier.category == _LEGS_CATEGORY
-                ) && hasOnesie
-            ) {
-                revert ONESIE_ALREADY_ADDED();
             } else if (
                 (
                     outfitTier.category == _FACE_CATEGORY || outfitTier.category == _FACE_EYES_CATEGORY
