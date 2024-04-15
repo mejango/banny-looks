@@ -206,7 +206,8 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             }
         } else {
             // Compose the contents.
-            contents = svgOf({hook: hook, tokenId: tokenId, shouldDressNakedBanny: true, shouldIncludeWorldOnNakedBanny: true});
+            contents =
+                svgOf({hook: hook, tokenId: tokenId, shouldDressNakedBanny: true, shouldIncludeWorldOnNakedBanny: true});
         }
 
         if (bytes(contents).length == 0) {
@@ -234,7 +235,8 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         );
     }
 
-    /// @notice Returns the SVG showing either a naked banny with/without outfits and a world, or the stand alone outfit or world.
+    /// @notice Returns the SVG showing either a naked banny with/without outfits and a world, or the stand alone outfit
+    /// or world.
     /// @param hook The hook storing the assets.
     /// @param tokenId The ID of the token to show. If the ID belongs to a Naked Banny, it will be shown with its
     /// current outfits in its current world if specified.

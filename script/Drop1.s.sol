@@ -129,7 +129,7 @@ contract Drop1Script is Script, Sphinx {
             votingUnits: 0,
             reserveFrequency: 25,
             reserveBeneficiary: producer,
-            encodedIPFSUri: bytes32(0x1e7d86c28080058013e8123a7b3c0054059f2171bd66ae078fdc87a8471f7428), 
+            encodedIPFSUri: bytes32(0x1e7d86c28080058013e8123a7b3c0054059f2171bd66ae078fdc87a8471f7428),
             category: 6,
             allowOwnerMint: false,
             useReserveBeneficiaryAsDefault: true,
@@ -210,7 +210,7 @@ contract Drop1Script is Script, Sphinx {
         svgHashes[9] = bytes32(0x5665e5d760e91466c4b9f094b710c26b93563846e39f08bff765ef71951d2b7b);
         tiers[9] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 3))),
-            initialSupply: 1_000,
+            initialSupply: 1000,
             votingUnits: 0,
             reserveFrequency: 0,
             reserveBeneficiary: address(0),
@@ -601,7 +601,7 @@ contract Drop1Script is Script, Sphinx {
         svgHashes[32] = bytes32(0xad8511155eabb8cb57331d2926c3a3ba46a2e405a759878ee658367574d57c14);
         tiers[32] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 3))),
-            initialSupply: 10000,
+            initialSupply: 10_000,
             votingUnits: 0,
             reserveFrequency: 0,
             reserveBeneficiary: address(0),
@@ -771,7 +771,7 @@ contract Drop1Script is Script, Sphinx {
 
         uint256[] memory tierIds = new uint256[](42);
         for (uint256 i; i < 42; i++) {
-          tierIds[i] = i + 5;
+            tierIds[i] = i + 5;
         }
 
         bannyverse.resolver.setSvgHashsOf(tierIds, svgHashes);
