@@ -26,7 +26,6 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
 
     error ASSET_IS_ALREADY_BEING_WORN();
     error HEAD_ALREADY_ADDED();
-    error FACE_ALREADY_ADDED();
     error SUIT_ALREADY_ADDED();
     error UNRECOGNIZED_WORLD();
     error UNAUTHORIZED_NAKED_BANNY();
@@ -61,16 +60,15 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     uint8 private constant _BACKSIDE_CATEGORY = 2;
     uint8 private constant _NECKLACE_CATEGORY = 3;
     uint8 private constant _HEAD_CATEGORY = 4;
-    uint8 private constant _FACE_CATEGORY = 5;
-    uint8 private constant _FACE_EYES_CATEGORY = 6;
-    uint8 private constant _FACE_MOUTH_CATEGORY = 7;
-    uint8 private constant _HEADGEAR_CATEGORY = 8;
-    uint8 private constant _LEGS_CATEGORY = 9;
-    uint8 private constant _SUIT_CATEGORY = 10;
-    uint8 private constant _SUIT_BOTTOM_CATEGORY = 11;
-    uint8 private constant _SUIT_TOP_CATEGORY = 12;
-    uint8 private constant _FIST_CATEGORY = 13;
-    uint8 private constant _TOPPING_CATEGORY = 14;
+    uint8 private constant _GLASSES_CATEGORY = 5;
+    uint8 private constant _MOUTH_CATEGORY = 6;
+    uint8 private constant _LEGS_CATEGORY = 7;
+    uint8 private constant _SUIT_CATEGORY = 8;
+    uint8 private constant _SUIT_BOTTOM_CATEGORY = 9;
+    uint8 private constant _SUIT_TOP_CATEGORY = 10;
+    uint8 private constant _HEADTOP_CATEGORY = 11;
+    uint8 private constant _FIST_CATEGORY = 12;
+    uint8 private constant _TOPPING_CATEGORY = 13;
 
     uint8 private constant ALIEN_TIER = 1;
     uint8 private constant PINK_TIER = 2;
@@ -290,6 +288,10 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         contents = string.concat(contents, _nakedBannySvgOf(tier.id));
 
         if (shouldDressNakedBanny) {
+            // Add eyes.
+            if (tier.id == ALIEN_TIER) contents = string.concat(contents, _DEFAULT_ALIEN_EYES);
+            else contents = string.concat(contents, _DEFAULT_STANDARD_EYES);
+
             // Get the outfit contents.
             string memory outfitContents =
                 _outfitContentsFor({hook: hook, nakedBannyTier: tier.id, outfitIds: outfitIds});
@@ -374,7 +376,6 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         JB721Tier memory outfitTier;
 
         bool hasHead;
-        bool hasFace;
         bool hasSuit;
 
         // Iterate through each outfit checking to see if the message sender owns them all.
@@ -404,21 +405,15 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
 
             if (outfitTier.category == _HEAD_CATEGORY) {
                 hasHead = true;
-            } else if (outfitTier.category == _FACE_CATEGORY) {
-                hasFace = true;
             } else if (outfitTier.category == _SUIT_CATEGORY) {
                 hasSuit = true;
             } else if (
                 (
-                    outfitTier.category == _FACE_CATEGORY || outfitTier.category == _FACE_EYES_CATEGORY
-                        || outfitTier.category == _FACE_MOUTH_CATEGORY || outfitTier.category == _HEADGEAR_CATEGORY
+                    outfitTier.category == _GLASSES_CATEGORY
+                        || outfitTier.category == _MOUTH_CATEGORY || outfitTier.category == _HEADTOP_CATEGORY
                 ) && hasHead
             ) {
                 revert HEAD_ALREADY_ADDED();
-            } else if (
-                (outfitTier.category == _FACE_EYES_CATEGORY || outfitTier.category == _FACE_MOUTH_CATEGORY) && hasFace
-            ) {
-                revert FACE_ALREADY_ADDED();
             } else if (
                 (outfitTier.category == _SUIT_TOP_CATEGORY || outfitTier.category == _SUIT_BOTTOM_CATEGORY) && hasSuit
             ) {
@@ -616,8 +611,6 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
 
         // Keep a reference to if certain accessories have been added.
         bool hasNecklace;
-        bool hasFace;
-        bool hasEyes;
         bool hasMouth;
 
         // If there are less than 3 outfits, loop once more to make sure all default outfits are added.
@@ -634,7 +627,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
                 category = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, outfitId, false).category;
             } else {
                 // Set the category to be greater than the last default category.
-                category = _FACE_MOUTH_CATEGORY + 1;
+                category = _MOUTH_CATEGORY + 1;
                 outfitId = 0;
             }
 
@@ -644,26 +637,12 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
                 contents = string.concat(contents, _DEFAULT_NECKLACE);
                 hasNecklace = true;
             }
-            if (category == _FACE_CATEGORY) {
-                hasFace = true;
-            } else if (category > _FACE_CATEGORY && !hasFace) {
-                if (category == _FACE_EYES_CATEGORY) {
-                    hasEyes = true;
-                } else if (category > _FACE_EYES_CATEGORY && !hasEyes) {
-                    if (nakedBannyTier == ALIEN_TIER) contents = string.concat(contents, _DEFAULT_ALIEN_EYES);
-                    else contents = string.concat(contents, _DEFAULT_STANDARD_EYES);
-                    hasEyes = true;
-                }
-                if (category == _FACE_MOUTH_CATEGORY) {
-                    hasMouth = true;
-                } else if (category > _FACE_MOUTH_CATEGORY && !hasMouth) {
-                    contents = string.concat(contents, _DEFAULT_MOUTH);
-                    hasMouth = true;
-                }
 
-                if (hasEyes && hasMouth && !hasFace) {
-                    hasFace = true;
-                }
+            if (category == _MOUTH_CATEGORY) {
+                hasMouth = true;
+            } else if (category > _MOUTH_CATEGORY && !hasMouth) {
+                contents = string.concat(contents, _DEFAULT_MOUTH);
+                hasMouth = true;
             }
 
             // Add the outfit if needed.
@@ -703,14 +682,12 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
                 return string.concat("Legs: ", name);
             } else if (category == _NECKLACE_CATEGORY) {
                 return string.concat("Necklace: ", name);
-            } else if (category == _FACE_CATEGORY) {
-                return string.concat("Face: ", name);
-            } else if (category == _FACE_EYES_CATEGORY) {
-                return string.concat("Eyes: ", name);
-            } else if (category == _FACE_MOUTH_CATEGORY) {
+            } else if (category == _GLASSES_CATEGORY) {
+                return string.concat("Glasses: ", name);
+            } else if (category == _MOUTH_CATEGORY) {
                 return string.concat("Mouth: ", name);
-            } else if (category == _HEADGEAR_CATEGORY) {
-                return string.concat("Hair: ", name);
+            } else if (category == _HEADTOP_CATEGORY) {
+                return string.concat("Head top: ", name);
             } else if (category == _HEAD_CATEGORY) {
                 return string.concat("Head: ", name);
             } else if (category == _SUIT_CATEGORY) {
