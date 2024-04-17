@@ -19,10 +19,10 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     event DecorateBanny(
         address indexed hook, uint256 indexed nakenBannyId, uint256 worldId, uint256[] outfitIds, address caller
     );
-    event SetSvgContents(uint256[] indexed tierId, string[] svgContents, address caller);
-    event SetSvgHashes(uint256[] indexed tierIds, bytes32[] indexed svgHashs, address caller);
+    event SetSvgContent(uint256 indexed tierId, string svgContents, address caller);
+    event SetSvgHash(uint256 indexed tierIds, bytes32 indexed svgHashs, address caller);
     event SetSvgBaseUri(string baseUri, address caller);
-    event SetTierNames(uint256[] indexed tierIds, string[] names, address caller);
+    event SetTierName(uint256 indexed tierIds, string names, address caller);
 
     error ASSET_IS_ALREADY_BEING_WORN();
     error HEAD_ALREADY_ADDED();
@@ -460,9 +460,9 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
 
             // Store the svg contents.
             _svgContentOf[tierId] = svgContent;
-        }
 
-        emit SetSvgContents(tierIds, svgContents, msg.sender);
+            emit SetSvgContent(tierId, svgContent, msg.sender);
+        }
     }
 
     /// @notice Allows the owner of this contract to upload the hash of an svg file for a tierId.
@@ -484,8 +484,9 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
 
             // Store the svg contents.
             svgHashOf[tierId] = svgHash;
+
+            emit SetSvgHash(tierId, svgHash, msg.sender);
         }
-        emit SetSvgHashes(tierIds, svgHashs, msg.sender);
     }
 
     /// @notice Allows the owner to set the tier's name.
@@ -502,8 +503,9 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             name = names[i];
 
             _tierNameOf[tierId] = name;
+
+            emit SetTierName(tierId, name, msg.sender);
         }
-        emit SetTierNames(tierIds, names, msg.sender);
     }
 
     /// @notice Allows the owner of this contract to specify the base of the domain hosting the SVG files.

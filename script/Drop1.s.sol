@@ -48,9 +48,9 @@ contract Drop1Script is Script, Sphinx {
         address producer = safeAddress();
         uint256 decimals = 18;
 
-        string[] memory names = new string[](43);
-        bytes32[] memory svgHashes = new bytes32[](43);
-        JB721TierConfig[] memory tiers = new JB721TierConfig[](43);
+        string[] memory names = new string[](42);
+        bytes32[] memory svgHashes = new bytes32[](42);
+        JB721TierConfig[] memory tiers = new JB721TierConfig[](42);
 
         // Pew pew
         names[0] = "Pew Pew";
@@ -596,27 +596,10 @@ contract Drop1Script is Script, Sphinx {
             useVotingUnits: false,
             cannotBeRemoved: false
         });
-        // Quaid helmet
-        names[32] = "Quaid Helmet";
-        svgHashes[32] = bytes32(0xa22f083429a5746e05458a089c0ab4029fa032165dab3ba0e74a20a4b6d68761);
-        tiers[32] = JB721TierConfig({
-            price: uint104(1 * (10 ** (decimals - 3))),
-            initialSupply: 100,
-            votingUnits: 0,
-            reserveFrequency: 0,
-            reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0x73bc60a567ddac156f680a0483499c6e5407750ba01223fe40a81214bd0704cc),
-            category: 11,
-            allowOwnerMint: false,
-            useReserveBeneficiaryAsDefault: false,
-            transfersPausable: false,
-            useVotingUnits: false,
-            cannotBeRemoved: false
-        });
         // Catana
-        names[33] = "Catana";
-        svgHashes[33] = bytes32(0xbe7e7bb20da87fffa92e867bf0cd3267df180e24ba6eae7a1d434c56856ef2f5);
-        tiers[33] = JB721TierConfig({
+        names[32] = "Catana";
+        svgHashes[32] = bytes32(0xbe7e7bb20da87fffa92e867bf0cd3267df180e24ba6eae7a1d434c56856ef2f5);
+        tiers[32] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 250,
             votingUnits: 0,
@@ -631,9 +614,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Chefs knife
-        names[34] = "Chefs Knife";
-        svgHashes[34] = bytes32(0x705180b5aee8e57d0a0783d22fc30dc95e3e84fac36e9d96fef96fabfa58d1f9);
-        tiers[34] = JB721TierConfig({
+        names[33] = "Chefs Knife";
+        svgHashes[33] = bytes32(0x705180b5aee8e57d0a0783d22fc30dc95e3e84fac36e9d96fef96fabfa58d1f9);
+        tiers[33] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 3))),
             initialSupply: 500,
             votingUnits: 0,
@@ -648,9 +631,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Cheap beer
-        names[35] = "Cheap Beer";
-        svgHashes[35] = bytes32(0x993a2c657f43e19820f3e23677e650705d0c8c6a0ccd88a381aa54d2da7ba047);
-        tiers[35] = JB721TierConfig({
+        names[34] = "Cheap Beer";
+        svgHashes[34] = bytes32(0x993a2c657f43e19820f3e23677e650705d0c8c6a0ccd88a381aa54d2da7ba047);
+        tiers[34] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 3))),
             initialSupply: 10_000,
             votingUnits: 0,
@@ -665,9 +648,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Constitution
-        names[36] = "Constitution";
-        svgHashes[36] = bytes32(0xaf0826d8eac1e57789077f43e6f979488da6f619f72f9f0ff50a52ebcca3bfa3);
-        tiers[36] = JB721TierConfig({
+        names[35] = "Constitution";
+        svgHashes[35] = bytes32(0xaf0826d8eac1e57789077f43e6f979488da6f619f72f9f0ff50a52ebcca3bfa3);
+        tiers[35] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 3))),
             initialSupply: 10_000,
             votingUnits: 0,
@@ -682,9 +665,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // DJ booth
-        names[37] = "DJ Booth";
-        svgHashes[37] = bytes32(0x2c9538556986d134ddec2831e768233f587b242e887df9bb359b3aefffa3c5a6);
-        tiers[37] = JB721TierConfig({
+        names[36] = "DJ Booth";
+        svgHashes[36] = bytes32(0x2c9538556986d134ddec2831e768233f587b242e887df9bb359b3aefffa3c5a6);
+        tiers[36] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 1))),
             initialSupply: 10,
             votingUnits: 0,
@@ -699,9 +682,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Gas can
-        names[38] = "Gas Can";
-        svgHashes[38] = bytes32(0x89808b70d019077e4f986b4a60af4ec15fc72ed022bc5e5476441d98f8ce1d1d);
-        tiers[38] = JB721TierConfig({
+        names[37] = "Gas Can";
+        svgHashes[37] = bytes32(0x89808b70d019077e4f986b4a60af4ec15fc72ed022bc5e5476441d98f8ce1d1d);
+        tiers[37] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 1))),
             initialSupply: 25,
             votingUnits: 0,
@@ -716,9 +699,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Lightsaber
-        names[39] = "Lightsaber";
-        svgHashes[39] = bytes32(0xf7017a80e9fa4c3fc052a701c04374176620a8e5befa39b708a51293c4d8f406);
-        tiers[39] = JB721TierConfig({
+        names[38] = "Lightsaber";
+        svgHashes[38] = bytes32(0xf7017a80e9fa4c3fc052a701c04374176620a8e5befa39b708a51293c4d8f406);
+        tiers[38] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 3))),
             initialSupply: 5000,
             votingUnits: 0,
@@ -733,9 +716,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Potion
-        names[40] = "Potion";
-        svgHashes[40] = bytes32(0xefdbac65db3868ead1c1093ea20f0b2d77e9095567f6358e246ba160ec545e09);
-        tiers[40] = JB721TierConfig({
+        names[39] = "Potion";
+        svgHashes[39] = bytes32(0xefdbac65db3868ead1c1093ea20f0b2d77e9095567f6358e246ba160ec545e09);
+        tiers[39] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 1))),
             initialSupply: 100,
             votingUnits: 0,
@@ -750,9 +733,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Dagger
-        names[41] = "Dagger";
-        svgHashes[41] = bytes32(0xcb3bc383475808e8949861811434cfc233fa8c5b6f6d75e19371e84a25a77171);
-        tiers[41] = JB721TierConfig({
+        names[40] = "Dagger";
+        svgHashes[40] = bytes32(0xcb3bc383475808e8949861811434cfc233fa8c5b6f6d75e19371e84a25a77171);
+        tiers[40] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 3))),
             initialSupply: 150,
             votingUnits: 0,
@@ -767,9 +750,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Mouthstraw
-        names[42] = "Mouthstraw";
-        svgHashes[42] = bytes32(0x112b8217bb82aebc91e80c935244dce8aa30d4d8df5f98382054b97037dc0c94);
-        tiers[42] = JB721TierConfig({
+        names[41] = "Mouthstraw";
+        svgHashes[41] = bytes32(0x112b8217bb82aebc91e80c935244dce8aa30d4d8df5f98382054b97037dc0c94);
+        tiers[41] = JB721TierConfig({
             price: uint104(1 * (10 ** decimals)),
             initialSupply: 15,
             votingUnits: 0,
