@@ -287,11 +287,11 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         // Start with the Naked Banny.
         contents = string.concat(contents, _nakedBannySvgOf(tier.id));
 
-        if (shouldDressNakedBanny) {
-            // Add eyes.
-            if (tier.id == ALIEN_TIER) contents = string.concat(contents, _DEFAULT_ALIEN_EYES);
-            else contents = string.concat(contents, _DEFAULT_STANDARD_EYES);
+        // Add eyes.
+        if (tier.id == ALIEN_TIER) contents = string.concat(contents, _DEFAULT_ALIEN_EYES);
+        else contents = string.concat(contents, _DEFAULT_STANDARD_EYES);
 
+        if (shouldDressNakedBanny) {
             // Get the outfit contents.
             string memory outfitContents =
                 _outfitContentsFor({hook: hook, nakedBannyTier: tier.id, outfitIds: outfitIds});
