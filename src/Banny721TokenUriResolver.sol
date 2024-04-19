@@ -19,10 +19,10 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     event DecorateBanny(
         address indexed hook, uint256 indexed nakenBannyId, uint256 worldId, uint256[] outfitIds, address caller
     );
-    event SetSvgContent(uint256 indexed tierId, string svgContents, address caller);
-    event SetSvgHash(uint256 indexed tierIds, bytes32 indexed svgHashs, address caller);
+    event SetSvgContent(uint256 indexed upc, string svgContent, address caller);
+    event SetSvgHash(uint256 indexed upc, bytes32 indexed svgHash, address caller);
     event SetSvgBaseUri(string baseUri, address caller);
-    event SetTierName(uint256 indexed tierIds, string names, address caller);
+    event SetProductName(uint256 indexed upc, string name, address caller);
 
     error ASSET_IS_ALREADY_BEING_WORN();
     error HEAD_ALREADY_ADDED();
@@ -38,7 +38,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     error HASH_NOT_FOUND();
     error CONTENTS_MISMATCH();
     error HASH_ALREADY_STORED();
-    error UNRECOGNIZED_TIER();
+    error UNRECOGNIZED_PRODUCT();
 
     /// @notice Just a kind reminder to our readers.
     /// @dev Used in 721 token ID generation.
@@ -70,25 +70,25 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     uint8 private constant _FIST_CATEGORY = 12;
     uint8 private constant _TOPPING_CATEGORY = 13;
 
-    uint8 private constant ALIEN_TIER = 1;
-    uint8 private constant PINK_TIER = 2;
-    uint8 private constant ORANGE_TIER = 3;
-    uint8 private constant ORIGINAL_TIER = 4;
+    uint8 private constant ALIEN_UPC = 1;
+    uint8 private constant PINK_UPC = 2;
+    uint8 private constant ORANGE_UPC = 3;
+    uint8 private constant ORIGINAL_UPC = 4;
 
     /// @notice The Naked Banny and outfit SVG hash files.
-    /// @custom:param tierId The ID of the tier that the SVG hash represent.
-    mapping(uint256 tierId => bytes32) public svgHashOf;
+    /// @custom:param upc The universal product code that the SVG hash represent.
+    mapping(uint256 upc => bytes32) public svgHashOf;
 
     /// @notice The base of the domain hosting the SVG files that can be lazily uploaded to the contract.
     string public svgBaseUri;
 
-    /// @notice The name of each tier.
-    /// @custom:param tierId The ID of the tier that the name belongs to.
-    mapping(uint256 tierId => string) private _tierNameOf;
+    /// @notice The name of each product.
+    /// @custom:param upc The universal product code that the name belongs to.
+    mapping(uint256 upc => string) internal _customProductNameOf;
 
     /// @notice The Naked Banny and outfit SVG files.
-    /// @custom:param tierId The ID of the tier that the SVG contents represent.
-    mapping(uint256 tierId => string) private _svgContentOf;
+    /// @custom:param upc The universal product code that the SVG contents represent.
+    mapping(uint256 upc => string) internal _svgContentOf;
 
     /// @notice The outfits currently attached to each Naked Banny.
     /// @dev Nakes Banny's will only be shown with outfits currently owned by the owner of the Naked Banny.
@@ -102,11 +102,11 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
 
     /// @notice The ID of the naked banny each world is being used by.
     /// @custom:param worldId The ID of the world.
-    mapping(uint256 worldId => uint256) internal _worldIsBeingUsedBy;
+    mapping(uint256 worldId => uint256) internal _userOf;
 
     /// @notice The ID of the naked banny each outfit is being worn by.
     /// @custom:param outfitId The ID of the outfit.
-    mapping(uint256 outfitId => uint256) internal _outfitIsBeingWornBy;
+    mapping(uint256 outfitId => uint256) internal _wearerOf;
 
     /// @notice The assets currently attached to each Naked Banny, owned by the naked Banny's owner.
     /// @param nakedBannyId The ID of the naked banny shows with the associated assets.
@@ -114,36 +114,18 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     /// @return outfitIds The outfits attached to the Naked Banny.
     function assetIdsOf(uint256 nakedBannyId) public view returns (uint256 worldId, uint256[] memory outfitIds) {
         // Keep a reference to the outfit IDs currently attached to the Naked Banny.
-        uint256[] memory attachedOutfitIds = _attachedOutfitIdsOf[nakedBannyId];
+        outfitIds = _attachedOutfitIdsOf[nakedBannyId];
 
         // Add the world.
         worldId = _attachedWorldIdOf[nakedBannyId];
-
-        // Get a reference to the number of outfits are on the Naked Banny.
-        uint256 numberOfAttachedOutfits = attachedOutfitIds.length;
-
-        // Keep a reference to the attached outfit ID being iterated on.
-        uint256 attachedOutfitId;
-
-        // Keep a reference to a counter of the number of outfits being returned.
-        uint256 counter;
-
-        // Return the outfits attached.
-        for (uint256 i; i < numberOfAttachedOutfits; i++) {
-            // Set the outfit being iterated on.
-            attachedOutfitId = attachedOutfitIds[i];
-
-            // Return the outfit.
-            outfitIds[counter++] = attachedOutfitId;
-        }
     }
 
     /// @notice Checks to see which naked banny is currently using a particular world.
     /// @param worldId The ID of the world being used.
     /// @return The ID of the naked banny using the world.
-    function worldIsBeingUsedBy(uint256 worldId) public view returns (uint256) {
+    function userOf(uint256 worldId) public view returns (uint256) {
         // Get a reference to the naked banny using the world.
-        uint256 nakedBannyId = _worldIsBeingUsedBy[worldId];
+        uint256 nakedBannyId = _userOf[worldId];
 
         // If no naked banny is wearing the outfit, or if its no longer the world attached, return 0.
         if (nakedBannyId == 0 || _attachedWorldIdOf[nakedBannyId] != worldId) return 0;
@@ -155,9 +137,9 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     /// @notice Checks to see which naked banny is currently wearing a particular outfit.
     /// @param outfitId The ID of the outfit being worn.
     /// @return The ID of the naked banny wearing the outfit.
-    function outfitIsBeingWornBy(uint256 outfitId) public view returns (uint256) {
+    function wearerOf(uint256 outfitId) public view returns (uint256) {
         // Get a reference to the naked banny wearing the outfit.
-        uint256 nakedBannyId = _outfitIsBeingWornBy[outfitId];
+        uint256 nakedBannyId = _wearerOf[outfitId];
 
         // If no naked banny is wearing the outfit, return 0.
         if (nakedBannyId == 0) return 0;
@@ -181,23 +163,25 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     /// current outfits in its current world.
     /// @return tokenUri The URI representing the SVG.
     function tokenUriOf(address hook, uint256 tokenId) external view returns (string memory) {
-        // Get a reference to the tier for the given token ID.
-        JB721Tier memory tier = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, tokenId, false);
+        // Get a reference to the product for the given token ID.
+        JB721Tier memory product = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, tokenId, false);
 
-        // If the token's tier doesn't exist, return an empty uri.
-        if (tier.id == 0) return "";
+        // If the token's product ID doesn't exist, return an empty uri.
+        if (product.id == 0) return "";
 
         string memory contents;
 
+        string memory extraNakedBannyMetadata = "";
+
         // If this isn't a Naked Banny, return the asset SVG alone (or on a manakin banny).
-        if (tier.category > _NAKED_CATEGORY) {
+        if (product.category > _NAKED_CATEGORY) {
             // Keep a reference to the SVG contents.
-            contents = _svgOf(hook, tier.id);
+            contents = _svgOf(hook, product.id);
 
             // Layer the outfit SVG over the mannequin Banny
             // Start with the mannequin SVG if we're not returning a world.
             if (bytes(contents).length != 0) {
-                if (tier.category != _WORLD_CATEGORY) {
+                if (product.category != _WORLD_CATEGORY) {
                     contents = string.concat(_mannequinBannySvg(), contents);
                 }
                 contents = _layeredSvg(contents);
@@ -206,12 +190,26 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             // Compose the contents.
             contents =
                 svgOf({hook: hook, tokenId: tokenId, shouldDressNakedBanny: true, shouldIncludeWorldOnNakedBanny: true});
+
+            // Get a reference to each asset ID currently attached to the Naked Banny.
+            (uint256 worldId, uint256[] memory outfitIds) = assetIdsOf(tokenId);
+
+            // Keep a reference to the number of outfits
+            uint256 numberOfOutfits = outfitIds.length;
+
+            extraNakedBannyMetadata = '"outfitUpcs": [';
+
+            for (uint256 i; i < numberOfOutfits; i++) {
+                extraNakedBannyMetadata = string.concat(extraNakedBannyMetadata, '"', outfitIds[i].toString(), '",');
+            }
+
+            extraNakedBannyMetadata = string.concat('], "worldUpcs": "', worldId.toString());
         }
 
         if (bytes(contents).length == 0) {
-            // If the tier's category is greater than the last expected category, use the default base URI of the 721
+            // If the product's category is greater than the last expected category, use the default base URI of the 721
             // contract. Otherwise use the SVG URI.
-            string memory baseUri = tier.category > _TOPPING_CATEGORY ? IJB721TiersHook(hook).baseURI() : svgBaseUri;
+            string memory baseUri = product.category > _TOPPING_CATEGORY ? IJB721TiersHook(hook).baseURI() : svgBaseUri;
 
             // Fallback to returning an IPFS hash if present.
             return JBIpfsDecoder.decode(baseUri, IJB721TiersHook(hook).STORE().encodedTierIPFSUriOf(hook, tokenId));
@@ -222,17 +220,23 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             Base64.encode(
                 abi.encodePacked(
                     '{"name":"',
-                    _nameOf(tokenId, tier),
-                    '", "id": "',
-                    tier.id.toString(),
+                    _fullNameOf(tokenId, product),
+                    '", "productName": "',
+                    _productNameOf(product.id),
+                    '", "categoryName": "',
+                    _categoryNameOf(product.category),
+                    '", "upc": "',
+                    product.id.toString(),
                     '", "category": "',
-                    tier.category.toString(),
+                    product.category.toString(),
                     '", "supply": "',
-                    tier.initialSupply.toString(),
+                    product.initialSupply.toString(),
                     '", "remaining": "',
-                    tier.remainingSupply.toString(),
+                    product.remainingSupply.toString(),
                     '", "price": "',
-                    tier.price.toString(),
+                    product.price.toString(),
+                    '", ',
+                    extraNakedBannyMetadata,
                     '","description":"A piece of the Bannyverse","image":"data:image/svg+xml;base64,',
                     Base64.encode(abi.encodePacked(contents)),
                     '"}'
@@ -259,44 +263,34 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         view
         returns (string memory)
     {
-        // Get a reference to the tier for the given token ID.
-        JB721Tier memory tier = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, tokenId, false);
+        // Get a reference to the product for the given token ID.
+        JB721Tier memory product = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, tokenId, false);
 
-        // If the token's tier doesn't exist, return an empty uri.
-        if (tier.id == 0) return "";
+        // If the token's product doesn't exist, return an empty uri.
+        if (product.id == 0) return "";
 
         // Compose the contents.
         string memory contents;
 
         // If this isn't a Naked Banny and there's an SVG available, return the asset SVG alone.
-        if (tier.category > _NAKED_CATEGORY) {
+        if (product.category > _NAKED_CATEGORY) {
             // Keep a reference to the SVG contents.
-            contents = _svgOf(hook, tier.id);
+            contents = _svgOf(hook, product.id);
 
             // Return the svg if it exists.
             return (bytes(contents).length == 0) ? "" : _layeredSvg(contents);
         }
-
-        // Keep a reference to the world ID.
-        uint256 worldId;
-
-        // Keep a reference to the outfit IDs.
-        uint256[] memory outfitIds;
-
         // Get a reference to each asset ID currently attached to the Naked Banny.
-        try this.assetIdsOf(tokenId) returns (uint256 _worldId, uint256[] memory _outfitIds) {
-            worldId = _worldId;
-            outfitIds = _outfitIds;
-        } catch (bytes memory) {}
+        (uint256 worldId, uint256[] memory outfitIds) = assetIdsOf(tokenId);
 
         // Add the world if needed.
         if (worldId != 0 && shouldIncludeWorldOnNakedBanny) contents = string.concat(contents, _svgOf(hook, worldId));
 
         // Start with the Naked Banny.
-        contents = string.concat(contents, _nakedBannySvgOf(tier.id));
+        contents = string.concat(contents, _nakedBannySvgOf(product.id));
 
         // Add eyes.
-        if (tier.id == ALIEN_TIER) contents = string.concat(contents, _DEFAULT_ALIEN_EYES);
+        if (product.id == ALIEN_UPC) contents = string.concat(contents, _DEFAULT_ALIEN_EYES);
         else contents = string.concat(contents, _DEFAULT_STANDARD_EYES);
 
         if (shouldDressNakedBanny) {
@@ -316,15 +310,17 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     /// @notice Returns the name of the token.
     /// @param hook The hook storing the assets.
     /// @param tokenId The ID of the token to show.
-    /// @return The name of the token.
-    function nameOf(address hook, uint256 tokenId) public view returns (string memory) {
-        // Get a reference to the tier for the given token ID.
-        JB721Tier memory tier = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, tokenId, false);
+    /// @return fullName The full name of the token.
+    /// @return categoryName The name of the token's category.
+    /// @return productName The name of the token's product.
+    function namesOf(address hook, uint256 tokenId) public view returns (string memory, string memory, string memory) {
+        // Get a reference to the product for the given token ID.
+        JB721Tier memory product = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, tokenId, false);
 
-        return _nameOf(tokenId, tier);
+        return (_fullNameOf(tokenId, product), _categoryNameOf(product.category), _productNameOf(tokenId));
     }
 
-    /// @param owner The owner allowed to add SVG files that correspond to tier IDs.
+    /// @param owner The owner allowed to add SVG files that correspond to product IDs.
     /// @param trustedForwarder The trusted forwarder for the ERC2771Context.
     constructor(address owner, address trustedForwarder) Ownable(owner) ERC2771Context(trustedForwarder) {}
 
@@ -353,19 +349,19 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             if (IERC721(hook).ownerOf(worldId) != _msgSender()) revert UNAUTHORIZED_WORLD();
 
             // Make sure the world is not already being shown on another Naked banny.
-            if (worldIsBeingUsedBy(worldId) != 0) revert ASSET_IS_ALREADY_BEING_WORN();
+            if (userOf(worldId) != 0) revert ASSET_IS_ALREADY_BEING_WORN();
 
-            // Get the world's tier.
-            JB721Tier memory worldTier = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, worldId, false);
+            // Get the world's product info.
+            JB721Tier memory worldProduct = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, worldId, false);
 
-            // Tier must exist
-            if (worldTier.id == 0) revert UNRECOGNIZED_WORLD();
+            // World must exist
+            if (worldProduct.id == 0) revert UNRECOGNIZED_WORLD();
 
             // Store the world for the banny.
             _attachedWorldIdOf[nakedBannyId] = worldId;
 
             // Store the banny that's in the world.
-            _worldIsBeingUsedBy[worldId] = nakedBannyId;
+            _userOf[worldId] = nakedBannyId;
         } else {
             _attachedWorldIdOf[nakedBannyId] = 0;
         }
@@ -379,8 +375,8 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         // Keep a reference to the category of the last outfit iterated on.
         uint256 lastAssetCategory;
 
-        // Keep a reference to the tier of the outfit being iterated on.
-        JB721Tier memory outfitTier;
+        // Keep a reference to the product of the outfit being iterated on.
+        JB721Tier memory outfitProduct;
 
         bool hasHead;
         bool hasSuit;
@@ -394,44 +390,45 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             if (IERC721(hook).ownerOf(outfitId) != _msgSender()) revert UNAUTHORIZED_OUTFIT();
 
             // Make sure the outfit is not already being worn.
-            if (outfitIsBeingWornBy(outfitId) != 0) revert ASSET_IS_ALREADY_BEING_WORN();
+            if (wearerOf(outfitId) != 0) revert ASSET_IS_ALREADY_BEING_WORN();
 
-            // Get the outfit's tier.
-            outfitTier = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, outfitId, false);
+            // Get the outfit's product info.
+            outfitProduct = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, outfitId, false);
 
-            // Tier must exist
-            if (outfitTier.id == 0) revert UNRECOGNIZED_OUTFIT();
+            // Product must exist
+            if (outfitProduct.id == 0) revert UNRECOGNIZED_OUTFIT();
 
-            // The tier's category must be a known category.
-            if (outfitTier.category < _BACKSIDE_CATEGORY || outfitTier.category > _TOPPING_CATEGORY) {
+            // The product's category must be a known category.
+            if (outfitProduct.category < _BACKSIDE_CATEGORY || outfitProduct.category > _TOPPING_CATEGORY) {
                 revert UNRECOGNIZED_CATEGORY();
             }
 
             // Make sure the category is an increment of the previous outfit's category.
-            if (i != 0 && outfitTier.category <= lastAssetCategory) revert UNORDERED_CATEGORIES();
+            if (i != 0 && outfitProduct.category <= lastAssetCategory) revert UNORDERED_CATEGORIES();
 
-            if (outfitTier.category == _HEAD_CATEGORY) {
+            if (outfitProduct.category == _HEAD_CATEGORY) {
                 hasHead = true;
-            } else if (outfitTier.category == _SUIT_CATEGORY) {
+            } else if (outfitProduct.category == _SUIT_CATEGORY) {
                 hasSuit = true;
             } else if (
                 (
-                    outfitTier.category == _GLASSES_CATEGORY || outfitTier.category == _MOUTH_CATEGORY
-                        || outfitTier.category == _HEADTOP_CATEGORY
+                    outfitProduct.category == _GLASSES_CATEGORY || outfitProduct.category == _MOUTH_CATEGORY
+                        || outfitProduct.category == _HEADTOP_CATEGORY
                 ) && hasHead
             ) {
                 revert HEAD_ALREADY_ADDED();
             } else if (
-                (outfitTier.category == _SUIT_TOP_CATEGORY || outfitTier.category == _SUIT_BOTTOM_CATEGORY) && hasSuit
+                (outfitProduct.category == _SUIT_TOP_CATEGORY || outfitProduct.category == _SUIT_BOTTOM_CATEGORY)
+                    && hasSuit
             ) {
                 revert SUIT_ALREADY_ADDED();
             }
 
             // Keep a reference to the last outfit's category.
-            lastAssetCategory = outfitTier.category;
+            lastAssetCategory = outfitProduct.category;
 
             // Store the banny that's in the world.
-            _outfitIsBeingWornBy[outfitId] = nakedBannyId;
+            _wearerOf[outfitId] = nakedBannyId;
         }
 
         // Store the outfits.
@@ -440,24 +437,24 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         emit DecorateBanny(hook, nakedBannyId, worldId, outfitIds, _msgSender());
     }
 
-    /// @notice The owner of this contract can store SVG files for tier IDs.
-    /// @param tierIds The IDs of the tiers having SVGs stored.
+    /// @notice The owner of this contract can store SVG files for product IDs.
+    /// @param upcs The universal product codes of the products having SVGs stored.
     /// @param svgContents The svg contents being stored, not including the parent <svg></svg> element.
-    function setSvgContentsOf(uint256[] memory tierIds, string[] calldata svgContents) external {
-        uint256 numberOfTiers = tierIds.length;
+    function setSvgContentsOf(uint256[] memory upcs, string[] calldata svgContents) external {
+        uint256 numberOfProducts = upcs.length;
 
-        uint256 tierId;
+        uint256 upc;
         string memory svgContent;
 
-        for (uint256 i; i < numberOfTiers; i++) {
-            tierId = tierIds[i];
+        for (uint256 i; i < numberOfProducts; i++) {
+            upc = upcs[i];
             svgContent = svgContents[i];
 
-            // Make sure there isn't already contents for the specified tierId;
-            if (bytes(_svgContentOf[tierId]).length != 0) revert CONTENTS_ALREADY_STORED();
+            // Make sure there isn't already contents for the specified universal product code.
+            if (bytes(_svgContentOf[upc]).length != 0) revert CONTENTS_ALREADY_STORED();
 
-            // Get the stored svg hash for the tier.
-            bytes32 svgHash = svgHashOf[tierId];
+            // Get the stored svg hash for the product.
+            bytes32 svgHash = svgHashOf[upc];
 
             // Make sure a hash exists.
             if (svgHash == bytes32(0)) revert HASH_NOT_FOUND();
@@ -466,52 +463,52 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             if (keccak256(abi.encodePacked(svgContent)) != svgHash) revert CONTENTS_MISMATCH();
 
             // Store the svg contents.
-            _svgContentOf[tierId] = svgContent;
+            _svgContentOf[upc] = svgContent;
 
-            emit SetSvgContent(tierId, svgContent, msg.sender);
+            emit SetSvgContent(upc, svgContent, msg.sender);
         }
     }
 
-    /// @notice Allows the owner of this contract to upload the hash of an svg file for a tierId.
+    /// @notice Allows the owner of this contract to upload the hash of an svg file for a universal product code.
     /// @dev This allows anyone to lazily upload the correct svg file.
-    /// @param tierIds The IDs of the tiers having SVG hashes stored.
+    /// @param upcs The universal product codes of the products having SVG hashes stored.
     /// @param svgHashs The svg hashes being stored, not including the parent <svg></svg> element.
-    function setSvgHashsOf(uint256[] memory tierIds, bytes32[] memory svgHashs) external onlyOwner {
-        uint256 numberOfTiers = tierIds.length;
+    function setSvgHashsOf(uint256[] memory upcs, bytes32[] memory svgHashs) external onlyOwner {
+        uint256 numberOfProducts = upcs.length;
 
-        uint256 tierId;
+        uint256 upc;
         bytes32 svgHash;
 
-        for (uint256 i; i < numberOfTiers; i++) {
-            tierId = tierIds[i];
+        for (uint256 i; i < numberOfProducts; i++) {
+            upc = upcs[i];
             svgHash = svgHashs[i];
 
-            // Make sure there isn't already contents for the specified tierId;
-            if (svgHashOf[tierId] != bytes32(0)) revert HASH_ALREADY_STORED();
+            // Make sure there isn't already contents for the specified universal product code.
+            if (svgHashOf[upc] != bytes32(0)) revert HASH_ALREADY_STORED();
 
             // Store the svg contents.
-            svgHashOf[tierId] = svgHash;
+            svgHashOf[upc] = svgHash;
 
-            emit SetSvgHash(tierId, svgHash, msg.sender);
+            emit SetSvgHash(upc, svgHash, msg.sender);
         }
     }
 
-    /// @notice Allows the owner to set the tier's name.
-    /// @param tierIds The IDs of the tiers having their name stored.
-    /// @param names The names of the tiers.
-    function setTierNames(uint256[] memory tierIds, string[] memory names) external onlyOwner {
-        uint256 numberOfTiers = tierIds.length;
+    /// @notice Allows the owner to set the product's name.
+    /// @param upcs The universal product codes of the products having their name stored.
+    /// @param names The names of the products.
+    function setProductNames(uint256[] memory upcs, string[] memory names) external onlyOwner {
+        uint256 numberOfProducts = upcs.length;
 
-        uint256 tierId;
+        uint256 upc;
         string memory name;
 
-        for (uint256 i; i < numberOfTiers; i++) {
-            tierId = tierIds[i];
+        for (uint256 i; i < numberOfProducts; i++) {
+            upc = upcs[i];
             name = names[i];
 
-            _tierNameOf[tierId] = name;
+            _customProductNameOf[upc] = name;
 
-            emit SetTierName(tierId, name, msg.sender);
+            emit SetProductName(upc, name, msg.sender);
         }
     }
 
@@ -540,7 +537,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         );
     }
 
-    function _nakedBannySvgOf(uint256 tier) internal pure returns (string memory) {
+    function _nakedBannySvgOf(uint256 upc) internal pure returns (string memory) {
         (
             string memory b1,
             string memory b2,
@@ -549,7 +546,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             string memory a1,
             string memory a2,
             string memory a3
-        ) = _fillsFor(tier);
+        ) = _fillsFor(upc);
         return string.concat(
             "<style>.b1{fill:#",
             b1,
@@ -570,7 +567,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         );
     }
 
-    function _fillsFor(uint256 tier)
+    function _fillsFor(uint256 upc)
         internal
         pure
         returns (
@@ -583,17 +580,17 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             string memory
         )
     {
-        if (tier == ALIEN_TIER) {
+        if (upc == ALIEN_UPC) {
             return ("67d757", "30a220", "217a15", "none", "e483ef", "dc2fef", "dc2fef");
-        } else if (tier == PINK_TIER) {
+        } else if (upc == PINK_UPC) {
             return ("ffd8c5", "ff96a9", "fe588b", "c92f45", "ffd8c5", "ff96a9", "fe588b");
-        } else if (tier == ORANGE_TIER) {
+        } else if (upc == ORANGE_UPC) {
             return ("f3a603", "ff7c02", "fd3600", "c32e0d", "f3a603", "ff7c02", "fd3600");
-        } else if (tier == ORIGINAL_TIER) {
+        } else if (upc == ORIGINAL_UPC) {
             return ("ffe900", "ffc700", "f3a603", "965a1a", "ffe900", "ffc700", "f3a603");
         }
 
-        revert UNRECOGNIZED_TIER();
+        revert UNRECOGNIZED_PRODUCT();
     }
 
     /// @notice The SVG contents for a list of outfit IDs.
@@ -659,108 +656,116 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         }
     }
 
-    /// @notice The name of each tier.
-    /// @param tokenId The ID of the token being named.
-    /// @param tier The tier of the token being named.
-    /// @return name The name.
-    function _nameOf(uint256 tokenId, JB721Tier memory tier) public view returns (string memory name) {
-        if (tier.id == ALIEN_TIER) {
-            name = "Alien Naked Banny";
-        } else if (tier.id == PINK_TIER) {
-            name = "Pink Naked Banny";
-        } else if (tier.id == ORANGE_TIER) {
-            name = "Orange Naked Banny";
-        } else if (tier.id == ORIGINAL_TIER) {
-            name = "Original Naked Banny";
+    /// @notice The name of each token's product type.
+    /// @param upc The ID of the token whose product type is being named.
+    /// @return name The item's product name.
+    function _productNameOf(uint256 upc) internal view returns (string memory) {
+        // Get the token's name.
+        if (upc == ALIEN_UPC) {
+            return "Alien";
+        } else if (upc == PINK_UPC) {
+            return "Pink";
+        } else if (upc == ORANGE_UPC) {
+            return "Orange";
+        } else if (upc == ORIGINAL_UPC) {
+            return "Original";
         } else {
-            name = _tierNameOf[tier.id];
-
-            if (tier.category == _WORLD_CATEGORY) {
-                name = string.concat("World: ", name);
-            } else if (tier.category == _BACKSIDE_CATEGORY) {
-                name = string.concat("Backside: ", name);
-            } else if (tier.category == _LEGS_CATEGORY) {
-                name = string.concat("Legs: ", name);
-            } else if (tier.category == _NECKLACE_CATEGORY) {
-                name = string.concat("Necklace: ", name);
-            } else if (tier.category == _GLASSES_CATEGORY) {
-                name = string.concat("Glasses: ", name);
-            } else if (tier.category == _MOUTH_CATEGORY) {
-                name = string.concat("Mouth: ", name);
-            } else if (tier.category == _HEADTOP_CATEGORY) {
-                name = string.concat("Head top: ", name);
-            } else if (tier.category == _HEAD_CATEGORY) {
-                name = string.concat("Head: ", name);
-            } else if (tier.category == _SUIT_CATEGORY) {
-                name = string.concat("Suit: ", name);
-            } else if (tier.category == _SUIT_TOP_CATEGORY) {
-                name = string.concat("Suit top: ", name);
-            } else if (tier.category == _SUIT_BOTTOM_CATEGORY) {
-                name = string.concat("Suit bottom: ", name);
-            } else if (tier.category == _FIST_CATEGORY) {
-                name = string.concat("Fist: ", name);
-            } else if (tier.category == _TOPPING_CATEGORY) {
-                name = string.concat("Topping: ", name);
-            }
-        }
-
-        // Get just the token ID without the tier ID included.
-        uint256 rawTokenId = tokenId % _ONE_BILLION;
-
-        // If there is a token ID, add it to the name.
-        if (rawTokenId != 0) {
-            if (bytes(name).length == 0) {
-                name = rawTokenId.toString();
-            } else {
-                name = string.concat(
-                    name,
-                    " (UPC #",
-                    tier.id.toString(),
-                    " Item ",
-                    rawTokenId.toString(),
-                    "/",
-                    tier.initialSupply.toString(),
-                    ")"
-                );
-            }
-        } else {
-            if (tier.remainingSupply == 0) {
-                name = string.concat(
-                    name,
-                    " (UPC #",
-                    tier.id.toString(),
-                    " SOLD OUT ",
-                    tier.remainingSupply.toString(),
-                    "/",
-                    tier.initialSupply.toString(),
-                    " remaining)"
-                );
-            } else {
-                name = string.concat(
-                    name,
-                    " (UPC #",
-                    tier.id.toString(),
-                    " ",
-                    tier.remainingSupply.toString(),
-                    "/",
-                    tier.initialSupply.toString(),
-                    " remaining)"
-                );
-            }
+            // Get the product's name that has been uploaded.
+            return _customProductNameOf[upc];
         }
     }
 
+    /// @notice The name of each token's category.
+    /// @param category The category of the token being named.
+    /// @return name The token's category name.
+    function _categoryNameOf(uint256 category) internal pure returns (string memory) {
+        if (category == _NAKED_CATEGORY) {
+            return "Naked Banny";
+        } else if (category == _WORLD_CATEGORY) {
+            return "World";
+        } else if (category == _BACKSIDE_CATEGORY) {
+            return "Backside";
+        } else if (category == _LEGS_CATEGORY) {
+            return "Legs";
+        } else if (category == _NECKLACE_CATEGORY) {
+            return "Necklace";
+        } else if (category == _GLASSES_CATEGORY) {
+            return "Glasses";
+        } else if (category == _MOUTH_CATEGORY) {
+            return "Mouth";
+        } else if (category == _HEADTOP_CATEGORY) {
+            return "Head top";
+        } else if (category == _HEAD_CATEGORY) {
+            return "Head";
+        } else if (category == _SUIT_CATEGORY) {
+            return "Suit";
+        } else if (category == _SUIT_TOP_CATEGORY) {
+            return "Suit top";
+        } else if (category == _SUIT_BOTTOM_CATEGORY) {
+            return "Suit bottom";
+        } else if (category == _FIST_CATEGORY) {
+            return "Fist";
+        } else if (category == _TOPPING_CATEGORY) {
+            return "Topping";
+        }
+        return "";
+    }
+
+    /// @notice The full name of each product, including category and inventory.
+    /// @param tokenId The ID of the token being named.
+    /// @param product The product of the token being named.
+    /// @return name The full name.
+    function _fullNameOf(uint256 tokenId, JB721Tier memory product) internal view returns (string memory name) {
+        // Start with the item's name.
+        name = string.concat(_productNameOf(product.id), " ");
+
+        // Get just the token ID without the product ID included.
+        uint256 rawTokenId = tokenId % _ONE_BILLION;
+
+        // If there's a raw token id, append it to the name before appending it to the category.
+        if (rawTokenId != 0) {
+            name = string.concat(name, rawTokenId.toString(), "/", product.initialSupply.toString());
+        } else if (product.remainingSupply == 0) {
+            name = string.concat(
+                name,
+                " (SOLD OUT) ",
+                product.remainingSupply.toString(),
+                "/",
+                product.initialSupply.toString(),
+                " remaining"
+            );
+        } else {
+            name = string.concat(
+                name, product.remainingSupply.toString(), "/", product.initialSupply.toString(), " remaining"
+            );
+        }
+
+        // Append a separator.
+        name = string.concat(name, " : ");
+
+        // Get a reference to the categorie's name.
+        string memory categoryName = _categoryNameOf(product.category);
+
+        // If there's a category name, append it.
+        if (bytes(categoryName).length != 0) {
+            name = string.concat(categoryName, " ");
+        }
+
+        // Append the product ID as a universal product code.
+        name = string.concat(name, "UPC #", product.id.toString());
+    }
+
     /// @notice The Naked Banny and outfit SVG files.
-    /// @custom:param tierId The ID of the tier that the SVG contents represent.
-    function _svgOf(address hook, uint256 tierId) private view returns (string memory) {
+    /// @custom:param upc The universal product code of the product that the SVG contents represent.
+    function _svgOf(address hook, uint256 upc) internal view returns (string memory) {
         // Keep a reference to the stored scg contents.
-        string memory svgContents = _svgContentOf[tierId];
+        string memory svgContents = _svgContentOf[upc];
 
         if (bytes(svgContents).length != 0) return svgContents;
 
         return string.concat(
             '<image href="',
-            JBIpfsDecoder.decode(svgBaseUri, IJB721TiersHook(hook).STORE().encodedIPFSUriOf(hook, tierId)),
+            JBIpfsDecoder.decode(svgBaseUri, IJB721TiersHook(hook).STORE().encodedIPFSUriOf(hook, upc)),
             '" width="400" height="400"/>'
         );
     }
