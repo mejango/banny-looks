@@ -655,55 +655,54 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     }
 
     /// @notice The name of each tier.
-    function _nameOf(uint256 tokenId, uint256 tierId, uint256 category) public view returns (string memory) {
+    function _nameOf(uint256 tokenId, uint256 tierId, uint256 category) public view returns (string memory name) {
+        if (tierId == ALIEN_TIER) {
+            name = "Alien Naked Banny";
+        } else if (tierId == PINK_TIER) {
+            name = "Pink Naked Banny";
+        } else if (tierId == ORANGE_TIER) {
+            name = "Orange Naked Banny";
+        } else if (tierId == ORIGINAL_TIER) {
+            name = "Original Naked Banny";
+        } else {
+            name = _tierNameOf[tierId];
+
+            if (category == _WORLD_CATEGORY) {
+                name = string.concat("World: ", name);
+            } else if (category == _BACKSIDE_CATEGORY) {
+                name = string.concat("Backside: ", name);
+            } else if (category == _LEGS_CATEGORY) {
+                name = string.concat("Legs: ", name);
+            } else if (category == _NECKLACE_CATEGORY) {
+                name = string.concat("Necklace: ", name);
+            } else if (category == _GLASSES_CATEGORY) {
+                name = string.concat("Glasses: ", name);
+            } else if (category == _MOUTH_CATEGORY) {
+                name = string.concat("Mouth: ", name);
+            } else if (category == _HEADTOP_CATEGORY) {
+                name = string.concat("Head top: ", name);
+            } else if (category == _HEAD_CATEGORY) {
+                name = string.concat("Head: ", name);
+            } else if (category == _SUIT_CATEGORY) {
+                name = string.concat("Suit: ", name);
+            } else if (category == _SUIT_TOP_CATEGORY) {
+                name = string.concat("Suit top: ", name);
+            } else if (category == _SUIT_BOTTOM_CATEGORY) {
+                name = string.concat("Suit bottom: ", name);
+            } else if (category == _FIST_CATEGORY) {
+                name = string.concat("Fist: ", name);
+            } else if (category == _TOPPING_CATEGORY) {
+                name = string.concat("Topping: ", name);
+            }
+        }
+
         // Get just the token ID without the tier ID included.
         uint256 rawTokenId = tokenId % _ONE_BILLION;
 
-        if (tierId == ALIEN_TIER) {
-            return string.concat("Alien Naked Banny ", tokenId.toString());
-        } else if (tierId == PINK_TIER) {
-            return string.concat("Pink Naked Banny ", tokenId.toString());
-        } else if (tierId == ORANGE_TIER) {
-            return string.concat("Orange Naked Banny ", tokenId.toString());
-        } else if (tierId == ORIGINAL_TIER) {
-            return string.concat("Original Naked Banny ", tokenId.toString());
-        } else {
-            string memory name = _tierNameOf[tierId];
-
-            // If there is a token ID, add it to the name.
-            if (rawTokenId != 0) {
-                if (bytes(name).length == 0) name = rawTokenId.toString();
-                else name = string.concat(name, " #", rawTokenId.toString());
-            }
-
-            if (category == _WORLD_CATEGORY) {
-                return string.concat("World: ", name);
-            } else if (category == _BACKSIDE_CATEGORY) {
-                return string.concat("Backside: ", name);
-            } else if (category == _LEGS_CATEGORY) {
-                return string.concat("Legs: ", name);
-            } else if (category == _NECKLACE_CATEGORY) {
-                return string.concat("Necklace: ", name);
-            } else if (category == _GLASSES_CATEGORY) {
-                return string.concat("Glasses: ", name);
-            } else if (category == _MOUTH_CATEGORY) {
-                return string.concat("Mouth: ", name);
-            } else if (category == _HEADTOP_CATEGORY) {
-                return string.concat("Head top: ", name);
-            } else if (category == _HEAD_CATEGORY) {
-                return string.concat("Head: ", name);
-            } else if (category == _SUIT_CATEGORY) {
-                return string.concat("Suit: ", name);
-            } else if (category == _SUIT_TOP_CATEGORY) {
-                return string.concat("Suit top: ", name);
-            } else if (category == _SUIT_BOTTOM_CATEGORY) {
-                return string.concat("Suit bottom: ", name);
-            } else if (category == _FIST_CATEGORY) {
-                return string.concat("Fist: ", name);
-            } else if (category == _TOPPING_CATEGORY) {
-                return string.concat("Topping: ", name);
-            }
-            return "";
+        // If there is a token ID, add it to the name.
+        if (rawTokenId != 0) {
+            if (bytes(name).length == 0) name = rawTokenId.toString();
+            else name = string.concat(name, " #", rawTokenId.toString());
         }
     }
 
