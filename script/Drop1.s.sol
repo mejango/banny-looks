@@ -223,7 +223,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Gap tooth
-        names[10] = "Gap tooth";
+        names[10] = "Gap Teeth";
         svgHashes[10] = bytes32(0x5b5a29873435b40784f64c5d9bb5d95ecebd433c57493e38f3eb816a0dd9fd7f);
         products[10] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 1))),
@@ -257,7 +257,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Astronaut boots
-        names[12] = "Astronaut boots";
+        names[12] = "Astronaut Boots";
         svgHashes[12] = bytes32(0x118692cc1bcd7d9b88049b501b40d03b9df1275082ee7e01fd62ec0c1b884f4c);
         products[12] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
@@ -291,7 +291,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Astronaut Body
-        names[14] = "Astronaut Body";
+        names[14] = "Astronaut Suit";
         svgHashes[14] = bytes32(0xdbcfc1891ab9d56cb964f3432f867a77293352e38edca3b59b34061e46a31b83);
         products[14] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
@@ -342,7 +342,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Geisha body
-        names[17] = "Geisha Body";
+        names[17] = "Geisha Gown";
         svgHashes[17] = bytes32(0x5f8c77bc896a90a35580078ee7ea51460b5694aec68db3d749fd1dc0e9b05c6c);
         products[17] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 1))),
@@ -699,7 +699,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // DJ booth
-        names[38] = "DJ Booth";
+        names[38] = "DJ Deck";
         svgHashes[38] = bytes32(0x2c9538556986d134ddec2831e768233f587b242e887df9bb359b3aefffa3c5a6);
         products[38] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 1))),
@@ -784,7 +784,7 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Mouthstraw
-        names[43] = "Mouthstraw";
+        names[43] = "Wheat Straw";
         svgHashes[43] = bytes32(0x112b8217bb82aebc91e80c935244dce8aa30d4d8df5f98382054b97037dc0c94);
         products[43] = JB721TierConfig({
             price: uint104(1 * (10 ** decimals)),
