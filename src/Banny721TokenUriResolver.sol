@@ -708,9 +708,9 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
                     name,
                     " (UPC #",
                     tier.id.toString(),
-                    ", Item ",
+                    " Item ",
                     rawTokenId.toString(),
-                    " of ",
+                    "/",
                     tier.initialSupply.toString(),
                     ")"
                 );
