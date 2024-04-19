@@ -716,7 +716,29 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
                 );
             }
         } else {
-            name = string.concat(name, " (UPC #", tier.id.toString(), ")");
+            if (tier.remainingSupply == 0) {
+                name = string.concat(
+                    name,
+                    " (UPC #",
+                    tier.id.toString(),
+                    " SOLD OUT ",
+                    tier.remainingSupply.toString(),
+                    "/",
+                    tier.initialSupply.toString(),
+                    " remaining)"
+                );
+            } else {
+                name = string.concat(
+                    name,
+                    " (UPC #",
+                    tier.id.toString(),
+                    " ",
+                    tier.remainingSupply.toString(),
+                    "/",
+                    tier.initialSupply.toString(),
+                    " remaining)"
+                );
+            }
         }
     }
 
