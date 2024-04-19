@@ -48,10 +48,10 @@ library BannyverseDeploymentLib {
             _getDeploymentAddress(path, "bannyverse-core", network_name, "Banny721TokenUriResolver")
         );
 
-        // TODO: Update the following after every deploy. 
-        if(keccak256(abi.encode(network_name)) == keccak256(abi.encode("sepolia"))) {
+        // TODO: Update the following after every deploy.
+        if (keccak256(abi.encode(network_name)) == keccak256(abi.encode("sepolia"))) {
             deployment.revnetId = 5;
-        } else  {
+        } else {
             deployment.revnetId = 7;
         }
     }

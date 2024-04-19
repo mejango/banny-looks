@@ -222,7 +222,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             Base64.encode(
                 abi.encodePacked(
                     '{"name":"',
-                    _nameOf(tokenId, tier.id, tier.category),
+                    _nameOf(tokenId, tier),
                     '", "id": "',
                     tier.id.toString(),
                     '","description":"A piece of the Bannyverse","image":"data:image/svg+xml;base64,',
@@ -293,8 +293,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
 
         if (shouldDressNakedBanny) {
             // Get the outfit contents.
-            string memory outfitContents =
-                _outfitContentsFor({hook: hook, nakedBannyTier: tier.id, outfitIds: outfitIds});
+            string memory outfitContents = _outfitContentsFor({hook: hook, outfitIds: outfitIds});
 
             // Add the outfit contents if there are any.
             if (bytes(outfitContents).length != 0) {
@@ -314,7 +313,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         // Get a reference to the tier for the given token ID.
         JB721Tier memory tier = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, tokenId, false);
 
-        return _nameOf(tokenId, tier.id, tier.category);
+        return _nameOf(tokenId, tier);
     }
 
     /// @param owner The owner allowed to add SVG files that correspond to tier IDs.
@@ -409,8 +408,8 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
                 hasSuit = true;
             } else if (
                 (
-                    outfitTier.category == _GLASSES_CATEGORY
-                        || outfitTier.category == _MOUTH_CATEGORY || outfitTier.category == _HEADTOP_CATEGORY
+                    outfitTier.category == _GLASSES_CATEGORY || outfitTier.category == _MOUTH_CATEGORY
+                        || outfitTier.category == _HEADTOP_CATEGORY
                 ) && hasHead
             ) {
                 revert HEAD_ALREADY_ADDED();
@@ -591,11 +590,9 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
 
     /// @notice The SVG contents for a list of outfit IDs.
     /// @param hook The address of the hook storing the assets.
-    /// @param nakedBannyTier The tier of the naked banny being dressed.
     /// @param outfitIds The IDs of the outfits that'll be associated with the specified banny.
     function _outfitContentsFor(
         address hook,
-        uint256 nakedBannyTier,
         uint256[] memory outfitIds
     )
         internal
@@ -655,43 +652,46 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     }
 
     /// @notice The name of each tier.
-    function _nameOf(uint256 tokenId, uint256 tierId, uint256 category) public view returns (string memory name) {
-        if (tierId == ALIEN_TIER) {
+    /// @param tokenId The ID of the token being named.
+    /// @param tier The tier of the token being named.
+    /// @return name The name.
+    function _nameOf(uint256 tokenId, JB721Tier memory tier) public view returns (string memory name) {
+        if (tier.id == ALIEN_TIER) {
             name = "Alien Naked Banny";
-        } else if (tierId == PINK_TIER) {
+        } else if (tier.id == PINK_TIER) {
             name = "Pink Naked Banny";
-        } else if (tierId == ORANGE_TIER) {
+        } else if (tier.id == ORANGE_TIER) {
             name = "Orange Naked Banny";
-        } else if (tierId == ORIGINAL_TIER) {
+        } else if (tier.id == ORIGINAL_TIER) {
             name = "Original Naked Banny";
         } else {
-            name = _tierNameOf[tierId];
+            name = _tierNameOf[tier.id];
 
-            if (category == _WORLD_CATEGORY) {
+            if (tier.category == _WORLD_CATEGORY) {
                 name = string.concat("World: ", name);
-            } else if (category == _BACKSIDE_CATEGORY) {
+            } else if (tier.category == _BACKSIDE_CATEGORY) {
                 name = string.concat("Backside: ", name);
-            } else if (category == _LEGS_CATEGORY) {
+            } else if (tier.category == _LEGS_CATEGORY) {
                 name = string.concat("Legs: ", name);
-            } else if (category == _NECKLACE_CATEGORY) {
+            } else if (tier.category == _NECKLACE_CATEGORY) {
                 name = string.concat("Necklace: ", name);
-            } else if (category == _GLASSES_CATEGORY) {
+            } else if (tier.category == _GLASSES_CATEGORY) {
                 name = string.concat("Glasses: ", name);
-            } else if (category == _MOUTH_CATEGORY) {
+            } else if (tier.category == _MOUTH_CATEGORY) {
                 name = string.concat("Mouth: ", name);
-            } else if (category == _HEADTOP_CATEGORY) {
+            } else if (tier.category == _HEADTOP_CATEGORY) {
                 name = string.concat("Head top: ", name);
-            } else if (category == _HEAD_CATEGORY) {
+            } else if (tier.category == _HEAD_CATEGORY) {
                 name = string.concat("Head: ", name);
-            } else if (category == _SUIT_CATEGORY) {
+            } else if (tier.category == _SUIT_CATEGORY) {
                 name = string.concat("Suit: ", name);
-            } else if (category == _SUIT_TOP_CATEGORY) {
+            } else if (tier.category == _SUIT_TOP_CATEGORY) {
                 name = string.concat("Suit top: ", name);
-            } else if (category == _SUIT_BOTTOM_CATEGORY) {
+            } else if (tier.category == _SUIT_BOTTOM_CATEGORY) {
                 name = string.concat("Suit bottom: ", name);
-            } else if (category == _FIST_CATEGORY) {
+            } else if (tier.category == _FIST_CATEGORY) {
                 name = string.concat("Fist: ", name);
-            } else if (category == _TOPPING_CATEGORY) {
+            } else if (tier.category == _TOPPING_CATEGORY) {
                 name = string.concat("Topping: ", name);
             }
         }
@@ -701,8 +701,22 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
 
         // If there is a token ID, add it to the name.
         if (rawTokenId != 0) {
-            if (bytes(name).length == 0) name = rawTokenId.toString();
-            else name = string.concat(name, " #", rawTokenId.toString());
+            if (bytes(name).length == 0) {
+                name = rawTokenId.toString();
+            } else {
+                name = string.concat(
+                    name,
+                    " (UPC #",
+                    tier.id.toString(),
+                    ", Item ",
+                    rawTokenId.toString(),
+                    " of ",
+                    tier.initialSupply.toString(),
+                    ")"
+                );
+            }
+        } else {
+            name = string.concat(name, " (UPC #", tier.id.toString(), ")");
         }
     }
 
