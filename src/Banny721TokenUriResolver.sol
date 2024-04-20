@@ -203,7 +203,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
                 extraNakedBannyMetadata = string.concat(extraNakedBannyMetadata, '"', outfitIds[i].toString(), '",');
             }
 
-            extraNakedBannyMetadata = string.concat('], "worldUpcs": "', worldId.toString());
+            extraNakedBannyMetadata = string.concat('], "worldUpcs": "', worldId.toString(), '",');
         }
 
         if (bytes(contents).length == 0) {
@@ -237,7 +237,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
                     product.price.toString(),
                     '", ',
                     extraNakedBannyMetadata,
-                    '","description":"A piece of the Bannyverse","image":"data:image/svg+xml;base64,',
+                    '"description":"A piece of the Bannyverse","image":"data:image/svg+xml;base64,',
                     Base64.encode(abi.encodePacked(contents)),
                     '"}'
                 )
