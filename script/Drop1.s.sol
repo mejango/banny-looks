@@ -803,7 +803,7 @@ contract Drop1Script is Script, Sphinx {
 
         hook.adjustTiers(products, new uint256[](0));
 
-        uint256[] memory productIds = new uint256[](42);
+        uint256[] memory productIds = new uint256[](44);
         for (uint256 i; i < 44; i++) {
             productIds[i] = i + 5;
         }
