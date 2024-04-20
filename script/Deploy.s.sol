@@ -346,44 +346,9 @@ contract DeployScript is Script, Sphinx {
         // Update our config with its address.
         bannyverseConfig.hookConfiguration.baseline721HookConfiguration.tokenUriResolver = resolver;
 
-        // Mint a new project.
-        uint256 _projectId = core.projects.createFor(safeAddress());
-
-        // The permissions required to configure a revnet.
-        uint256[] memory _permissions = new uint256[](6);
-        _permissions[0] = JBPermissionIds.QUEUE_RULESETS;
-        _permissions[1] = JBPermissionIds.DEPLOY_ERC20;
-        _permissions[2] = JBPermissionIds.SET_BUYBACK_POOL;
-        _permissions[3] = JBPermissionIds.SET_SPLIT_GROUPS;
-        _permissions[4] = JBPermissionIds.MAP_SUCKER_TOKEN;
-        _permissions[5] = JBPermissionIds.DEPLOY_SUCKERS;
-
-        // Give the permissions to the croptop deployer.
-        core.permissions.setPermissionsFor(
-            safeAddress(),
-            JBPermissionsData({
-                operator: address(revnet.croptop_deployer),
-                projectId: _projectId,
-                permissionIds: _permissions
-            })
-        );
-
-        // Give the permissions to the sucker registry.
-        // TODO: Check if this is actually needed. And if it is, why is it needed?
-        uint256[] memory _registryPermissions = new uint256[](1);
-        _registryPermissions[0] = JBPermissionIds.MAP_SUCKER_TOKEN;
-        core.permissions.setPermissionsFor(
-            safeAddress(),
-            JBPermissionsData({
-                operator: address(suckers.registry),
-                projectId: _projectId,
-                permissionIds: _registryPermissions
-            })
-        );
-
         // Deploy the $BANNY Revnet.
         revnet.croptop_deployer.launchCroptopRevnetFor({
-            revnetId: _projectId,
+            revnetId: 0,
             configuration: bannyverseConfig.configuration,
             terminalConfigurations: bannyverseConfig.terminalConfigurations,
             buybackHookConfiguration: bannyverseConfig.buybackHookConfiguration,
@@ -393,9 +358,6 @@ contract DeployScript is Script, Sphinx {
             extraHookMetadata: bannyverseConfig.extraHookMetadata,
             allowedPosts: bannyverseConfig.allowedPosts
         });
-
-        // Tranfer ownership.
-        core.projects.transferFrom(safeAddress(), address(revnet.croptop_deployer), _projectId);
     }
 
     function _isDeployed(

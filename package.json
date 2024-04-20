@@ -26,6 +26,6 @@
         "@bananapus/buyback-hook": "^0.0.8"
     },  
     "devDependencies": {
-        "@sphinx-labs/plugins": "0.31.8"
+        "@sphinx-labs/plugins": "0.31.10"
     }
 }
