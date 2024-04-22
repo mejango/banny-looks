@@ -48,12 +48,14 @@ library BannyverseDeploymentLib {
             _getDeploymentAddress(path, "bannyverse-core", network_name, "Banny721TokenUriResolver")
         );
 
-        // TODO: Update the following after every deploy.
-        if (keccak256(abi.encode(network_name)) == keccak256(abi.encode("sepolia"))) {
-            deployment.revnetId = 6;
-        } else {
-            deployment.revnetId = 8;
-        }
+        deployment.revnetId = 2;
+
+        // // TODO: Update the following after every deploy.
+        // if (keccak256(abi.encode(network_name)) == keccak256(abi.encode("sepolia"))) {
+        //     deployment.revnetId = 6;
+        // } else {
+        //     deployment.revnetId = 8;
+        // }
     }
 
     /// @notice Get the address of a contract that was deployed by the Deploy script.
