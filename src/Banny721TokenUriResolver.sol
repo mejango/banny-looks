@@ -748,7 +748,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
 
         // If there's a category name, append it.
         if (bytes(categoryName).length != 0) {
-            name = string.concat(categoryName, " ");
+            name = string.concat(name, categoryName, " ");
         }
 
         // Append the product ID as a universal product code.
