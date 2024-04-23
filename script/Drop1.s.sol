@@ -71,14 +71,14 @@ contract Drop1Script is Script, Sphinx {
         });
         // Pew pew
         names[1] = "Pew Pew";
-        svgHashes[1] = bytes32(0x5930f0bb8cb34d82b88a13391bcccf936e09be535f2848ba7911b2a98615585d);
+        svgHashes[1] = bytes32(0x71f6918188cd0bc9eb1d5baed9340491efb41af1d358bbeb10912a02e95323f8);
         products[1] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 150,
             votingUnits: 0,
             reserveFrequency: 0,
             reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0x325c138f1f38e5b5f90a57a248a2f5afe6af738b2adfc825cf9f413bbcf50fa1),
+            encodedIPFSUri: bytes32(0x6cb06872575a04a0c4527157eb4719be10b6474d08aa2ce2a4ac5bcb0da996ea),
             category: 2,
             allowOwnerMint: false,
             useReserveBeneficiaryAsDefault: false,
