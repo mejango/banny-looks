@@ -174,7 +174,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         string memory extraNakedBannyMetadata = "";
 
         // If this isn't a Naked Banny, return the asset SVG alone (or on a manakin banny).
-        if (product.category > _NAKED_CATEGORY) {
+        if (product.category != _NAKED_CATEGORY) {
             // Keep a reference to the SVG contents.
             contents = _svgOf(hook, product.id);
 
@@ -203,7 +203,9 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
                 extraNakedBannyMetadata = string.concat(extraNakedBannyMetadata, '"', outfitIds[i].toString(), '",');
             }
 
-            extraNakedBannyMetadata = string.concat('], "worldUpcs": "', worldId.toString(), '",');
+            extraNakedBannyMetadata = string.concat(extraNakedBannyMetadata, '],');
+            
+            if (worldId != 0) extraNakedBannyMetadata = string.concat(extraNakedBannyMetadata, '"worldUpc": "', worldId.toString(), '",');
         }
 
         if (bytes(contents).length == 0) {
@@ -273,13 +275,14 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         string memory contents;
 
         // If this isn't a Naked Banny and there's an SVG available, return the asset SVG alone.
-        if (product.category > _NAKED_CATEGORY) {
+        if (product.category != _NAKED_CATEGORY) {
             // Keep a reference to the SVG contents.
             contents = _svgOf(hook, product.id);
 
             // Return the svg if it exists.
             return (bytes(contents).length == 0) ? "" : _layeredSvg(contents);
         }
+
         // Get a reference to each asset ID currently attached to the Naked Banny.
         (uint256 worldId, uint256[] memory outfitIds) = assetIdsOf(tokenId);
 
@@ -617,8 +620,11 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         bool hasNecklace;
         bool hasMouth;
 
-        // If there are less than 3 outfits, loop once more to make sure all default outfits are added.
-        uint256 numberOfIterations = numberOfOutfits < 3 ? numberOfOutfits + 1 : numberOfOutfits;
+        // Keep a reference to the custom necklace. Needed because the custom necklace is layered differently than the default.
+        string memory customNecklace;
+
+        // Loop once more to make sure all default outfits are added.
+        uint256 numberOfIterations = numberOfOutfits + 1;
 
         // For each outfit, add the SVG layer if it's owned by the same owner as the Naked Banny being dressed.
         for (uint256 i; i < numberOfIterations; i++) {
@@ -630,13 +636,14 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
                 // Set the category of the outfit being iterated on.
                 category = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, outfitId, false).category;
             } else {
-                // Set the category to be greater than the last default category.
-                category = _MOUTH_CATEGORY + 1;
+                // Set the category to be more than all other categories to force adding defaults.
+                category = _TOPPING_CATEGORY + 1;
                 outfitId = 0;
             }
 
             if (category == _NECKLACE_CATEGORY) {
                 hasNecklace = true;
+                customNecklace = _svgOf(hook, outfitId);
             } else if (category > _NECKLACE_CATEGORY && !hasNecklace) {
                 contents = string.concat(contents, _DEFAULT_NECKLACE);
                 hasNecklace = true;
@@ -649,8 +656,15 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
                 hasMouth = true;
             }
 
+            // Add the custom necklace if needed.
+            if (category > _SUIT_TOP_CATEGORY && bytes(customNecklace).length != 0) {
+                contents = string.concat(contents, customNecklace);
+                // Reset.
+                customNecklace = "";
+            }
+
             // Add the outfit if needed.
-            if (outfitId != 0) {
+            if (outfitId != 0 && category != _NECKLACE_CATEGORY) {
                 contents = string.concat(contents, _svgOf(hook, outfitId));
             }
         }
