@@ -17,7 +17,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     using Strings for uint256;
 
     event DecorateBanny(
-        address indexed hook, uint256 indexed nakenBannyId, uint256 worldId, uint256[] outfitIds, address caller
+        address indexed hook, uint256 indexed nakedBannyId, uint256 worldId, uint256[] outfitIds, address caller
     );
     event SetSvgContent(uint256 indexed upc, string svgContent, address caller);
     event SetSvgHash(uint256 indexed upc, bytes32 indexed svgHash, address caller);
@@ -171,7 +171,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
 
         string memory contents;
 
-        string memory extraNakedBannyMetadata = "";
+        string memory extraMetadata = "";
 
         // If this isn't a Naked Banny, return the asset SVG alone (or on a manakin banny).
         if (product.category != _NAKED_CATEGORY) {
@@ -186,6 +186,16 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
                 }
                 contents = _layeredSvg(contents);
             }
+
+            // If the world or outfit is attached to a naked banny, add it to the metadata.
+            if (product.category == _WORLD_CATEGORY) {
+                uint256 nakedBannyId = userOf(tokenId);
+                extraMetadata = string.concat('"usedByNakedBannyId": "', nakedBannyId.toString(), '",');
+            } else {
+                uint256 nakedBannyId = wearerOf(tokenId);
+                extraMetadata = string.concat('"wornByNakedBannyId": "', nakedBannyId.toString(), '",');
+            }
+
         } else {
             // Compose the contents.
             contents =
@@ -197,15 +207,15 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             // Keep a reference to the number of outfits
             uint256 numberOfOutfits = outfitIds.length;
 
-            extraNakedBannyMetadata = '"outfitUpcs": [';
+            extraMetadata = '"outfitIds": [';
 
             for (uint256 i; i < numberOfOutfits; i++) {
-                extraNakedBannyMetadata = string.concat(extraNakedBannyMetadata, '"', outfitIds[i].toString(), '",');
+                extraMetadata = string.concat(extraMetadata, '"', outfitIds[i].toString(), '",');
             }
 
-            extraNakedBannyMetadata = string.concat(extraNakedBannyMetadata, '],');
+            extraMetadata = string.concat(extraMetadata, '],');
             
-            if (worldId != 0) extraNakedBannyMetadata = string.concat(extraNakedBannyMetadata, '"worldUpc": "', worldId.toString(), '",');
+            if (worldId != 0) extraMetadata = string.concat(extraMetadata, '"worldId": "', worldId.toString(), '",');
         }
 
         if (bytes(contents).length == 0) {
@@ -217,6 +227,9 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             return JBIpfsDecoder.decode(baseUri, IJB721TiersHook(hook).STORE().encodedTierIPFSUriOf(hook, tokenId));
         }
 
+        // Get a reference to the pricing context.
+        (uint256 currency, uint256 decimals,) = IJB721TiersHook(hook).pricingContext();
+
         return string.concat(
             "data:application/json;base64,",
             Base64.encode(
@@ -227,6 +240,8 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
                     _productNameOf(product.id),
                     '", "categoryName": "',
                     _categoryNameOf(product.category),
+                    '", "tokenId": "',
+                    tokenId.toString(),
                     '", "upc": "',
                     product.id.toString(),
                     '", "category": "',
@@ -237,8 +252,12 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
                     product.remainingSupply.toString(),
                     '", "price": "',
                     product.price.toString(),
+                    '", "decimals": "',
+                    decimals.toString(),
+                    '", "currency": "',
+                    currency.toString(),
                     '", ',
-                    extraNakedBannyMetadata,
+                    extraMetadata,
                     '"description":"A piece of the Bannyverse","image":"data:image/svg+xml;base64,',
                     Base64.encode(abi.encodePacked(contents)),
                     '"}'
