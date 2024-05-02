@@ -50,11 +50,11 @@ library BannyverseDeploymentLib {
 
         // TODO: Update the following after every deploy.
         if (keccak256(abi.encode(network_name)) == keccak256(abi.encode("sepolia"))) {
-            deployment.revnetId = 30;
-        } else if (keccak256(abi.encode(network_name)) == keccak256(abi.encode("base_sepolia"))) {
-            deployment.revnetId = 3;
+            deployment.revnetId = 7;
+        } else if (keccak256(abi.encode(network_name)) == keccak256(abi.encode("optimism_sepolia"))) {
+            deployment.revnetId = 7;
         } else {
-            deployment.revnetId = 30;
+            deployment.revnetId = 2;
         }
     }
 
