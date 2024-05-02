@@ -111,13 +111,13 @@
   dependencies:
     regenerator-runtime "^0.14.0"
 
-"@bananapus/721-hook@^0.0.11":
-  version "0.0.11"
-  resolved "https://registry.yarnpkg.com/@bananapus/721-hook/-/721-hook-0.0.11.tgz#ff29399f0a177d4279875a7ac7038e15c687802f"
-  integrity sha512-HH4EuFzEGvY3VeLduyMzMaiaG/QjnmZvtoc6tY/C6ks2P/diSYUU5HMILjJAXnI7qM4YlcNiOpFw9xMsHcXbcg==
+"@bananapus/721-hook@^0.0.12":
+  version "0.0.12"
+  resolved "https://registry.yarnpkg.com/@bananapus/721-hook/-/721-hook-0.0.12.tgz#d0cdddbb5ef5c13517cdaf7945450c539ede9719"
+  integrity sha512-MbbppW4BNalertxspO4xdO9dW/7bievEOS/H2xS5nZjTo9sxwtLUF92HxEerFZWXyXRFjxjh+HGF/ic5Znjfqg==
   dependencies:
     "@bananapus/address-registry" "^0.0.4"
-    "@bananapus/core" "^0.0.13"
+    "@bananapus/core" "^0.0.14"
     "@bananapus/ownable" "^0.0.6"
     "@bananapus/permission-ids" "^0.0.5"
     "@openzeppelin/contracts" "^5.0.2"
@@ -128,12 +128,12 @@
   resolved "https://registry.yarnpkg.com/@bananapus/address-registry/-/address-registry-0.0.4.tgz#a9a4b96726d64a471dca347662bdba1e5d33342a"
   integrity sha512-3VHv3IcgQqzvzijZXuQCSjQP30SiXb6njfdYPBzKRljNVWp0vQUUahicNpzUjuyzymAdQcgSH8xQBZedf3kT/w==
 
-"@bananapus/buyback-hook@^0.0.9":
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/@bananapus/buyback-hook/-/buyback-hook-0.0.9.tgz#55deff1bf83d1fc8ffd851a2006984c7bb2465f2"
-  integrity sha512-oDhrl98Krax8e8anls21mh5dc4MIoh6VsPtUDIZdt4rQoiyy49SOwm56PfXWlmfSoMpixn9md2/mQbQiBfYmQA==
+"@bananapus/buyback-hook@^0.0.10":
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/@bananapus/buyback-hook/-/buyback-hook-0.0.10.tgz#0e1071a1056564fab76765defe3903b68da67159"
+  integrity sha512-C8qIwL94chvHeZOK2Ljf8OZrtvN9Qztv/d1xsX+yQuKrBz53GsL19Q30p3HxPtAIxYZJNn+/AjDMZNIuRaRdQA==
   dependencies:
-    "@bananapus/core" "^0.0.13"
+    "@bananapus/core" "^0.0.14"
     "@bananapus/permission-ids" "^0.0.5"
     "@exhausted-pigeon/uniswap-v3-forge-quoter" "^1.0.1"
     "@openzeppelin/contracts" "^5.0.2"
@@ -151,13 +151,13 @@
     "@prb/math" "^4.0.2"
     "@uniswap/permit2" "github:Uniswap/permit2"
 
-"@bananapus/core@^0.0.13":
-  version "0.0.13"
-  resolved "https://registry.yarnpkg.com/@bananapus/core/-/core-0.0.13.tgz#803025d743f97ab81bb71d754dcd54dbd21e8ff4"
-  integrity sha512-JM3ozsFrqu9jPuD7EO5y1sobjiLmBcZfVGP4O/mpVBAMb/hi8n5HD07e1WLdOHyEE4sg5DCb2+XSFX23j7g+Ug==
+"@bananapus/core@^0.0.14":
+  version "0.0.14"
+  resolved "https://registry.yarnpkg.com/@bananapus/core/-/core-0.0.14.tgz#dd9da3220731b1c6a80daebdbfa44ef51203a61e"
+  integrity sha512-0yEZAhai56c9IDR0T4j7An/lDkdu+2uMc8BdpX9sfpI8w5IhxDj9uv8lBPG9iMvOcILOqtYweFWK3eR3yRL1YA==
   dependencies:
     "@bananapus/permission-ids" "^0.0.5"
-    "@chainlink/contracts" "^1.0.0"
+    "@chainlink/contracts" "^1.1.0"
     "@openzeppelin/contracts" "^5.0.2"
     "@prb/math" "^4.0.2"
     "@uniswap/permit2" "github:Uniswap/permit2"
@@ -175,25 +175,13 @@
   resolved "https://registry.yarnpkg.com/@bananapus/permission-ids/-/permission-ids-0.0.5.tgz#1861094d38e3dc6b3339724abb03d3658a0ed91a"
   integrity sha512-eC1Pkon47hth4z4dRDOACTJICsLLZf/9KH4W+9VUXQMcT3+4UbzNZ3kw2gJ3WdkuFZgIQLjNZt1oQ68RP29KRg==
 
-"@bananapus/suckers@^0.0.10":
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/@bananapus/suckers/-/suckers-0.0.10.tgz#39c7389cc921479ef166c29b8e1bf160af60b1aa"
-  integrity sha512-wkAGDP2jioxyZJJy8v9oOFi2otcDgGXb5ZaEXTUG+qFI11rJddTD50alT8zGTlrPd92ae98R5jDk804V3LMjRQ==
+"@bananapus/suckers@^0.0.12":
+  version "0.0.12"
+  resolved "https://registry.yarnpkg.com/@bananapus/suckers/-/suckers-0.0.12.tgz#53926df66d324051406f347de8e210133aace4a2"
+  integrity sha512-SMeJpwnJFx/09vvaPxXUDXq3Op7M7Pek4MtsG2VZzv9DvVe57Ndj0vBJ4SN9h+WJMk6cJjZpg46gZUc3MiVUdw==
   dependencies:
     "@arbitrum/nitro-contracts" "github:OffchainLabs/nitro-contracts"
-    "@bananapus/core" "^0.0.13"
-    "@bananapus/ownable" "^0.0.6"
-    "@bananapus/permission-ids" "^0.0.5"
-    "@openzeppelin/contracts" "^5.0.2"
-    "@prb/math" "^4.0.2"
-
-"@bananapus/suckers@^0.0.8":
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/@bananapus/suckers/-/suckers-0.0.8.tgz#314bc60affa1718bbff5ca11279699235d1ad1ab"
-  integrity sha512-KF83+lL2UGdCfOqZTadwySUVvXQOgWDY3x9cjPK0FZAeIsK7931JnhkrwluhbJGOsbhlJCShP7Saxqb1LtZvjg==
-  dependencies:
-    "@arbitrum/nitro-contracts" "github:OffchainLabs/nitro-contracts"
-    "@bananapus/core" "^0.0.13"
+    "@bananapus/core" "^0.0.14"
     "@bananapus/ownable" "^0.0.6"
     "@bananapus/permission-ids" "^0.0.5"
     "@openzeppelin/contracts" "^5.0.2"
@@ -211,6 +199,19 @@
     "@openzeppelin/contracts-upgradeable" "4.9.3"
     "@scroll-tech/contracts" "0.1.0"
     semver "^7.5.4"
+
+"@chainlink/contracts@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@chainlink/contracts/-/contracts-1.1.0.tgz#7158db5771b9504d32d2235a5378ef56601a3e6c"
+  integrity sha512-J+gDUCnEOJ2ofCvy5L2VLrQ7DVs0NXK31w8MQrW6U1GpjzU1j+it7FOJHZMxZKGg7wDdWI06aWmCgFeiD1H+bA==
+  dependencies:
+    "@changesets/changelog-github" "^0.4.8"
+    "@changesets/cli" "~2.26.2"
+    "@eth-optimism/contracts" "0.6.0"
+    "@openzeppelin/contracts" "4.9.3"
+    "@openzeppelin/contracts-upgradeable" "4.9.3"
+    "@scroll-tech/contracts" "0.1.0"
+    semver "^7.6.0"
 
 "@changesets/apply-release-plan@^6.1.4":
   version "6.1.4"
@@ -429,13 +430,13 @@
     human-id "^1.0.2"
     prettier "^2.7.1"
 
-"@croptop/core@^0.0.8":
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/@croptop/core/-/core-0.0.8.tgz#5ba60a884a6e726f0b6265cbc033d49114ddaf8f"
-  integrity sha512-x4Z5Z3pgsdaXJHSeaGEBOkrw4z7TsFvXMy8Lb2Q2bnzlCFnBJoxyWK5TwRPGqDey0XtXDk91R+VU4zLoKd5UGA==
+"@croptop/core@^0.0.9":
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/@croptop/core/-/core-0.0.9.tgz#450025b962402b43e951cff20c7cab02f08b3cbd"
+  integrity sha512-rMce18Ok0WlrTdCir408l9oJzKaCFtvm8wv7v0MxF97bWVA56ll+TR3KJjD3nZywNzE1Mqf8HE0UDAwCswQZWw==
   dependencies:
-    "@bananapus/721-hook" "^0.0.11"
-    "@bananapus/core" "^0.0.13"
+    "@bananapus/721-hook" "^0.0.12"
+    "@bananapus/core" "^0.0.14"
     "@bananapus/ownable" "^0.0.6"
     "@bananapus/permission-ids" "^0.0.5"
     "@openzeppelin/contracts" "^5.0.2"
@@ -1328,18 +1329,18 @@
   resolved "https://registry.yarnpkg.com/@prb/math/-/math-4.0.2.tgz#0bcbc34eb2c49c56b70ded059d0af28c09b7833a"
   integrity sha512-kJgqvXR6iyU7+N959RzggSFhBdnRuSDnc/bs8u6MzdWw7aYIUaAr+uMVdpP6Dheypjerd7sfJgFOs19FRFhscg==
 
-"@rev-net/core@^0.0.19":
-  version "0.0.19"
-  resolved "https://registry.yarnpkg.com/@rev-net/core/-/core-0.0.19.tgz#6db06090b3c3661f13ae24e73d59161efae32d0c"
-  integrity sha512-smDDPIDHJB3AAvM2TxUCOLGDVIMpHVaZF1dKLGoNIk+zT8mOJm728HVzJ08FksA03yjMEL3IgS7RUsWuOm1Krg==
+"@rev-net/core@^0.0.20":
+  version "0.0.20"
+  resolved "https://registry.yarnpkg.com/@rev-net/core/-/core-0.0.20.tgz#ba8a3ec5d64dc7cb7d0e89895f608ca655b180bc"
+  integrity sha512-5cGmVzZ59poqw+vn+IG0ippDaThi8DK1D3ze3qz4rl6CeZmEsz9sX/6IlSpNK8owrlJo6yWSvibThS9dHVOtZA==
   dependencies:
-    "@bananapus/721-hook" "^0.0.11"
-    "@bananapus/buyback-hook" "^0.0.9"
-    "@bananapus/core" "^0.0.13"
+    "@bananapus/721-hook" "^0.0.12"
+    "@bananapus/buyback-hook" "^0.0.10"
+    "@bananapus/core" "^0.0.14"
     "@bananapus/ownable" "^0.0.6"
     "@bananapus/permission-ids" "^0.0.5"
-    "@bananapus/suckers" "^0.0.8"
-    "@croptop/core" "^0.0.8"
+    "@bananapus/suckers" "^0.0.12"
+    "@croptop/core" "^0.0.9"
     "@openzeppelin/contracts" "^5.0.2"
 
 "@scroll-tech/contracts@0.1.0":
@@ -1552,19 +1553,19 @@
   dependencies:
     tslib "^2.6.2"
 
-"@sphinx-labs/contracts@^0.21.10":
-  version "0.21.10"
-  resolved "https://registry.yarnpkg.com/@sphinx-labs/contracts/-/contracts-0.21.10.tgz#6f24af3ef9319847a9f249eb3918323c2b6b72f6"
-  integrity sha512-KffGOYoFi75MqFmQwgpAvxnma6UVldapQQcr/cvkDdZOk1d39k2VxHTFQ7hYFkJtAUCKXpx3GEPdKJClTCj1mA==
+"@sphinx-labs/contracts@^0.21.11":
+  version "0.21.11"
+  resolved "https://registry.yarnpkg.com/@sphinx-labs/contracts/-/contracts-0.21.11.tgz#3c7d7fcd58413d46e27c56011f9c4209d65a2f0f"
+  integrity sha512-BLYtKlBnS9p+kb2WeXvO9WXPzamzGJFbbXspeC5hSzKC0tAPVfYt9+V0PY3OfUJqFrHsOIwXbupL8znD1oBYJA==
   dependencies:
     "@openzeppelin/contracts" "4.9.3"
     ethers "^6.7.0"
     solmate "6.2.0"
 
-"@sphinx-labs/core@^0.24.8":
-  version "0.24.8"
-  resolved "https://registry.yarnpkg.com/@sphinx-labs/core/-/core-0.24.8.tgz#dfb1d364837aeb3c77f939f1b60c453ed1f8fcd0"
-  integrity sha512-yNveTOp/STU3ZCC3Pg8BKIHRooxF6WF4juA3nj2c+O1FU/CIOxeLu1DzMCffy5lGLwMSDolAIcSQ3iQGQQ43Dg==
+"@sphinx-labs/core@^0.24.9":
+  version "0.24.9"
+  resolved "https://registry.yarnpkg.com/@sphinx-labs/core/-/core-0.24.9.tgz#6fda819764d26f70b90d49c11f5043ec620a30f4"
+  integrity sha512-dfpsPY5d8mqMJu6hnnC0+GwPENcqIMD1tozMSlk7PDVs79lP1YIFuNu2EjgyUQOqh6NPHH3Wo07xnkXiBzDjnw==
   dependencies:
     "@amplitude/node" "^1.10.2"
     "@eth-optimism/common-ts" "^0.7.1"
@@ -1573,7 +1574,7 @@
     "@nomicfoundation/hardhat-verify" "^2.0.2"
     "@openzeppelin/hardhat-upgrades" "^1.22.1"
     "@openzeppelin/merkle-tree" "1.0.5"
-    "@sphinx-labs/contracts" "^0.21.10"
+    "@sphinx-labs/contracts" "^0.21.11"
     axios "^1.4.0"
     chalk "^4.1.2"
     core-js "^3.27.1"
@@ -1589,18 +1590,18 @@
     undici "^5.21.1"
     yesno "^0.4.0"
 
-"@sphinx-labs/plugins@0.31.11":
-  version "0.31.11"
-  resolved "https://registry.yarnpkg.com/@sphinx-labs/plugins/-/plugins-0.31.11.tgz#85be4149675606d5cd6bb2734aa4ce65eea23047"
-  integrity sha512-07IXhFHLMRJO1/RlEcbK1uxIqMymmCvXgx5GISWnAJ6T4R8h/Oo3KPmbP8PhOMfOsE7dilFoszI6JVz1SHVx/A==
+"@sphinx-labs/plugins@0.31.12":
+  version "0.31.12"
+  resolved "https://registry.yarnpkg.com/@sphinx-labs/plugins/-/plugins-0.31.12.tgz#1ee2eb535265efc8ea6f4a7ecbdb116ac9029367"
+  integrity sha512-3f6Eo+rQwCx8ZohIYhOSV1fS8S9q7T4lx0IGBg7km2vWkC109SkGbsDj4sSPmTIXOuw0sBjUm9aWdCV8upyYqw==
   dependencies:
     "@eth-optimism/contracts" "^0.5.40"
     "@ethersproject/bignumber" "^5.7.0"
     "@nomicfoundation/hardhat-ethers" "^3.0.5"
     "@openzeppelin/contracts" "^4.8.1"
     "@openzeppelin/hardhat-upgrades" "^1.22.1"
-    "@sphinx-labs/contracts" "^0.21.10"
-    "@sphinx-labs/core" "^0.24.8"
+    "@sphinx-labs/contracts" "^0.21.11"
+    "@sphinx-labs/core" "^0.24.9"
     "@swc/core" "1.3.75"
     chalk "^4.1.2"
     core-js "^3.31.1"
@@ -5743,7 +5744,7 @@ semver@^6.3.0:
   resolved "https://registry.yarnpkg.com/semver/-/semver-6.3.1.tgz#556d2ef8689146e46dcea4bfdd095f3434dffcb4"
   integrity sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==
 
-semver@^7.3.5, semver@^7.3.7, semver@^7.3.8, semver@^7.5.3, semver@^7.5.4:
+semver@^7.3.5, semver@^7.3.7, semver@^7.3.8, semver@^7.5.3, semver@^7.5.4, semver@^7.6.0:
   version "7.6.0"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.6.0.tgz#1a46a4db4bffcccd97b743b5005c8325f23d4e2d"
   integrity sha512-EnwXhrlwXMk9gKu5/flx5sv/an57AkRplG3hTK68W7FRDN+k+OWBj65M7719OkA82XLBxrcX0KSHj+X5COhOVg==
