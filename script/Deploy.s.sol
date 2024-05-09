@@ -129,7 +129,7 @@ contract DeployScript is Script, Sphinx {
         uint256 decimalMultiplier = 10 ** decimals;
         uint24 nakedBannyCategory = 0;
         uint40 oneDay = 86_400;
-        uint40 start = uint40(1_710_875_417); // 15 minutes from now
+        uint40 start = block.timestamp;
 
         // The terminals that the project will accept funds through.
         JBTerminalConfig[] memory terminalConfigurations = new JBTerminalConfig[](1);
@@ -159,11 +159,11 @@ contract DeployScript is Script, Sphinx {
         });
         stageConfigurations[1] = REVStageConfig({
             mintConfigs: new REVMintConfig[](0),
-            startsAtOrAfter: start + 86_400 * 28,
+            startsAtOrAfter: start + (oneDay * 28),
             splitRate: uint16(JBConstants.MAX_RESERVED_RATE / 2),
             initialIssuanceRate: uint112(100_000 * decimalMultiplier),
             priceCeilingIncreaseFrequency: 7 * oneDay,
-            priceCeilingIncreasePercentage: uint16(JBConstants.MAX_DECAY_RATE / 100), // 1%
+            priceCeilingIncreasePercentage: uint32(JBConstants.MAX_DECAY_RATE / 100), // 1%
             priceFloorTaxIntensity: uint16(JBConstants.MAX_REDEMPTION_RATE / 2) // 0.5
         });
 
