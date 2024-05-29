@@ -92,60 +92,67 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
 
     /// @notice The outfits currently attached to each Naked Banny.
     /// @dev Nakes Banny's will only be shown with outfits currently owned by the owner of the Naked Banny.
+    /// @custom:param hook The hook address of the collection.
     /// @custom:param nakedBannyId The ID of the Naked Banny of the outfits.
-    mapping(uint256 nakedBannyId => uint256[]) internal _attachedOutfitIdsOf;
+    mapping(address hook => mapping(uint256 nakedBannyId => uint256[])) internal _attachedOutfitIdsOf;
 
     /// @notice The world currently attached to each Naked Banny.
     /// @dev Nakes Banny's will only be shown with a world currently owned by the owner of the Naked Banny.
+    /// @custom:param hook The hook address of the collection.
     /// @custom:param nakedBannyId The ID of the Naked Banny of the world.
-    mapping(uint256 nakedBannyId => uint256) internal _attachedWorldIdOf;
+    mapping(address hook => mapping(uint256 nakedBannyId => uint256)) internal _attachedWorldIdOf;
 
     /// @notice The ID of the naked banny each world is being used by.
+    /// @custom:param hook The hook address of the collection.
     /// @custom:param worldId The ID of the world.
-    mapping(uint256 worldId => uint256) internal _userOf;
+    mapping(address hook => mapping(uint256 worldId => uint256)) internal _userOf;
 
     /// @notice The ID of the naked banny each outfit is being worn by.
+    /// @custom:param hook The hook address of the collection.
     /// @custom:param outfitId The ID of the outfit.
-    mapping(uint256 outfitId => uint256) internal _wearerOf;
+    mapping(address hook => mapping(uint256 outfitId => uint256)) internal _wearerOf;
 
     /// @notice The assets currently attached to each Naked Banny, owned by the naked Banny's owner.
+    /// @custom:param hook The hook address of the collection.
     /// @param nakedBannyId The ID of the naked banny shows with the associated assets.
     /// @return worldId The world attached to the Naked Banny.
     /// @return outfitIds The outfits attached to the Naked Banny.
-    function assetIdsOf(uint256 nakedBannyId) public view returns (uint256 worldId, uint256[] memory outfitIds) {
+    function assetIdsOf(address hook, uint256 nakedBannyId) public view returns (uint256 worldId, uint256[] memory outfitIds) {
         // Keep a reference to the outfit IDs currently attached to the Naked Banny.
-        outfitIds = _attachedOutfitIdsOf[nakedBannyId];
+        outfitIds = _attachedOutfitIdsOf[hook][nakedBannyId];
 
         // Add the world.
-        worldId = _attachedWorldIdOf[nakedBannyId];
+        worldId = _attachedWorldIdOf[hook][nakedBannyId];
     }
 
     /// @notice Checks to see which naked banny is currently using a particular world.
+    /// @custom:param hook The hook address of the collection.
     /// @param worldId The ID of the world being used.
     /// @return The ID of the naked banny using the world.
-    function userOf(uint256 worldId) public view returns (uint256) {
+    function userOf(address hook, uint256 worldId) public view returns (uint256) {
         // Get a reference to the naked banny using the world.
-        uint256 nakedBannyId = _userOf[worldId];
+        uint256 nakedBannyId = _userOf[hook][worldId];
 
         // If no naked banny is wearing the outfit, or if its no longer the world attached, return 0.
-        if (nakedBannyId == 0 || _attachedWorldIdOf[nakedBannyId] != worldId) return 0;
+        if (nakedBannyId == 0 || _attachedWorldIdOf[hook][nakedBannyId] != worldId) return 0;
 
         // Return the naked banny ID.
         return nakedBannyId;
     }
 
     /// @notice Checks to see which naked banny is currently wearing a particular outfit.
+    /// @custom:param hook The hook address of the collection.
     /// @param outfitId The ID of the outfit being worn.
     /// @return The ID of the naked banny wearing the outfit.
-    function wearerOf(uint256 outfitId) public view returns (uint256) {
+    function wearerOf(address hook, uint256 outfitId) public view returns (uint256) {
         // Get a reference to the naked banny wearing the outfit.
-        uint256 nakedBannyId = _wearerOf[outfitId];
+        uint256 nakedBannyId = _wearerOf[hook][outfitId];
 
         // If no naked banny is wearing the outfit, return 0.
         if (nakedBannyId == 0) return 0;
 
         // Keep a reference to the outfit IDs currently attached to a naked banny.
-        uint256[] memory attachedOutfitIds = _attachedOutfitIdsOf[nakedBannyId];
+        uint256[] memory attachedOutfitIds = _attachedOutfitIdsOf[hook][nakedBannyId];
 
         // Keep a reference to the number of outfit IDs currently attached.
         uint256 numberOfAttachedOutfitIds = attachedOutfitIds.length;
@@ -202,7 +209,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
                 svgOf({hook: hook, tokenId: tokenId, shouldDressNakedBanny: true, shouldIncludeWorldOnNakedBanny: true});
 
             // Get a reference to each asset ID currently attached to the Naked Banny.
-            (uint256 worldId, uint256[] memory outfitIds) = assetIdsOf(tokenId);
+            (uint256 worldId, uint256[] memory outfitIds) = assetIdsOf(hook, tokenId);
 
             // Keep a reference to the number of outfits
             uint256 numberOfOutfits = outfitIds.length;
@@ -303,7 +310,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         }
 
         // Get a reference to each asset ID currently attached to the Naked Banny.
-        (uint256 worldId, uint256[] memory outfitIds) = assetIdsOf(tokenId);
+        (uint256 worldId, uint256[] memory outfitIds) = assetIdsOf(hook, tokenId);
 
         // Add the world if needed.
         if (worldId != 0 && shouldIncludeWorldOnNakedBanny) contents = string.concat(contents, _svgOf(hook, worldId));
@@ -380,10 +387,10 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             if (worldProduct.id == 0) revert UNRECOGNIZED_WORLD();
 
             // Store the world for the banny.
-            _attachedWorldIdOf[nakedBannyId] = worldId;
+            _attachedWorldIdOf[hook][nakedBannyId] = worldId;
 
             // Store the banny that's in the world.
-            _userOf[worldId] = nakedBannyId;
+            _userOf[hook][worldId] = nakedBannyId;
         } else {
             _attachedWorldIdOf[nakedBannyId] = 0;
         }
@@ -450,11 +457,11 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             lastAssetCategory = outfitProduct.category;
 
             // Store the banny that's in the world.
-            _wearerOf[outfitId] = nakedBannyId;
+            _wearerOf[hook][outfitId] = nakedBannyId;
         }
 
         // Store the outfits.
-        _attachedOutfitIdsOf[nakedBannyId] = outfitIds;
+        _attachedOutfitIdsOf[hook][nakedBannyId] = outfitIds;
 
         emit DecorateBanny(hook, nakedBannyId, worldId, outfitIds, _msgSender());
     }
