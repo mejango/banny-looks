@@ -309,14 +309,14 @@ contract Drop1Script is Script, Sphinx {
         });
         // Sweatsuit
         names[15] = "Sweatsuit";
-        svgHashes[15] = bytes32(0x5743ca5682540e9a5eacc9d80c499fa525de4ca6789a67f54ec8f98fb23b3488);
+        svgHashes[15] = bytes32(0xfbb3a6dde059e3e3115c3e83fd675d1739ec29afa62999fa759ed878f48e9aa2);
         products[15] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 1))),
             initialSupply: 20,
             votingUnits: 0,
             reserveFrequency: 0,
             reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0x5b28da5f0f6f0f9e16acf6133bdcee73d78c75b60dc6ce4bf608f1cd11297006),
+            encodedIPFSUri: bytes32(0x823466de69eaf605d3a62366e5e9dbd6649a71da146f791f94628d4749a2da55),
             category: 8,
             allowOwnerMint: false,
             useReserveBeneficiaryAsDefault: false,
@@ -360,14 +360,14 @@ contract Drop1Script is Script, Sphinx {
         });
         // Baggies
         names[18] = "Baggies";
-        svgHashes[18] = bytes32(0x59714cb1abaae1174440da86825858c9dd2d8112484e8397c36b694fe8d12514);
+        svgHashes[18] = bytes32(0x2f0cab70c7d07048ccc7b6855bba39cdd95be15a109c8eaa401d9be6d503ca2a);
         products[18] = JB721TierConfig({
             price: uint104(15 * (10 ** (decimals - 1))),
             initialSupply: 30,
             votingUnits: 0,
             reserveFrequency: 0,
             reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0xb8a33e0cf042bc917a043bbcf04013ce730fd17ff997941dd42039504aeef24d),
+            encodedIPFSUri: bytes32(0x745b3b4f18aab6ad0d8465d34751ca8eb5b9c267dee6ec8bf63686b508afacf3),
             category: 9,
             allowOwnerMint: false,
             useReserveBeneficiaryAsDefault: false,
