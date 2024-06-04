@@ -196,10 +196,10 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
 
             // If the world or outfit is attached to a naked banny, add it to the metadata.
             if (product.category == _WORLD_CATEGORY) {
-                uint256 nakedBannyId = userOf(tokenId);
+                uint256 nakedBannyId = userOf(hook, tokenId);
                 extraMetadata = string.concat('"usedByNakedBannyId": "', nakedBannyId.toString(), '",');
             } else {
-                uint256 nakedBannyId = wearerOf(tokenId);
+                uint256 nakedBannyId = wearerOf(hook, tokenId);
                 extraMetadata = string.concat('"wornByNakedBannyId": "', nakedBannyId.toString(), '",');
             }
 
@@ -378,7 +378,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             if (IERC721(hook).ownerOf(worldId) != _msgSender()) revert UNAUTHORIZED_WORLD();
 
             // Make sure the world is not already being shown on another Naked banny.
-            if (userOf(worldId) != 0) revert ASSET_IS_ALREADY_BEING_WORN();
+            if (userOf(hook, worldId) != 0) revert ASSET_IS_ALREADY_BEING_WORN();
 
             // Get the world's product info.
             JB721Tier memory worldProduct = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, worldId, false);
@@ -392,7 +392,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             // Store the banny that's in the world.
             _userOf[hook][worldId] = nakedBannyId;
         } else {
-            _attachedWorldIdOf[nakedBannyId] = 0;
+            _attachedWorldIdOf[hook][nakedBannyId] = 0;
         }
 
         // Keep a reference to the number of outfits being worn.
@@ -419,7 +419,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             if (IERC721(hook).ownerOf(outfitId) != _msgSender()) revert UNAUTHORIZED_OUTFIT();
 
             // Make sure the outfit is not already being worn.
-            if (wearerOf(outfitId) != 0) revert ASSET_IS_ALREADY_BEING_WORN();
+            if (wearerOf(hook, outfitId) != 0) revert ASSET_IS_ALREADY_BEING_WORN();
 
             // Get the outfit's product info.
             outfitProduct = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, outfitId, false);
