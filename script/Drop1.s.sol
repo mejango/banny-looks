@@ -20,13 +20,9 @@ contract Drop1Script is Script, Sphinx {
 
     function configureSphinx() public override {
         // TODO: Update to contain revnet devs.
-        sphinxConfig.owners = [0x26416423d530b1931A2a7a6b7D435Fac65eED27d];
-        sphinxConfig.orgId = "cltepuu9u0003j58rjtbd0hvu";
         sphinxConfig.projectName = "bannyverse-core";
-        sphinxConfig.threshold = 1;
         sphinxConfig.mainnets = ["ethereum", "optimism", "base", "arbitrum"];
         sphinxConfig.testnets = ["ethereum_sepolia", "optimism_sepolia", "base_sepolia", "arbitrum_sepolia"];
-        sphinxConfig.saltNonce = 6;
     }
 
     function run() public {
@@ -57,7 +53,7 @@ contract Drop1Script is Script, Sphinx {
         svgHashes[0] = bytes32(0xab22e30cb6daaac109ea557a14af9b65f680d46cc563a0b25dd42483f9286bf7);
         products[0] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
-            initialSupply: 10000,
+            initialSupply: 10_000,
             votingUnits: 0,
             reserveFrequency: 0,
             reserveBeneficiary: address(0),

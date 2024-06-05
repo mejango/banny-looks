@@ -73,13 +73,9 @@ contract DeployScript is Script, Sphinx {
 
     function configureSphinx() public override {
         // TODO: Update to contain revnet devs.
-        sphinxConfig.owners = [0x26416423d530b1931A2a7a6b7D435Fac65eED27d];
-        sphinxConfig.orgId = "cltepuu9u0003j58rjtbd0hvu";
         sphinxConfig.projectName = "bannyverse-core";
-        sphinxConfig.threshold = 1;
         sphinxConfig.mainnets = ["ethereum", "optimism", "base", "arbitrum"];
         sphinxConfig.testnets = ["ethereum_sepolia", "optimism_sepolia", "base_sepolia", "arbitrum_sepolia"];
-        sphinxConfig.saltNonce = 6;
     }
 
     function run() public {
@@ -130,7 +126,7 @@ contract DeployScript is Script, Sphinx {
         uint256 decimalMultiplier = 10 ** decimals;
         uint24 nakedBannyCategory = 0;
         uint40 oneDay = 86_400;
-        uint40 start = block.timestamp;
+        uint40 start = uint40(block.timestamp);
 
         // The terminals that the project will accept funds through.
         JBTerminalConfig[] memory terminalConfigurations = new JBTerminalConfig[](1);
@@ -139,14 +135,11 @@ contract DeployScript is Script, Sphinx {
         // Accept the chain's native currency through the multi terminal.
         tokensToAccept[0] = JBConstants.NATIVE_TOKEN;
         terminalConfigurations[0] = JBTerminalConfig({terminal: core.terminal, tokensToAccept: tokensToAccept});
-        
+
         REVMintConfig[] memory mintConfs = new REVMintConfig[](1);
-        mintConfs[0] = REVMintConfig({
-            chainId: PREMINT_CHAIN_ID,
-            count: 80_000_000 * decimalMultiplier,
-            beneficiary: OPERATOR 
-        });
-            
+        mintConfs[0] =
+            REVMintConfig({chainId: PREMINT_CHAIN_ID, count: 80_000_000 * decimalMultiplier, beneficiary: OPERATOR});
+
         // The project's revnet stage configurations.
         REVStageConfig[] memory stageConfigurations = new REVStageConfig[](2);
         stageConfigurations[0] = REVStageConfig({
@@ -287,20 +280,15 @@ contract DeployScript is Script, Sphinx {
             minBridgeAmount: 0.01 ether
         });
 
-
-        BPSuckerDeployerConfig[] memory suckerDeployerConfigurations; 
-        if (block.chainid == 1 || block.chainid == 11155111) {
+        BPSuckerDeployerConfig[] memory suckerDeployerConfigurations;
+        if (block.chainid == 1 || block.chainid == 11_155_111) {
             suckerDeployerConfigurations = new BPSuckerDeployerConfig[](2);
-            // OP 
-            suckerDeployerConfigurations[0] = BPSuckerDeployerConfig({
-                deployer: suckers.optimismDeployer,
-                mappings: tokenMappings
-            });
+            // OP
+            suckerDeployerConfigurations[0] =
+                BPSuckerDeployerConfig({deployer: suckers.optimismDeployer, mappings: tokenMappings});
 
-            suckerDeployerConfigurations[1] = BPSuckerDeployerConfig({
-                deployer: suckers.baseDeployer,
-                mappings: tokenMappings
-            });
+            suckerDeployerConfigurations[1] =
+                BPSuckerDeployerConfig({deployer: suckers.baseDeployer, mappings: tokenMappings});
 
             // suckerDeployerConfigurations[2] = BPSuckerDeployerConfig({
             //     deployer: suckers.arbitrumDeployer,
@@ -308,15 +296,19 @@ contract DeployScript is Script, Sphinx {
             // });
         } else {
             suckerDeployerConfigurations = new BPSuckerDeployerConfig[](1);
-            // L2 -> Mainnet 
+            // L2 -> Mainnet
             suckerDeployerConfigurations[0] = BPSuckerDeployerConfig({
-                deployer: address(suckers.optimismDeployer) != address(0) ? suckers.optimismDeployer : address(suckers.baseDeployer) != address(0) ? suckers.baseDeployer : suckers.arbitrumDeployer,
+                deployer: address(suckers.optimismDeployer) != address(0)
+                    ? suckers.optimismDeployer
+                    : address(suckers.baseDeployer) != address(0) ? suckers.baseDeployer : suckers.arbitrumDeployer,
                 mappings: tokenMappings
             });
 
-            if(address(suckerDeployerConfigurations[0].deployer) == address(0)) revert("L2 > L1 Sucker is not configured");
+            if (address(suckerDeployerConfigurations[0].deployer) == address(0)) {
+                revert("L2 > L1 Sucker is not configured");
+            }
         }
-            
+
         // Specify all sucker deployments.
         REVSuckerDeploymentConfig memory suckerDeploymentConfiguration =
             REVSuckerDeploymentConfig({deployerConfigurations: suckerDeployerConfigurations, salt: SUCKER_SALT});
