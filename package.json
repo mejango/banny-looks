@@ -1,6 +1,6 @@
 {
     "name": "@bannyverse/core",
-    "version": "0.0.20",
+    "version": "0.0.21",
     "license": "MIT",
     "repository": {
         "type": "git",
@@ -21,7 +21,7 @@
         "@bananapus/721-hook": "^0.0.13",
         "@bananapus/core": "^0.0.15",
         "@bananapus/ownable": "^0.0.6",
-        "@bananapus/permission-ids": "^0.0.8",
+        "@bananapus/permission-ids": "^0.0.9",
         "@croptop/core": "^0.0.10",
         "@openzeppelin/contracts": "^5.0.2",
         "@rev-net/core": "^0.0.22",
