@@ -64,16 +64,16 @@ contract DeployScript is Script, Sphinx {
     BannyverseRevnetConfig bannyverseConfig;
 
     uint256 PREMINT_CHAIN_ID = 1;
-    bytes32 SALT = "BANNY_3";
-    bytes32 SUCKER_SALT = "BANNY_3";
-    bytes32 RESOLVER_SALT = "Banny721TokenUriResolver";
+    bytes32 SALT = "BANNY";
+    bytes32 SUCKER_SALT = "BANNY_SUCKER";
+    bytes32 RESOLVER_SALT = "BANNY_RESOLVER";
 
     address OPERATOR;
     address TRUSTED_FORWARDER = 0xB2b5841DBeF766d4b521221732F9B618fCf34A87;
 
     function configureSphinx() public override {
         // TODO: Update to contain revnet devs.
-        sphinxConfig.projectName = "bannyverse-core";
+        sphinxConfig.projectName = "bannyverse-core-testnet";
         sphinxConfig.mainnets = ["ethereum", "optimism", "base", "arbitrum"];
         sphinxConfig.testnets = ["ethereum_sepolia", "optimism_sepolia", "base_sepolia", "arbitrum_sepolia"];
     }
@@ -110,6 +110,19 @@ contract DeployScript is Script, Sphinx {
 
         bannyverseConfig = getBannyverseRevnetConfig();
 
+        // Since Juicebox has logic dependent on the timestamp we warp time to create a scenario closer to production.
+        // We force simulations to make the assumption that the `START_TIME` has not occured,
+        // and is not the current time.
+        // Because of the cross-chain allowing components of nana-core, all chains require the same start_time,
+        // for this reason we can't rely on the simulations block.time and we need a shared timestamp across all
+        // simulations.
+        uint256 _realTimestamp = vm.envUint("START_TIME");
+        if (_realTimestamp <= block.timestamp - 1 days) {
+            revert("Something went wrong while setting the 'START_TIME' environment variable.");
+        }
+
+        vm.warp(_realTimestamp);
+
         // Perform the deployment transactions.
         deploy();
     }
@@ -125,8 +138,6 @@ contract DeployScript is Script, Sphinx {
         uint8 decimals = 18;
         uint256 decimalMultiplier = 10 ** decimals;
         uint24 nakedBannyCategory = 0;
-        uint40 oneDay = 86_400;
-        uint40 start = uint40(block.timestamp);
 
         // The terminals that the project will accept funds through.
         JBTerminalConfig[] memory terminalConfigurations = new JBTerminalConfig[](1);
@@ -144,19 +155,19 @@ contract DeployScript is Script, Sphinx {
         REVStageConfig[] memory stageConfigurations = new REVStageConfig[](2);
         stageConfigurations[0] = REVStageConfig({
             mintConfigs: mintConfs,
-            startsAtOrAfter: start,
+            startsAtOrAfter: uint40(block.timestamp + 1 days),
             splitRate: uint16(JBConstants.MAX_RESERVED_RATE / 2),
             initialIssuanceRate: uint112(1_000_000 * decimalMultiplier),
-            priceCeilingIncreaseFrequency: oneDay,
+            priceCeilingIncreaseFrequency: 1 days,
             priceCeilingIncreasePercentage: uint32(JBConstants.MAX_DECAY_RATE / 20), // 5%
             priceFloorTaxIntensity: uint16(JBConstants.MAX_REDEMPTION_RATE / 5) // 0.2
         });
         stageConfigurations[1] = REVStageConfig({
             mintConfigs: new REVMintConfig[](0),
-            startsAtOrAfter: start + (oneDay * 28),
+            startsAtOrAfter: uint40(block.timestamp + 28 days),
             splitRate: uint16(JBConstants.MAX_RESERVED_RATE / 2),
             initialIssuanceRate: uint112(100_000 * decimalMultiplier),
-            priceCeilingIncreaseFrequency: 7 * oneDay,
+            priceCeilingIncreaseFrequency: 7 days,
             priceCeilingIncreasePercentage: uint32(JBConstants.MAX_DECAY_RATE / 100), // 1%
             priceFloorTaxIntensity: uint16(JBConstants.MAX_REDEMPTION_RATE / 2) // 0.5
         });
