@@ -45,7 +45,7 @@ library BannyverseDeploymentLib {
         returns (BannyverseDeployment memory deployment)
     {
         deployment.resolver = Banny721TokenUriResolver(
-            _getDeploymentAddress(path, "bannyverse-core", network_name, "Banny721TokenUriResolver")
+            _getDeploymentAddress(path, "bannyverse-core-testnet", network_name, "Banny721TokenUriResolver")
         );
 
         // TODO: Update the following after every deploy.
