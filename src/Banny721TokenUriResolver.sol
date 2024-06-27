@@ -24,7 +24,6 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     event SetSvgBaseUri(string baseUri, address caller);
     event SetProductName(uint256 indexed upc, string name, address caller);
 
-    error ASSET_IS_ALREADY_BEING_WORN();
     error HEAD_ALREADY_ADDED();
     error SUIT_ALREADY_ADDED();
     error UNRECOGNIZED_WORLD();
@@ -112,17 +111,41 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     /// @custom:param outfitId The ID of the outfit.
     mapping(address hook => mapping(uint256 outfitId => uint256)) internal _wearerOf;
 
-    /// @notice The assets currently attached to each Naked Banny, owned by the naked Banny's owner.
+    /// @notice The assets currently attached to each Naked Banny.
     /// @custom:param hook The hook address of the collection.
     /// @param nakedBannyId The ID of the naked banny shows with the associated assets.
     /// @return worldId The world attached to the Naked Banny.
     /// @return outfitIds The outfits attached to the Naked Banny.
     function assetIdsOf(address hook, uint256 nakedBannyId) public view returns (uint256 worldId, uint256[] memory outfitIds) {
-        // Keep a reference to the outfit IDs currently attached to the Naked Banny.
-        outfitIds = _attachedOutfitIdsOf[hook][nakedBannyId];
+        // Keep a reference to the outfit IDs currently stored as attached to the Naked Banny.
+        uint256[] memory storedOutfitIds = _attachedOutfitIdsOf[hook][nakedBannyId];
 
-        // Add the world.
-        worldId = _attachedWorldIdOf[hook][nakedBannyId];
+        // Keep a reference to the number of outfit IDs currently attached.
+        uint256 numberOfStoredOutfitIds = storedOutfitIds.length;
+
+        // Initiate the outfit IDs array with the same number of entries.
+        outfitIds = new uint256[](numberOfStoredOutfitIds);
+
+        // Keep a reference to the number of included outfits.
+        uint256 numberOfIncludedOutfits = 0;
+
+        // Keep a reference to the stored outfit ID being iterated on.
+        uint256 storedOutfitId;
+
+        // Return the outfit's that are still being worn by the naked banny.
+        for (uint256 i; i < numberOfStoredOutfitIds; i++) {
+            // Set the stored outfit ID being iterated on.
+            storedOutfitId = storedOutfitIds[i];
+
+            // If the stored outfit is still being worn, return it.
+            if (wearerOf(hook, storedOutfitId) == nakedBannyId) outfitIds[numberOfIncludedOutfits++] = storedOutfitId;
+        }
+
+        // Keep a reference to the world currently stored as attached to the naked Banny.
+        uint256 storedWorldOf = _attachedWorldIdOf[hook][nakedBannyId];
+
+        // If the world is still being used, return it.
+        if (userOf(hook, storedWorldOf) == nakedBannyId) worldId = storedWorldOf;
     }
 
     /// @notice Checks to see which naked banny is currently using a particular world.
@@ -377,9 +400,6 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             // Check if the owner matched.
             if (IERC721(hook).ownerOf(worldId) != _msgSender()) revert UNAUTHORIZED_WORLD();
 
-            // Make sure the world is not already being shown on another Naked banny.
-            if (userOf(hook, worldId) != 0) revert ASSET_IS_ALREADY_BEING_WORN();
-
             // Get the world's product info.
             JB721Tier memory worldProduct = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, worldId, false);
 
@@ -417,9 +437,6 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
 
             // Check if the owner matched.
             if (IERC721(hook).ownerOf(outfitId) != _msgSender()) revert UNAUTHORIZED_OUTFIT();
-
-            // Make sure the outfit is not already being worn.
-            if (wearerOf(hook, outfitId) != 0) revert ASSET_IS_ALREADY_BEING_WORN();
 
             // Get the outfit's product info.
             outfitProduct = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, outfitId, false);
