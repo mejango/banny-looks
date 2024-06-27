@@ -38,6 +38,8 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     error CONTENTS_MISMATCH();
     error HASH_ALREADY_STORED();
     error UNRECOGNIZED_PRODUCT();
+    error OUTFIT_IS_ALREADY_BEING_WORN();
+    error WORLD_IS_ALREADY_BEING_USED();
 
     /// @notice Just a kind reminder to our readers.
     /// @dev Used in 721 token ID generation.
@@ -400,6 +402,12 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             // Check if the owner matched.
             if (IERC721(hook).ownerOf(worldId) != _msgSender()) revert UNAUTHORIZED_WORLD();
 
+            // Keep a reference to the naked banny using the world.
+            uint256 user = userOf(hook, worldId);
+
+            // Make sure the world is not already being shown on another Naked banny that doesn't belong to this banny owner.
+            if (IERC721(hook).ownerOf(user) != _msgSender()) revert WORLD_IS_ALREADY_BEING_USED();
+
             // Get the world's product info.
             JB721Tier memory worldProduct = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, worldId, false);
 
@@ -429,6 +437,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
 
         bool hasHead;
         bool hasSuit;
+        uint256 wearer;
 
         // Iterate through each outfit checking to see if the message sender owns them all.
         for (uint256 i; i < numberOfAssets; i++) {
@@ -438,6 +447,12 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             // Check if the owner matched.
             if (IERC721(hook).ownerOf(outfitId) != _msgSender()) revert UNAUTHORIZED_OUTFIT();
 
+            // Keep a reference to the naked banny currently wearing the outfit.
+            wearer = wearerOf(hook, outfitId);
+
+            // Make sure the outfit is not already being worn by another Naked banny that doesn't belong to this banny owner.
+            if (IERC721(hook).ownerOf(wearer) != _msgSender()) revert OUTFIT_IS_ALREADY_BEING_WORN();
+            
             // Get the outfit's product info.
             outfitProduct = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, outfitId, false);
 
