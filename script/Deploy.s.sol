@@ -131,7 +131,7 @@ contract DeployScript is Script, Sphinx {
         // Define constants
         string memory name = "Bannyverse";
         string memory symbol = "BANNY";
-        string memory projectUri = "";
+        string memory projectUri = "ipfs://QmWkFkmgevwWJno9UrAZSmYz6Y17EC78X1xSc1KimwSYts";
         string memory baseUri = "ipfs://";
         string memory contractUri = "";
         uint32 nativeCurrency = uint32(uint160(JBConstants.NATIVE_TOKEN));
