@@ -222,10 +222,10 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             // If the world or outfit is attached to a naked banny, add it to the metadata.
             if (product.category == _WORLD_CATEGORY) {
                 uint256 nakedBannyId = userOf(hook, tokenId);
-                extraMetadata = string.concat('"usedByNakedBannyId": "', nakedBannyId.toString(), '",');
+                extraMetadata = string.concat('"usedByNakedBannyId": ', nakedBannyId.toString(), ',');
             } else {
                 uint256 nakedBannyId = wearerOf(hook, tokenId);
-                extraMetadata = string.concat('"wornByNakedBannyId": "', nakedBannyId.toString(), '",');
+                extraMetadata = string.concat('"wornByNakedBannyId": ', nakedBannyId.toString(), ',');
             }
 
         } else {
@@ -242,12 +242,12 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             extraMetadata = '"outfitIds": [';
 
             for (uint256 i; i < numberOfOutfits; i++) {
-                extraMetadata = string.concat(extraMetadata, '"', outfitIds[i].toString(), '",');
+                extraMetadata = string.concat(extraMetadata, outfitIds[i].toString(), ',');
             }
 
             extraMetadata = string.concat(extraMetadata, '],');
             
-            if (worldId != 0) extraMetadata = string.concat(extraMetadata, '"worldId": "', worldId.toString(), '",');
+            if (worldId != 0) extraMetadata = string.concat(extraMetadata, '"worldId": ', worldId.toString(), ',');
         }
 
         if (bytes(contents).length == 0) {
@@ -272,23 +272,23 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
                     _productNameOf(product.id),
                     '", "categoryName": "',
                     _categoryNameOf(product.category),
-                    '", "tokenId": "',
+                    '", "tokenId": ',
                     tokenId.toString(),
-                    '", "upc": "',
+                    ', "upc": ',
                     product.id.toString(),
-                    '", "category": "',
+                    ', "category": ',
                     product.category.toString(),
-                    '", "supply": "',
+                    ', "supply": ',
                     product.initialSupply.toString(),
-                    '", "remaining": "',
+                    ', "remaining": ',
                     product.remainingSupply.toString(),
-                    '", "price": "',
+                    ', "price": ',
                     product.price.toString(),
-                    '", "decimals": "',
+                    ', "decimals": ',
                     decimals.toString(),
-                    '", "currency": "',
+                    ', "currency": ',
                     currency.toString(),
-                    '", ',
+                    ', ',
                     extraMetadata,
                     '"description":"A piece of the Bannyverse","image":"data:image/svg+xml;base64,',
                     Base64.encode(abi.encodePacked(contents)),
