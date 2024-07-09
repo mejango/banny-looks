@@ -410,7 +410,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
 
         emit DecorateBanny(hook, nakedBannyId, worldId, outfitIds, _msgSender());
     }
-    
+
     /// @notice Add a world to a Naked Banny.
     /// @param hook The hook storing the assets.
     /// @param nakedBannyId The ID of the Naked Banny being dressed.
@@ -423,8 +423,11 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         if (worldId != previousWorldId) {
             // Add the world if needed.
             if (worldId != 0) {
-                // Check if the call is being made by the world's owner.
-                if (IERC721(hook).ownerOf(worldId) != _msgSender()) revert UNAUTHORIZED_WORLD();
+                // Check if the call is being made by the world's owner, or the owner of a naked banny using it.
+                if (
+                    _msgSender() != IERC721(hook).ownerOf(worldId)
+                        && _msgSender() != IERC721(hook).ownerOf(userOf(hook, worldId))
+                ) revert UNAUTHORIZED_WORLD();
 
                 // Get the world's product info.
                 JB721Tier memory worldProduct = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, worldId, false);
@@ -465,8 +468,8 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         // Keep a reference to the category of the last outfit iterated on.
         uint256 lastAssetCategory;
 
-        // Keep a reference to the product of the outfit being iterated on.
-        JB721Tier memory outfitProduct;
+        // Keep a reference to the product category of the outfit being iterated on.
+        uint256 outfitProductCategory;
 
         // Keep track of certain outfits being used along the way to prevent conflicting outfits.
         bool hasHead;
@@ -490,51 +493,54 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         // Set the previous values if there are previous outfits.
         if (numberOfPreviousOutfits > 0) {
             previousOutfitId = previousOutfitIds[previousOutfitIndex];
-            previousOutfitProductCategory = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, previousOutfitId, false).category;
+            previousOutfitProductCategory =
+                IJB721TiersHook(hook).STORE().tierOfTokenId(hook, previousOutfitId, false).category;
         }
 
-        // Iterate through each outfit, transfering them in and adding them to the banny if needed, while transfering out and removing old outfits no longer being worn.
+        // Iterate through each outfit, transfering them in and adding them to the banny if needed, while transfering
+        // out and removing old outfits no longer being worn.
         for (uint256 i; i < outfitIds.length; i++) {
             // Set the outfit ID being iterated on.
             outfitId = outfitIds[i];
 
-            // Check if the call is being made by the outfit's owner.
-            if (IERC721(hook).ownerOf(outfitId) != _msgSender()) revert UNAUTHORIZED_OUTFIT();
+            // Check if the call is being made either by the outfit's owner or the owner of the naked banny currently
+            // wearing it.
+            if (
+                _msgSender() != IERC721(hook).ownerOf(outfitId)
+                    && _msgSender() != IERC721(hook).ownerOf(wearerOf(hook, outfitId))
+            ) revert UNAUTHORIZED_OUTFIT();
 
             // Get the outfit's product info.
-            outfitProduct = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, outfitId, false);
-
-            // Product must exist
-            if (outfitProduct.id == 0) revert UNRECOGNIZED_OUTFIT();
+            outfitProductCategory = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, outfitId, false).category;
 
             // The product's category must be a known category.
-            if (outfitProduct.category < _BACKSIDE_CATEGORY || outfitProduct.category > _TOPPING_CATEGORY) {
+            if (outfitProductCategory < _BACKSIDE_CATEGORY || outfitProductCategory > _TOPPING_CATEGORY) {
                 revert UNRECOGNIZED_CATEGORY();
             }
 
             // Make sure the category is an increment of the previous outfit's category.
-            if (i != 0 && outfitProduct.category <= lastAssetCategory) revert UNORDERED_CATEGORIES();
+            if (i != 0 && outfitProductCategory <= lastAssetCategory) revert UNORDERED_CATEGORIES();
 
-            if (outfitProduct.category == _HEAD_CATEGORY) {
+            if (outfitProductCategory == _HEAD_CATEGORY) {
                 hasHead = true;
-            } else if (outfitProduct.category == _SUIT_CATEGORY) {
+            } else if (outfitProductCategory == _SUIT_CATEGORY) {
                 hasSuit = true;
             } else if (
                 (
-                    outfitProduct.category == _GLASSES_CATEGORY || outfitProduct.category == _MOUTH_CATEGORY
-                        || outfitProduct.category == _HEADTOP_CATEGORY
+                    outfitProductCategory == _GLASSES_CATEGORY || outfitProductCategory == _MOUTH_CATEGORY
+                        || outfitProductCategory == _HEADTOP_CATEGORY
                 ) && hasHead
             ) {
                 revert HEAD_ALREADY_ADDED();
             } else if (
-                (outfitProduct.category == _SUIT_TOP_CATEGORY || outfitProduct.category == _SUIT_BOTTOM_CATEGORY)
+                (outfitProductCategory == _SUIT_TOP_CATEGORY || outfitProductCategory == _SUIT_BOTTOM_CATEGORY)
                     && hasSuit
             ) {
                 revert SUIT_ALREADY_ADDED();
             }
 
             // Remove all previous assets up to and including the current category being iterated on.
-            while (previousOutfitProductCategory <= outfitProduct.category && previousOutfitProductCategory != 0) {
+            while (previousOutfitProductCategory <= outfitProductCategory && previousOutfitProductCategory != 0) {
                 if (previousOutfitId != outfitId) {
                     // Transfer the previous outfit to the owner of the banny.
                     IERC721(hook).transferFrom(address(this), _msgSender(), previousOutfitId);
@@ -544,7 +550,8 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
                     // remove previous product.
                     previousOutfitId = previousOutfitIds[previousOutfitIndex++];
                     // Get the next previous outfit.
-                    previousOutfitProductCategory = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, previousOutfitId, false).category;
+                    previousOutfitProductCategory =
+                        IJB721TiersHook(hook).STORE().tierOfTokenId(hook, previousOutfitId, false).category;
                 } else {
                     previousOutfitId = 0;
                     previousOutfitProductCategory = 0;
@@ -554,12 +561,12 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
                 // Store the banny that's in the world.
                 _wearerOf[hook][outfitId] = nakedBannyId;
 
-               // Transfer the outfit to this contract.
+                // Transfer the outfit to this contract.
                 IERC721(hook).transferFrom(_msgSender(), address(this), outfitId);
             }
 
             // Keep a reference to the last outfit's category.
-            lastAssetCategory = outfitProduct.category;
+            lastAssetCategory = outfitProductCategory;
         }
 
         // Remove and transfer out any remaining assets no longer being worn.
