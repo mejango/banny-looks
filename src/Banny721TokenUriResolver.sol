@@ -118,7 +118,14 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     /// @param nakedBannyId The ID of the naked banny shows with the associated assets.
     /// @return worldId The world attached to the Naked Banny.
     /// @return outfitIds The outfits attached to the Naked Banny.
-    function assetIdsOf(address hook, uint256 nakedBannyId) public view returns (uint256 worldId, uint256[] memory outfitIds) {
+    function assetIdsOf(
+        address hook,
+        uint256 nakedBannyId
+    )
+        public
+        view
+        returns (uint256 worldId, uint256[] memory outfitIds)
+    {
         // Keep a reference to the outfit IDs currently stored as attached to the Naked Banny.
         uint256[] memory storedOutfitIds = _attachedOutfitIdsOf[hook][nakedBannyId];
 
@@ -222,12 +229,11 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             // If the world or outfit is attached to a naked banny, add it to the metadata.
             if (product.category == _WORLD_CATEGORY) {
                 uint256 nakedBannyId = userOf(hook, tokenId);
-                extraMetadata = string.concat('"usedByNakedBannyId": ', nakedBannyId.toString(), ',');
+                extraMetadata = string.concat('"usedByNakedBannyId": ', nakedBannyId.toString(), ",");
             } else {
                 uint256 nakedBannyId = wearerOf(hook, tokenId);
-                extraMetadata = string.concat('"wornByNakedBannyId": ', nakedBannyId.toString(), ',');
+                extraMetadata = string.concat('"wornByNakedBannyId": ', nakedBannyId.toString(), ",");
             }
-
         } else {
             // Compose the contents.
             contents =
@@ -242,12 +248,12 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             extraMetadata = '"outfitIds": [';
 
             for (uint256 i; i < numberOfOutfits; i++) {
-                extraMetadata = string.concat(extraMetadata, outfitIds[i].toString(), ',');
+                extraMetadata = string.concat(extraMetadata, outfitIds[i].toString(), ",");
             }
 
-            extraMetadata = string.concat(extraMetadata, '],');
-            
-            if (worldId != 0) extraMetadata = string.concat(extraMetadata, '"worldId": ', worldId.toString(), ',');
+            extraMetadata = string.concat(extraMetadata, "],");
+
+            if (worldId != 0) extraMetadata = string.concat(extraMetadata, '"worldId": ', worldId.toString(), ",");
         }
 
         if (bytes(contents).length == 0) {
@@ -288,7 +294,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
                     decimals.toString(),
                     ', "currency": ',
                     currency.toString(),
-                    ', ',
+                    ", ",
                     extraMetadata,
                     '"description":"A piece of the Bannyverse","image":"data:image/svg+xml;base64,',
                     Base64.encode(abi.encodePacked(contents)),
@@ -384,8 +390,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     /// @param nakedBannyId The ID of the Naked Banny being dressed.
     /// @param worldId The ID of the world that'll be associated with the specified banny.
     /// @param outfitIds The IDs of the outfits that'll be associated with the specified banny. Only one outfit per
-    /// outfit category allowed at a time
-    /// and they must be passed in order.
+    /// outfit category allowed at a time and they must be passed in order.
     function decorateBannyWith(
         address hook,
         uint256 nakedBannyId,
@@ -397,35 +402,63 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         // Make sure call is being made by owner of Naked Banny.
         if (IERC721(hook).ownerOf(nakedBannyId) != _msgSender()) revert UNAUTHORIZED_NAKED_BANNY();
 
-        // Add the world if needed.
-        if (worldId != 0) {
-            // Check if the owner matched.
-            if (IERC721(hook).ownerOf(worldId) != _msgSender()) revert UNAUTHORIZED_WORLD();
+        // Add the world.
+        _decorateBannyWithWorld(hook, nakedBannyId, worldId);
 
-            // Keep a reference to the naked banny using the world.
-            uint256 user = userOf(hook, worldId);
+        // Add the outfits.
+        _decorateBannyWithOutfits(hook, nakedBannyId, outfitIds);
 
-            // Make sure the world is not already being shown on another Naked banny that doesn't belong to this banny owner.
-            if (IERC721(hook).ownerOf(user) != _msgSender()) revert WORLD_IS_ALREADY_BEING_USED();
+        emit DecorateBanny(hook, nakedBannyId, worldId, outfitIds, _msgSender());
+    }
+    
+    /// @notice Add a world to a Naked Banny.
+    /// @param hook The hook storing the assets.
+    /// @param nakedBannyId The ID of the Naked Banny being dressed.
+    /// @param worldId The ID of the world that'll be associated with the specified banny.
+    function _decorateBannyWithWorld(address hook, uint256 nakedBannyId, uint256 worldId) internal {
+        // Keep a reference to the previous world attached.
+        uint256 previousWorldId = _attachedWorldIdOf[hook][nakedBannyId];
 
-            // Get the world's product info.
-            JB721Tier memory worldProduct = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, worldId, false);
+        // If the world is changing, add the lateset world and transfer the old one back to the owner.
+        if (worldId != previousWorldId) {
+            // Add the world if needed.
+            if (worldId != 0) {
+                // Check if the call is being made by the world's owner.
+                if (IERC721(hook).ownerOf(worldId) != _msgSender()) revert UNAUTHORIZED_WORLD();
 
-            // World must exist
-            if (worldProduct.id == 0) revert UNRECOGNIZED_WORLD();
+                // Get the world's product info.
+                JB721Tier memory worldProduct = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, worldId, false);
 
-            // Store the world for the banny.
-            _attachedWorldIdOf[hook][nakedBannyId] = worldId;
+                // World must exist
+                if (worldProduct.id == 0) revert UNRECOGNIZED_WORLD();
 
-            // Store the banny that's in the world.
-            _userOf[hook][worldId] = nakedBannyId;
-        } else {
-            _attachedWorldIdOf[hook][nakedBannyId] = 0;
+                // Transfer the world to this contract.
+                IERC721(hook).transferFrom(_msgSender(), address(this), worldId);
+
+                // Store the world for the banny.
+                _attachedWorldIdOf[hook][nakedBannyId] = worldId;
+
+                // Store the banny that's in the world.
+                _userOf[hook][worldId] = nakedBannyId;
+            } else {
+                _attachedWorldIdOf[hook][nakedBannyId] = 0;
+            }
+
+            // If there's a previous world, transfer it back to the owner.
+            if (previousWorldId != 0) {
+                // Transfer the previous world to the owner of the banny.
+                IERC721(hook).safeTransferFrom(address(this), _msgSender(), previousWorldId);
+            }
         }
+    }
 
-        // Keep a reference to the number of outfits being worn.
-        uint256 numberOfAssets = outfitIds.length;
-
+    /// @notice Add outfits to a naked banny.
+    /// @dev The caller must own the naked banny being dressed and all outfits being worn.
+    /// @param hook The hook storing the assets.
+    /// @param nakedBannyId The ID of the Naked Banny being dressed.
+    /// @param outfitIds The IDs of the outfits that'll be associated with the specified banny. Only one outfit per
+    /// outfit category allowed at a time and they must be passed in order.
+    function _decorateBannyWithOutfits(address hook, uint256 nakedBannyId, uint256[] memory outfitIds) internal {
         // Keep a reference to the outfit being iterated on.
         uint256 outfitId;
 
@@ -435,24 +468,39 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         // Keep a reference to the product of the outfit being iterated on.
         JB721Tier memory outfitProduct;
 
+        // Keep track of certain outfits being used along the way to prevent conflicting outfits.
         bool hasHead;
         bool hasSuit;
-        uint256 wearer;
 
-        // Iterate through each outfit checking to see if the message sender owns them all.
-        for (uint256 i; i < numberOfAssets; i++) {
+        // Keep a reference to the currently attached outfits on the naked banny.
+        uint256[] memory previousOutfitIds = _attachedOutfitIdsOf[hook][nakedBannyId];
+
+        // Keep a reference to the number of currently attached outfits.
+        uint256 numberOfPreviousOutfits = previousOutfitIds.length;
+
+        // Keep a index counter that'll help with tracking progress.
+        uint256 previousOutfitIndex;
+
+        // Keep a reference to the previous outfit being iterated on when removing.
+        uint256 previousOutfitId;
+
+        // Get the outfit's product info.
+        uint256 previousOutfitProductCategory;
+
+        // Set the previous values if there are previous outfits.
+        if (numberOfPreviousOutfits > 0) {
+            previousOutfitId = previousOutfitIds[previousOutfitIndex];
+            previousOutfitProductCategory = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, previousOutfitId, false).category;
+        }
+
+        // Iterate through each outfit, transfering them in and adding them to the banny if needed, while transfering out and removing old outfits no longer being worn.
+        for (uint256 i; i < outfitIds.length; i++) {
             // Set the outfit ID being iterated on.
             outfitId = outfitIds[i];
 
-            // Check if the owner matched.
+            // Check if the call is being made by the outfit's owner.
             if (IERC721(hook).ownerOf(outfitId) != _msgSender()) revert UNAUTHORIZED_OUTFIT();
 
-            // Keep a reference to the naked banny currently wearing the outfit.
-            wearer = wearerOf(hook, outfitId);
-
-            // Make sure the outfit is not already being worn by another Naked banny that doesn't belong to this banny owner.
-            if (IERC721(hook).ownerOf(wearer) != _msgSender()) revert OUTFIT_IS_ALREADY_BEING_WORN();
-            
             // Get the outfit's product info.
             outfitProduct = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, outfitId, false);
 
@@ -485,17 +533,50 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
                 revert SUIT_ALREADY_ADDED();
             }
 
+            // Remove all previous assets up to and including the current category being iterated on.
+            while (previousOutfitProductCategory <= outfitProduct.category && previousOutfitProductCategory != 0) {
+                if (previousOutfitId != outfitId) {
+                    // Transfer the previous outfit to the owner of the banny.
+                    IERC721(hook).transferFrom(address(this), _msgSender(), previousOutfitId);
+                }
+
+                if (previousOutfitIndex++ < numberOfPreviousOutfits) {
+                    // remove previous product.
+                    previousOutfitId = previousOutfitIds[previousOutfitIndex++];
+                    // Get the next previous outfit.
+                    previousOutfitProductCategory = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, previousOutfitId, false).category;
+                } else {
+                    previousOutfitId = 0;
+                    previousOutfitProductCategory = 0;
+                }
+            }
+            if (previousOutfitId != outfitId) {
+                // Store the banny that's in the world.
+                _wearerOf[hook][outfitId] = nakedBannyId;
+
+               // Transfer the outfit to this contract.
+                IERC721(hook).transferFrom(_msgSender(), address(this), outfitId);
+            }
+
             // Keep a reference to the last outfit's category.
             lastAssetCategory = outfitProduct.category;
+        }
 
-            // Store the banny that's in the world.
-            _wearerOf[hook][outfitId] = nakedBannyId;
+        // Remove and transfer out any remaining assets no longer being worn.
+        while (previousOutfitId != 0) {
+            // Transfer the previous world to the owner of the banny.
+            IERC721(hook).transferFrom(address(this), _msgSender(), previousOutfitId);
+
+            if (previousOutfitIndex++ < numberOfPreviousOutfits) {
+                // remove previous product.
+                previousOutfitId = previousOutfitIds[previousOutfitIndex];
+            } else {
+                previousOutfitId = 0;
+            }
         }
 
         // Store the outfits.
         _attachedOutfitIdsOf[hook][nakedBannyId] = outfitIds;
-
-        emit DecorateBanny(hook, nakedBannyId, worldId, outfitIds, _msgSender());
     }
 
     /// @notice The owner of this contract can store SVG files for product IDs.
@@ -678,7 +759,8 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         bool hasNecklace;
         bool hasMouth;
 
-        // Keep a reference to the custom necklace. Needed because the custom necklace is layered differently than the default.
+        // Keep a reference to the custom necklace. Needed because the custom necklace is layered differently than the
+        // default.
         string memory customNecklace;
 
         // Loop once more to make sure all default outfits are added.
