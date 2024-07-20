@@ -9,8 +9,10 @@ import "@rev-net/core/script/helpers/RevnetCoreDeploymentLib.sol";
 import "@bananapus/buyback-hook/script/helpers/BuybackDeploymentLib.sol";
 
 import {JBPermissionIds} from "@bananapus/permission-ids/src/JBPermissionIds.sol";
+import {IJBPrices} from "@bananapus/core/src/interfaces/IJBPrices.sol";
 import {JBPermissionsData} from "@bananapus/core/src/structs/JBPermissionsData.sol";
 import {JBConstants} from "@bananapus/core/src/libraries/JBConstants.sol";
+import {JBAccountingContext} from "@bananapus/core/src/structs/JBAccountingContext.sol";
 import {JBTerminalConfig} from "@bananapus/core/src/structs/JBTerminalConfig.sol";
 import {REVStageConfig} from "@rev-net/core/src/structs/REVStageConfig.sol";
 import {REVMintConfig} from "@rev-net/core/src/structs/REVMintConfig.sol";
@@ -19,14 +21,13 @@ import {REVCroptopAllowedPost} from "@rev-net/core/src/structs/REVCroptopAllowed
 import {REVBuybackPoolConfig} from "@rev-net/core/src/structs/REVBuybackPoolConfig.sol";
 import {REVBuybackHookConfig} from "@rev-net/core/src/structs/REVBuybackHookConfig.sol";
 import {JB721TierConfig} from "@bananapus/721-hook/src/structs/JB721TierConfig.sol";
-import {BPTokenMapping} from "@bananapus/suckers/src/structs/BPTokenMapping.sol";
-import {BPSuckerDeployerConfig} from "@bananapus/suckers/src/structs/BPSuckerDeployerConfig.sol";
+import {JBTokenMapping} from "@bananapus/suckers/src/structs/JBTokenMapping.sol";
+import {JBSuckerDeployerConfig} from "@bananapus/suckers/src/structs/JBSuckerDeployerConfig.sol";
 import {REVSuckerDeploymentConfig} from "@rev-net/core/src/structs/REVSuckerDeploymentConfig.sol";
 import {JBPayHookSpecification} from "@bananapus/core/src/structs/JBPayHookSpecification.sol";
 import {JB721InitTiersConfig} from "@bananapus/721-hook/src/structs/JB721InitTiersConfig.sol";
 import {JB721TiersHookFlags} from "@bananapus/721-hook/src/structs/JB721TiersHookFlags.sol";
 import {REVDescription} from "@rev-net/core/src/structs/REVDescription.sol";
-import {IJBPrices} from "@bananapus/core/src/interfaces/IJBPrices.sol";
 import {REVDeploy721TiersHookConfig} from "@rev-net/core/src/structs/REVDeploy721TiersHookConfig.sol";
 import {JBDeploy721TiersHookConfig} from "@bananapus/721-hook/src/structs/JBDeploy721TiersHookConfig.sol";
 import {IJB721TokenUriResolver} from "@bananapus/721-hook/src/interfaces/IJB721TokenUriResolver.sol";
@@ -63,7 +64,7 @@ contract DeployScript is Script, Sphinx {
 
     BannyverseRevnetConfig bannyverseConfig;
 
-    uint256 PREMINT_CHAIN_ID = 1;
+    uint32 PREMINT_CHAIN_ID = 1;
     bytes32 SALT = "BANNY";
     bytes32 SUCKER_SALT = "BANNY_SUCKER";
     bytes32 RESOLVER_SALT = "BANNY_RESOLVER";
@@ -141,42 +142,47 @@ contract DeployScript is Script, Sphinx {
 
         // The terminals that the project will accept funds through.
         JBTerminalConfig[] memory terminalConfigurations = new JBTerminalConfig[](1);
-        address[] memory tokensToAccept = new address[](1);
+        JBAccountingContext[] memory accountingContextsToAccept = new JBAccountingContext[](1);
 
         // Accept the chain's native currency through the multi terminal.
-        tokensToAccept[0] = JBConstants.NATIVE_TOKEN;
-        terminalConfigurations[0] = JBTerminalConfig({terminal: core.terminal, tokensToAccept: tokensToAccept});
+        accountingContextsToAccept[0] = JBAccountingContext({
+         token: JBConstants.NATIVE_TOKEN,
+         decimals: 18,
+         currency: uint32(uint160(JBConstants.NATIVE_TOKEN))
+        });
+
+        terminalConfigurations[0] = JBTerminalConfig({terminal: core.terminal, accountingContextsToAccept: accountingContextsToAccept});
 
         REVMintConfig[] memory mintConfs = new REVMintConfig[](1);
         mintConfs[0] =
-            REVMintConfig({chainId: PREMINT_CHAIN_ID, count: 80_000_000 * decimalMultiplier, beneficiary: OPERATOR});
+            REVMintConfig({chainId: PREMINT_CHAIN_ID, count: uint104(80_000_000 * decimalMultiplier), beneficiary: OPERATOR});
 
         // The project's revnet stage configurations.
         REVStageConfig[] memory stageConfigurations = new REVStageConfig[](2);
         stageConfigurations[0] = REVStageConfig({
             mintConfigs: mintConfs,
             startsAtOrAfter: uint40(block.timestamp + 1 days),
-            splitRate: uint16(JBConstants.MAX_RESERVED_RATE / 2),
-            initialIssuanceRate: uint112(1_000_000 * decimalMultiplier),
-            priceCeilingIncreaseFrequency: 1 days,
-            priceCeilingIncreasePercentage: uint32(JBConstants.MAX_DECAY_RATE / 20), // 5%
-            priceFloorTaxIntensity: uint16(JBConstants.MAX_REDEMPTION_RATE / 5) // 0.2
+            splitPercent: uint16(JBConstants.MAX_RESERVED_RATE / 2),
+            initialPrice: uint104(10 ** (decimals - 5)),
+            priceIncreaseFrequency: 1 days,
+            priceIncreasePercentage: uint32(JBConstants.MAX_DECAY_RATE / 20), // 5%
+            cashOutTaxIntensity: uint16(JBConstants.MAX_REDEMPTION_RATE / 5) // 0.2
         });
         stageConfigurations[1] = REVStageConfig({
             mintConfigs: new REVMintConfig[](0),
             startsAtOrAfter: uint40(block.timestamp + 28 days),
-            splitRate: uint16(JBConstants.MAX_RESERVED_RATE / 2),
-            initialIssuanceRate: uint112(100_000 * decimalMultiplier),
-            priceCeilingIncreaseFrequency: 7 days,
-            priceCeilingIncreasePercentage: uint32(JBConstants.MAX_DECAY_RATE / 100), // 1%
-            priceFloorTaxIntensity: uint16(JBConstants.MAX_REDEMPTION_RATE / 2) // 0.5
+            splitPercent: uint16(JBConstants.MAX_RESERVED_RATE / 2),
+            initialPrice: uint104(10 ** (decimals - 4)),
+            priceIncreaseFrequency: 7 days,
+            priceIncreasePercentage: uint32(JBConstants.MAX_DECAY_RATE / 100), // 1%
+            cashOutTaxIntensity: uint16(JBConstants.MAX_REDEMPTION_RATE / 2) // 0.5
         });
 
         // The project's revnet configuration
         REVConfig memory revnetConfiguration = REVConfig({
             description: REVDescription(name, symbol, projectUri, SALT),
             baseCurrency: nativeCurrency,
-            initialSplitOperator: OPERATOR,
+            splitOperator: OPERATOR,
             stageConfigurations: stageConfigurations
         });
 
@@ -255,60 +261,60 @@ contract DeployScript is Script, Sphinx {
         REVCroptopAllowedPost[] memory allowedPosts = new REVCroptopAllowedPost[](4);
         allowedPosts[0] = REVCroptopAllowedPost({
             category: 100,
-            minimumPrice: 10 ** (decimals - 3),
+            minimumPrice: uint104(10 ** (decimals - 3)),
             minimumTotalSupply: 10_000,
             maximumTotalSupply: 999_999_999,
             allowedAddresses: new address[](0)
         });
         allowedPosts[1] = REVCroptopAllowedPost({
             category: 101,
-            minimumPrice: 10 ** (decimals - 1),
+            minimumPrice: uint104(10 ** (decimals - 1)),
             minimumTotalSupply: 100,
             maximumTotalSupply: 999_999_999,
             allowedAddresses: new address[](0)
         });
         allowedPosts[2] = REVCroptopAllowedPost({
             category: 102,
-            minimumPrice: 10 ** decimals,
+            minimumPrice: uint104(10 ** decimals),
             minimumTotalSupply: 10,
             maximumTotalSupply: 999_999_999,
             allowedAddresses: new address[](0)
         });
         allowedPosts[3] = REVCroptopAllowedPost({
             category: 103,
-            minimumPrice: 10 ** (decimals + 2),
+            minimumPrice: uint104(10 ** (decimals + 2)),
             minimumTotalSupply: 10,
             maximumTotalSupply: 999_999_999,
             allowedAddresses: new address[](0)
         });
 
         // Organize the instructions for how this project will connect to other chains.
-        BPTokenMapping[] memory tokenMappings = new BPTokenMapping[](1);
-        tokenMappings[0] = BPTokenMapping({
+        JBTokenMapping[] memory tokenMappings = new JBTokenMapping[](1);
+        tokenMappings[0] = JBTokenMapping({
             localToken: JBConstants.NATIVE_TOKEN,
             remoteToken: JBConstants.NATIVE_TOKEN,
             minGas: 200_000,
             minBridgeAmount: 0.01 ether
         });
 
-        BPSuckerDeployerConfig[] memory suckerDeployerConfigurations;
+        JBSuckerDeployerConfig[] memory suckerDeployerConfigurations;
         if (block.chainid == 1 || block.chainid == 11_155_111) {
-            suckerDeployerConfigurations = new BPSuckerDeployerConfig[](2);
+            suckerDeployerConfigurations = new JBSuckerDeployerConfig[](2);
             // OP
             suckerDeployerConfigurations[0] =
-                BPSuckerDeployerConfig({deployer: suckers.optimismDeployer, mappings: tokenMappings});
+                JBSuckerDeployerConfig({deployer: suckers.optimismDeployer, mappings: tokenMappings});
 
             suckerDeployerConfigurations[1] =
-                BPSuckerDeployerConfig({deployer: suckers.baseDeployer, mappings: tokenMappings});
+                JBSuckerDeployerConfig({deployer: suckers.baseDeployer, mappings: tokenMappings});
 
-            // suckerDeployerConfigurations[2] = BPSuckerDeployerConfig({
-            //     deployer: suckers.arbitrumDeployer,
-            //     mappings: tokenMappings
-            // });
+            suckerDeployerConfigurations[2] = JBSuckerDeployerConfig({
+                deployer: suckers.arbitrumDeployer,
+                mappings: tokenMappings
+            });
         } else {
-            suckerDeployerConfigurations = new BPSuckerDeployerConfig[](1);
+            suckerDeployerConfigurations = new JBSuckerDeployerConfig[](1);
             // L2 -> Mainnet
-            suckerDeployerConfigurations[0] = BPSuckerDeployerConfig({
+            suckerDeployerConfigurations[0] = JBSuckerDeployerConfig({
                 deployer: address(suckers.optimismDeployer) != address(0)
                     ? suckers.optimismDeployer
                     : address(suckers.baseDeployer) != address(0) ? suckers.baseDeployer : suckers.arbitrumDeployer,
@@ -351,9 +357,9 @@ contract DeployScript is Script, Sphinx {
                         preventOverspending: false
                     })
                 }),
-                operatorCanAdjustTiers: true,
-                operatorCanUpdateMetadata: true,
-                operatorCanMint: true
+                splitOperatorCanAdjustTiers: true,
+                splitOperatorCanUpdateMetadata: true,
+                splitOperatorCanMint: true
             }),
             otherPayHooksSpecifications: new JBPayHookSpecification[](0),
             extraHookMetadata: 0,
@@ -379,7 +385,7 @@ contract DeployScript is Script, Sphinx {
         bannyverseConfig.hookConfiguration.baseline721HookConfiguration.tokenUriResolver = resolver;
 
         // Deploy the $BANNY Revnet.
-        revnet.croptop_deployer.launchCroptopRevnetFor({
+        revnet.croptop_deployer.deployFor({
             revnetId: 0,
             configuration: bannyverseConfig.configuration,
             terminalConfigurations: bannyverseConfig.terminalConfigurations,

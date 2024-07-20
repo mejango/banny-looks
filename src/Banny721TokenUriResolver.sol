@@ -281,15 +281,15 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
                     '", "tokenId": ',
                     tokenId.toString(),
                     ', "upc": ',
-                    product.id.toString(),
+                    uint256(product.id).toString(),
                     ', "category": ',
-                    product.category.toString(),
+                    uint256(product.category).toString(),
                     ', "supply": ',
-                    product.initialSupply.toString(),
+                    uint256(product.initialSupply).toString(),
                     ', "remaining": ',
-                    product.remainingSupply.toString(),
+                    uint256(product.remainingSupply).toString(),
                     ', "price": ',
-                    product.price.toString(),
+                    uint256(product.price).toString(),
                     ', "decimals": ',
                     decimals.toString(),
                     ', "currency": ',
@@ -885,19 +885,19 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
 
         // If there's a raw token id, append it to the name before appending it to the category.
         if (rawTokenId != 0) {
-            name = string.concat(name, rawTokenId.toString(), "/", product.initialSupply.toString());
+            name = string.concat(name, rawTokenId.toString(), "/", uint256(product.initialSupply).toString());
         } else if (product.remainingSupply == 0) {
             name = string.concat(
                 name,
                 " (SOLD OUT) ",
-                product.remainingSupply.toString(),
+                uint256(product.remainingSupply).toString(),
                 "/",
-                product.initialSupply.toString(),
+                uint256(product.initialSupply).toString(),
                 " remaining"
             );
         } else {
             name = string.concat(
-                name, product.remainingSupply.toString(), "/", product.initialSupply.toString(), " remaining"
+                name, uint256(product.remainingSupply).toString(), "/", uint256(product.initialSupply).toString(), " remaining"
             );
         }
 
@@ -913,11 +913,11 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         }
 
         // Append the product ID as a universal product code.
-        name = string.concat(name, "UPC #", product.id.toString());
+        name = string.concat(name, "UPC #", uint256(product.id).toString());
     }
 
     /// @notice The Naked Banny and outfit SVG files.
-    /// @custom:param upc The universal product code of the product that the SVG contents represent.
+    /// @param upc The universal product code of the product that the SVG contents represent.
     function _svgOf(address hook, uint256 upc) internal view returns (string memory) {
         // Keep a reference to the stored scg contents.
         string memory svgContents = _svgContentOf[upc];
