@@ -9,6 +9,7 @@ import {ERC2771Context} from "@openzeppelin/contracts/metatx/ERC2771Context.sol"
 import {IJB721TokenUriResolver} from "@bananapus/721-hook/src/interfaces/IJB721TokenUriResolver.sol";
 import {IERC721} from "@bananapus/721-hook/src/abstract/ERC721.sol";
 import {IJB721TiersHook} from "@bananapus/721-hook/src/interfaces/IJB721TiersHook.sol";
+import {IJB721TiersHookStore} from "@bananapus/721-hook/src/interfaces/IJB721TiersHookStore.sol";
 import {JB721Tier} from "@bananapus/721-hook/src/structs/JB721Tier.sol";
 import {JBIpfsDecoder} from "@bananapus/721-hook/src/libraries/JBIpfsDecoder.sol";
 
@@ -262,7 +263,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             string memory baseUri = product.category > _TOPPING_CATEGORY ? IJB721TiersHook(hook).baseURI() : svgBaseUri;
 
             // Fallback to returning an IPFS hash if present.
-            return JBIpfsDecoder.decode(baseUri, IJB721TiersHook(hook).STORE().encodedTierIPFSUriOf(hook, tokenId));
+            return JBIpfsDecoder.decode(baseUri, _storeOf(hook).encodedTierIPFSUriOf(hook, tokenId));
         }
 
         // Get a reference to the pricing context.
@@ -926,17 +927,24 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
 
         return string.concat(
             '<image href="',
-            JBIpfsDecoder.decode(svgBaseUri, IJB721TiersHook(hook).STORE().encodedIPFSUriOf(hook, upc)),
+            JBIpfsDecoder.decode(svgBaseUri, _storeOf(hook).encodedIPFSUriOf(hook, upc)),
             '" width="400" height="400"/>'
         );
     }
+
+    /// @notice The store of the hook.
+    /// @param hook The hook to get the store of.
+    /// @return store The store of the hook.
+    function _storeOf(address hook) internal view returns (IJB721TiersHookStore) {
+        return IJB721TiersHook(hook).STORE();
+    }
+
     /// @notice Get the product of the 721 with the provided token ID in the provided 721 contract.
     /// @param hook The 721 contract that the product belongs to.
     /// @param tokenId The token ID of the 721 to get the product of.
     /// @return product The product.
-
     function _productOfTokenId(address hook, uint256 tokenId) internal view returns (JB721Tier memory) {
-        return IJB721TiersHook(hook).STORE().tierOfTokenId({hook: hook, tokenId: tokenId, includeResolvedUri: false});
+        return _storeOf(hook).tierOfTokenId({hook: hook, tokenId: tokenId, includeResolvedUri: false});
     }
 
     /// @notice Get the owner of.
