@@ -1,0 +1,926 @@
+{
+	"solcVersion": "0.8.23",
+	"solcLongVersion": "0.8.23",
+	"id": "6e6ed3cb6f2979c5af3eebdcebe8d1cc",
+	"input": {
+		"language": "Solidity",
+		"settings": {
+			"viaIR": true,
+			"optimizer": {
+				"runs": 200,
+				"enabled": true
+			},
+			"metadata": {
+				"useLiteralContent": false,
+				"bytecodeHash": "ipfs",
+				"appendCBOR": true
+			},
+			"outputSelection": {
+				"lib/base64/base64.sol": {
+					"*": []
+				},
+				"lib/forge-std/src/Base.sol": {
+					"*": []
+				},
+				"lib/forge-std/src/Script.sol": {
+					"*": []
+				},
+				"lib/forge-std/src/StdChains.sol": {
+					"*": []
+				},
+				"lib/forge-std/src/StdCheats.sol": {
+					"*": []
+				},
+				"lib/forge-std/src/StdJson.sol": {
+					"*": []
+				},
+				"lib/forge-std/src/StdMath.sol": {
+					"*": []
+				},
+				"lib/forge-std/src/StdStorage.sol": {
+					"*": []
+				},
+				"lib/forge-std/src/StdStyle.sol": {
+					"*": []
+				},
+				"lib/forge-std/src/StdUtils.sol": {
+					"*": []
+				},
+				"lib/forge-std/src/Vm.sol": {
+					"*": []
+				},
+				"lib/forge-std/src/console.sol": {
+					"*": []
+				},
+				"lib/forge-std/src/console2.sol": {
+					"*": []
+				},
+				"lib/forge-std/src/interfaces/IMulticall3.sol": {
+					"*": []
+				},
+				"lib/forge-std/src/mocks/MockERC20.sol": {
+					"*": []
+				},
+				"lib/forge-std/src/mocks/MockERC721.sol": {
+					"*": []
+				},
+				"lib/forge-std/src/safeconsole.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/721-hook/script/helpers/Hook721DeploymentLib.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/721-hook/src/JB721TiersHook.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/721-hook/src/abstract/ERC721.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/721-hook/src/abstract/JB721Hook.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/721-hook/src/interfaces/IJB721Hook.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/721-hook/src/interfaces/IJB721TiersHook.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/721-hook/src/interfaces/IJB721TiersHookDeployer.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/721-hook/src/interfaces/IJB721TiersHookProjectDeployer.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/721-hook/src/interfaces/IJB721TiersHookStore.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/721-hook/src/interfaces/IJB721TokenUriResolver.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/721-hook/src/libraries/JB721TiersRulesetMetadataResolver.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/721-hook/src/libraries/JBIpfsDecoder.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/721-hook/src/structs/JB721InitTiersConfig.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/721-hook/src/structs/JB721Tier.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/721-hook/src/structs/JB721TierConfig.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/721-hook/src/structs/JB721TiersHookFlags.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/721-hook/src/structs/JB721TiersMintReservesConfig.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/721-hook/src/structs/JB721TiersRulesetMetadata.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/721-hook/src/structs/JBDeploy721TiersHookConfig.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/721-hook/src/structs/JBLaunchProjectConfig.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/721-hook/src/structs/JBLaunchRulesetsConfig.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/721-hook/src/structs/JBPayDataHookRulesetConfig.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/721-hook/src/structs/JBPayDataHookRulesetMetadata.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/721-hook/src/structs/JBQueueRulesetsConfig.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/buyback-hook/script/helpers/BuybackDeploymentLib.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/buyback-hook/src/interfaces/IJBBuybackHook.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/buyback-hook/src/interfaces/external/IWETH9.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/script/helpers/CoreDeploymentLib.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/JBController.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/JBDirectory.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/JBERC20.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/JBFeelessAddresses.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/JBFundAccessLimits.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/JBMultiTerminal.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/JBPermissions.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/JBPrices.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/JBProjects.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/JBRulesets.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/JBSplits.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/JBTerminalStore.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/JBTokens.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/abstract/JBControlled.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/abstract/JBPermissioned.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/enums/JBApprovalStatus.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/interfaces/IJBControlled.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/interfaces/IJBController.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/interfaces/IJBDirectory.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/interfaces/IJBDirectoryAccessControl.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/interfaces/IJBFeeTerminal.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/interfaces/IJBFeelessAddresses.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/interfaces/IJBFundAccessLimits.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/interfaces/IJBMigratable.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/interfaces/IJBMultiTerminal.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/interfaces/IJBPayHook.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/interfaces/IJBPayoutTerminal.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/interfaces/IJBPermissioned.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/interfaces/IJBPermissions.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/interfaces/IJBPermitTerminal.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/interfaces/IJBPriceFeed.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/interfaces/IJBPrices.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/interfaces/IJBProjectUriRegistry.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/interfaces/IJBProjects.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/interfaces/IJBRedeemHook.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/interfaces/IJBRedeemTerminal.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/interfaces/IJBRulesetApprovalHook.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/interfaces/IJBRulesetDataHook.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/interfaces/IJBRulesets.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/interfaces/IJBSplitHook.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/interfaces/IJBSplits.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/interfaces/IJBTerminal.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/interfaces/IJBTerminalStore.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/interfaces/IJBToken.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/interfaces/IJBTokenUriResolver.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/interfaces/IJBTokens.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/libraries/JBConstants.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/libraries/JBFees.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/libraries/JBFixedPointNumber.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/libraries/JBMetadataResolver.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/libraries/JBRedemptions.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/libraries/JBRulesetMetadataResolver.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/libraries/JBSplitGroupIds.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/structs/JBAccountingContext.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/structs/JBAfterPayRecordedContext.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/structs/JBAfterRedeemRecordedContext.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/structs/JBBeforePayRecordedContext.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/structs/JBBeforeRedeemRecordedContext.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/structs/JBCurrencyAmount.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/structs/JBFee.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/structs/JBFundAccessLimitGroup.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/structs/JBPayHookSpecification.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/structs/JBPermissionsData.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/structs/JBRedeemHookSpecification.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/structs/JBRuleset.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/structs/JBRulesetConfig.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/structs/JBRulesetMetadata.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/structs/JBRulesetWeightCache.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/structs/JBRulesetWithMetadata.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/structs/JBSingleAllowance.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/structs/JBSplit.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/structs/JBSplitGroup.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/structs/JBSplitHookContext.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/structs/JBTerminalConfig.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/core/src/structs/JBTokenAmount.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/ownable/src/JBOwnable.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/ownable/src/JBOwnableOverrides.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/ownable/src/interfaces/IJBOwnable.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/ownable/src/struct/JBOwner.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/permission-ids/src/JBPermissionIds.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/suckers/script/helpers/SuckerDeploymentLib.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/suckers/src/interfaces/IJBSucker.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/suckers/src/interfaces/IJBSuckerDeployer.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/suckers/src/interfaces/IJBSuckerRegistry.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/suckers/src/structs/JBSuckerDeployerConfig.sol": {
+					"*": []
+				},
+				"node_modules/@bananapus/suckers/src/structs/JBTokenMapping.sol": {
+					"*": []
+				},
+				"node_modules/@croptop/core/script/helpers/CroptopDeploymentLib.sol": {
+					"*": []
+				},
+				"node_modules/@croptop/core/src/CTDeployer.sol": {
+					"*": []
+				},
+				"node_modules/@croptop/core/src/CTProjectOwner.sol": {
+					"*": []
+				},
+				"node_modules/@croptop/core/src/CTPublisher.sol": {
+					"*": []
+				},
+				"node_modules/@croptop/core/src/structs/CTAllowedPost.sol": {
+					"*": []
+				},
+				"node_modules/@croptop/core/src/structs/CTPost.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/access/Ownable.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/governance/utils/IVotes.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/governance/utils/Votes.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/interfaces/IERC2981.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/interfaces/IERC5267.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/interfaces/IERC5805.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/interfaces/IERC6372.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/interfaces/draft-IERC6093.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/metatx/ERC2771Context.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/proxy/Clones.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/token/ERC20/ERC20.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/token/ERC20/extensions/IERC20Permit.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/token/ERC721/IERC721.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/utils/Address.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/utils/Context.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/utils/Nonces.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/utils/ReentrancyGuard.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/utils/ShortStrings.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/utils/StorageSlot.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/utils/Strings.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/utils/cryptography/ECDSA.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/utils/cryptography/EIP712.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/utils/math/Math.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/utils/math/SafeCast.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/utils/math/SignedMath.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/utils/structs/Checkpoints.sol": {
+					"*": []
+				},
+				"node_modules/@openzeppelin/contracts/utils/types/Time.sol": {
+					"*": []
+				},
+				"node_modules/@prb/math/src/Common.sol": {
+					"*": []
+				},
+				"node_modules/@rev-net/core/script/helpers/RevnetCoreDeploymentLib.sol": {
+					"*": []
+				},
+				"node_modules/@rev-net/core/src/REVBasicDeployer.sol": {
+					"*": []
+				},
+				"node_modules/@rev-net/core/src/REVCroptopDeployer.sol": {
+					"*": []
+				},
+				"node_modules/@rev-net/core/src/REVTiered721HookDeployer.sol": {
+					"*": []
+				},
+				"node_modules/@rev-net/core/src/abstract/REVBasic.sol": {
+					"*": []
+				},
+				"node_modules/@rev-net/core/src/abstract/REVCroptop.sol": {
+					"*": []
+				},
+				"node_modules/@rev-net/core/src/abstract/REVPayHook.sol": {
+					"*": []
+				},
+				"node_modules/@rev-net/core/src/abstract/REVTiered721Hook.sol": {
+					"*": []
+				},
+				"node_modules/@rev-net/core/src/interfaces/IREVBasic.sol": {
+					"*": []
+				},
+				"node_modules/@rev-net/core/src/interfaces/IREVBasicDeployer.sol": {
+					"*": []
+				},
+				"node_modules/@rev-net/core/src/interfaces/IREVCroptop.sol": {
+					"*": []
+				},
+				"node_modules/@rev-net/core/src/interfaces/IREVCroptopDeployer.sol": {
+					"*": []
+				},
+				"node_modules/@rev-net/core/src/interfaces/IREVPayHook.sol": {
+					"*": []
+				},
+				"node_modules/@rev-net/core/src/interfaces/IREVTiered721Hook.sol": {
+					"*": []
+				},
+				"node_modules/@rev-net/core/src/interfaces/IREVTiered721HookDeployer.sol": {
+					"*": []
+				},
+				"node_modules/@rev-net/core/src/structs/REVBuybackHookConfig.sol": {
+					"*": []
+				},
+				"node_modules/@rev-net/core/src/structs/REVBuybackPoolConfig.sol": {
+					"*": []
+				},
+				"node_modules/@rev-net/core/src/structs/REVConfig.sol": {
+					"*": []
+				},
+				"node_modules/@rev-net/core/src/structs/REVCroptopAllowedPost.sol": {
+					"*": []
+				},
+				"node_modules/@rev-net/core/src/structs/REVDeploy721TiersHookConfig.sol": {
+					"*": []
+				},
+				"node_modules/@rev-net/core/src/structs/REVDescription.sol": {
+					"*": []
+				},
+				"node_modules/@rev-net/core/src/structs/REVMintConfig.sol": {
+					"*": []
+				},
+				"node_modules/@rev-net/core/src/structs/REVStageConfig.sol": {
+					"*": []
+				},
+				"node_modules/@rev-net/core/src/structs/REVSuckerDeploymentConfig.sol": {
+					"*": []
+				},
+				"node_modules/@sphinx-labs/contracts/contracts/core/SphinxDataTypes.sol": {
+					"*": []
+				},
+				"node_modules/@sphinx-labs/contracts/contracts/core/interfaces/ISphinxModule.sol": {
+					"*": []
+				},
+				"node_modules/@sphinx-labs/contracts/contracts/core/interfaces/ISphinxModuleProxyFactory.sol": {
+					"*": []
+				},
+				"node_modules/@sphinx-labs/contracts/contracts/forge-std/src/StdUtils.sol": {
+					"*": []
+				},
+				"node_modules/@sphinx-labs/contracts/contracts/forge-std/src/Vm.sol": {
+					"*": []
+				},
+				"node_modules/@sphinx-labs/contracts/contracts/forge-std/src/interfaces/IERC165.sol": {
+					"*": []
+				},
+				"node_modules/@sphinx-labs/contracts/contracts/forge-std/src/interfaces/IERC20.sol": {
+					"*": []
+				},
+				"node_modules/@sphinx-labs/contracts/contracts/forge-std/src/interfaces/IERC721.sol": {
+					"*": []
+				},
+				"node_modules/@sphinx-labs/contracts/contracts/forge-std/src/interfaces/IMulticall3.sol": {
+					"*": []
+				},
+				"node_modules/@sphinx-labs/contracts/contracts/forge-std/src/mocks/MockERC20.sol": {
+					"*": []
+				},
+				"node_modules/@sphinx-labs/contracts/contracts/forge-std/src/mocks/MockERC721.sol": {
+					"*": []
+				},
+				"node_modules/@sphinx-labs/contracts/contracts/foundry/Sphinx.sol": {
+					"*": []
+				},
+				"node_modules/@sphinx-labs/contracts/contracts/foundry/SphinxConstants.sol": {
+					"*": []
+				},
+				"node_modules/@sphinx-labs/contracts/contracts/foundry/SphinxForkCheck.sol": {
+					"*": []
+				},
+				"node_modules/@sphinx-labs/contracts/contracts/foundry/SphinxPlugin.sol": {
+					"*": []
+				},
+				"node_modules/@sphinx-labs/contracts/contracts/foundry/SphinxPluginTypes.sol": {
+					"*": []
+				},
+				"node_modules/@sphinx-labs/contracts/contracts/foundry/SphinxUtils.sol": {
+					"*": []
+				},
+				"node_modules/@sphinx-labs/contracts/contracts/foundry/interfaces/ICreateCall.sol": {
+					"*": []
+				},
+				"node_modules/@sphinx-labs/contracts/contracts/foundry/interfaces/IEnum.sol": {
+					"*": []
+				},
+				"node_modules/@sphinx-labs/contracts/contracts/foundry/interfaces/IGnosisSafe.sol": {
+					"*": []
+				},
+				"node_modules/@sphinx-labs/contracts/contracts/foundry/interfaces/IGnosisSafeProxy.sol": {
+					"*": []
+				},
+				"node_modules/@sphinx-labs/contracts/contracts/foundry/interfaces/IGnosisSafeProxyFactory.sol": {
+					"*": []
+				},
+				"node_modules/@sphinx-labs/contracts/contracts/foundry/interfaces/IMultiSend.sol": {
+					"*": []
+				},
+				"node_modules/@uniswap/permit2/src/interfaces/IAllowanceTransfer.sol": {
+					"*": []
+				},
+				"node_modules/@uniswap/permit2/src/interfaces/IEIP712.sol": {
+					"*": []
+				},
+				"node_modules/@uniswap/permit2/src/interfaces/IPermit2.sol": {
+					"*": []
+				},
+				"node_modules/@uniswap/permit2/src/interfaces/ISignatureTransfer.sol": {
+					"*": []
+				},
+				"node_modules/@uniswap/v3-core/contracts/interfaces/IUniswapV3Pool.sol": {
+					"*": []
+				},
+				"node_modules/@uniswap/v3-core/contracts/interfaces/callback/IUniswapV3SwapCallback.sol": {
+					"*": []
+				},
+				"node_modules/@uniswap/v3-core/contracts/interfaces/pool/IUniswapV3PoolActions.sol": {
+					"*": []
+				},
+				"node_modules/@uniswap/v3-core/contracts/interfaces/pool/IUniswapV3PoolDerivedState.sol": {
+					"*": []
+				},
+				"node_modules/@uniswap/v3-core/contracts/interfaces/pool/IUniswapV3PoolErrors.sol": {
+					"*": []
+				},
+				"node_modules/@uniswap/v3-core/contracts/interfaces/pool/IUniswapV3PoolEvents.sol": {
+					"*": []
+				},
+				"node_modules/@uniswap/v3-core/contracts/interfaces/pool/IUniswapV3PoolImmutables.sol": {
+					"*": []
+				},
+				"node_modules/@uniswap/v3-core/contracts/interfaces/pool/IUniswapV3PoolOwnerActions.sol": {
+					"*": []
+				},
+				"node_modules/@uniswap/v3-core/contracts/interfaces/pool/IUniswapV3PoolState.sol": {
+					"*": []
+				},
+				"script/Deploy.s.sol": {
+					"": [
+						"ast"
+					],
+					"*": [
+						"abi",
+						"evm.bytecode",
+						"evm.deployedBytecode",
+						"evm.methodIdentifiers",
+						"metadata",
+						"storageLayout"
+					]
+				},
+				"script/Drop1.s.sol": {
+					"": [
+						"ast"
+					],
+					"*": [
+						"abi",
+						"evm.bytecode",
+						"evm.deployedBytecode",
+						"evm.methodIdentifiers",
+						"metadata",
+						"storageLayout"
+					]
+				},
+				"script/helpers/BannyverseDeploymentLib.sol": {
+					"": [
+						"ast"
+					],
+					"*": [
+						"abi",
+						"evm.bytecode",
+						"evm.deployedBytecode",
+						"evm.methodIdentifiers",
+						"metadata",
+						"storageLayout"
+					]
+				},
+				"src/Banny721TokenUriResolver.sol": {
+					"": [
+						"ast"
+					],
+					"*": [
+						"abi",
+						"evm.bytecode",
+						"evm.deployedBytecode",
+						"evm.methodIdentifiers",
+						"metadata",
+						"storageLayout"
+					]
+				}
+			},
+			"evmVersion": "paris",
+			"libraries": {},
+			"remappings": [
+				"@sphinx-labs/contracts/=node_modules/@sphinx-labs/contracts/contracts/foundry/",
+				"@arbitrum/=node_modules/@arbitrum/",
+				"@bananapus/=node_modules/@bananapus/",
+				"@chainlink/=node_modules/@chainlink/",
+				"@croptop/=node_modules/@croptop/",
+				"@eth-optimism/=node_modules/@eth-optimism/",
+				"@exhausted-pigeon/=node_modules/@exhausted-pigeon/",
+				"@offchainlabs/=node_modules/@offchainlabs/",
+				"@openzeppelin/=node_modules/@openzeppelin/",
+				"@prb/=node_modules/@prb/",
+				"@rev-net/=node_modules/@rev-net/",
+				"@scroll-tech/=node_modules/@scroll-tech/",
+				"@uniswap/=node_modules/@uniswap/",
+				"base64-sol/=node_modules/base64-sol/",
+				"base64/=lib/base64/",
+				"ds-test/=lib/forge-std/lib/ds-test/src/",
+				"forge-std/=lib/forge-std/src/",
+				"hardhat/=node_modules/hardhat/",
+				"solady/=node_modules/solady/",
+				"solmate/=node_modules/solmate/",
+				"sphinx/=lib/sphinx/packages/contracts/contracts/forge-std/src/"
+			]
+		},
+		"sources": {
+			"lib/base64/base64.sol": {
+				"content": "// SPDX-License-Identifier: MIT\n\npragma solidity >=0.6.0;\n\n/// @title Base64\n/// @author Brecht Devos - <brecht@loopring.org>\n/// @notice Provides functions for encoding/decoding base64\nlibrary Base64 {\n    string internal constant TABLE_ENCODE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';\n    bytes  internal constant TABLE_DECODE = hex\"0000000000000000000000000000000000000000000000000000000000000000\"\n                                            hex\"00000000000000000000003e0000003f3435363738393a3b3c3d000000000000\"\n                                            hex\"00000102030405060708090a0b0c0d0e0f101112131415161718190000000000\"\n                                            hex\"001a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132330000000000\";\n\n    function encode(bytes memory data) internal pure returns (string memory) {\n        if (data.length == 0) return '';\n\n        // load the table into memory\n        string memory table = TABLE_ENCODE;\n\n        // multiply by 4/3 rounded up\n        uint256 encodedLen = 4 * ((data.length + 2) / 3);\n\n        // add some extra buffer at the end required for the writing\n        string memory result = new string(encodedLen + 32);\n\n        assembly {\n            // set the actual output length\n            mstore(result, encodedLen)\n\n            // prepare the lookup table\n            let tablePtr := add(table, 1)\n\n            // input ptr\n            let dataPtr := data\n            let endPtr := add(dataPtr, mload(data))\n\n            // result ptr, jump over length\n            let resultPtr := add(result, 32)\n\n            // run over the input, 3 bytes at a time\n            for {} lt(dataPtr, endPtr) {}\n            {\n                // read 3 bytes\n                dataPtr := add(dataPtr, 3)\n                let input := mload(dataPtr)\n\n                // write 4 characters\n                mstore8(resultPtr, mload(add(tablePtr, and(shr(18, input), 0x3F))))\n                resultPtr := add(resultPtr, 1)\n                mstore8(resultPtr, mload(add(tablePtr, and(shr(12, input), 0x3F))))\n                resultPtr := add(resultPtr, 1)\n                mstore8(resultPtr, mload(add(tablePtr, and(shr( 6, input), 0x3F))))\n                resultPtr := add(resultPtr, 1)\n                mstore8(resultPtr, mload(add(tablePtr, and(        input,  0x3F))))\n                resultPtr := add(resultPtr, 1)\n            }\n\n            // padding with '='\n            switch mod(mload(data), 3)\n            case 1 { mstore(sub(resultPtr, 2), shl(240, 0x3d3d)) }\n            case 2 { mstore(sub(resultPtr, 1), shl(248, 0x3d)) }\n        }\n\n        return result;\n    }\n\n    function decode(string memory _data) internal pure returns (bytes memory) {\n        bytes memory data = bytes(_data);\n\n        if (data.length == 0) return new bytes(0);\n        require(data.length % 4 == 0, \"invalid base64 decoder input\");\n\n        // load the table into memory\n        bytes memory table = TABLE_DECODE;\n\n        // every 4 characters represent 3 bytes\n        uint256 decodedLen = (data.length / 4) * 3;\n\n        // add some extra buffer at the end required for the writing\n        bytes memory result = new bytes(decodedLen + 32);\n\n        assembly {\n            // padding with '='\n            let lastBytes := mload(add(data, mload(data)))\n            if eq(and(lastBytes, 0xFF), 0x3d) {\n                decodedLen := sub(decodedLen, 1)\n                if eq(and(lastBytes, 0xFFFF), 0x3d3d) {\n                    decodedLen := sub(decodedLen, 1)\n                }\n            }\n\n            // set the actual output length\n            mstore(result, decodedLen)\n\n            // prepare the lookup table\n            let tablePtr := add(table, 1)\n\n            // input ptr\n            let dataPtr := data\n            let endPtr := add(dataPtr, mload(data))\n\n            // result ptr, jump over length\n            let resultPtr := add(result, 32)\n\n            // run over the input, 4 characters at a time\n            for {} lt(dataPtr, endPtr) {}\n            {\n               // read 4 characters\n               dataPtr := add(dataPtr, 4)\n               let input := mload(dataPtr)\n\n               // write 3 bytes\n               let output := add(\n                   add(\n                       shl(18, and(mload(add(tablePtr, and(shr(24, input), 0xFF))), 0xFF)),\n                       shl(12, and(mload(add(tablePtr, and(shr(16, input), 0xFF))), 0xFF))),\n                   add(\n                       shl( 6, and(mload(add(tablePtr, and(shr( 8, input), 0xFF))), 0xFF)),\n                               and(mload(add(tablePtr, and(        input , 0xFF))), 0xFF)\n                    )\n                )\n                mstore(resultPtr, shl(232, output))\n                resultPtr := add(resultPtr, 3)\n            }\n        }\n\n        return result;\n    }\n}\n"
+			},
+			"node_modules/@bananapus/721-hook/src/abstract/ERC721.sol": {
+				"content": "// SPDX-License-Identifier: MIT\n// OpenZeppelin Contracts (last updated v5.0.0) (token/ERC721/ERC721.sol)\n\npragma solidity 0.8.23;\n\nimport {IERC721} from \"@openzeppelin/contracts/token/ERC721/IERC721.sol\";\nimport {IERC721Receiver} from \"@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol\";\nimport {IERC721Metadata} from \"@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol\";\nimport {Context} from \"@openzeppelin/contracts/utils/Context.sol\";\nimport {Strings} from \"@openzeppelin/contracts/utils/Strings.sol\";\nimport {IERC165, ERC165} from \"@openzeppelin/contracts/utils/introspection/ERC165.sol\";\nimport {IERC721Errors} from \"@openzeppelin/contracts/interfaces/draft-IERC6093.sol\";\n\n/**\n * @dev Implementation of https://eips.ethereum.org/EIPS/eip-721[ERC721] Non-Fungible Token Standard, including\n * the Metadata extension, but not including the Enumerable extension, which is available separately as\n * {ERC721Enumerable}.\n */\nabstract contract ERC721 is Context, ERC165, IERC721, IERC721Metadata, IERC721Errors {\n    using Strings for uint256;\n\n    // Token name\n    string private _name;\n\n    // Token symbol\n    string private _symbol;\n\n    mapping(uint256 tokenId => address) internal _owners;\n\n    mapping(address owner => uint256) private _balances;\n\n    mapping(uint256 tokenId => address) private _tokenApprovals;\n\n    mapping(address owner => mapping(address operator => bool)) private _operatorApprovals;\n\n    /**\n     * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection.\n     */\n    function _initialize(string memory name_, string memory symbol_) internal {\n        _name = name_;\n        _symbol = symbol_;\n    }\n\n    /**\n     * @dev See {IERC165-supportsInterface}.\n     */\n    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC165, IERC165) returns (bool) {\n        return interfaceId == type(IERC721).interfaceId || interfaceId == type(IERC721Metadata).interfaceId\n            || super.supportsInterface(interfaceId);\n    }\n\n    /**\n     * @dev See {IERC721-balanceOf}.\n     */\n    function balanceOf(address owner) public view virtual returns (uint256) {\n        if (owner == address(0)) {\n            revert ERC721InvalidOwner(address(0));\n        }\n        return _balances[owner];\n    }\n\n    /**\n     * @dev See {IERC721-ownerOf}.\n     */\n    function ownerOf(uint256 tokenId) public view virtual returns (address) {\n        return _requireOwned(tokenId);\n    }\n\n    /**\n     * @dev See {IERC721Metadata-name}.\n     */\n    function name() public view virtual returns (string memory) {\n        return _name;\n    }\n\n    /**\n     * @dev See {IERC721Metadata-symbol}.\n     */\n    function symbol() public view virtual returns (string memory) {\n        return _symbol;\n    }\n\n    /**\n     * @dev See {IERC721Metadata-tokenURI}.\n     */\n    function tokenURI(uint256 tokenId) public view virtual returns (string memory) {\n        _requireOwned(tokenId);\n\n        string memory baseURI = _baseURI();\n        return bytes(baseURI).length > 0 ? string.concat(baseURI, tokenId.toString()) : \"\";\n    }\n\n    /**\n     * @dev Base URI for computing {tokenURI}. If set, the resulting URI for each\n     * token will be the concatenation of the `baseURI` and the `tokenId`. Empty\n     * by default, can be overridden in child contracts.\n     */\n    function _baseURI() internal view virtual returns (string memory) {\n        return \"\";\n    }\n\n    /**\n     * @dev See {IERC721-approve}.\n     */\n    function approve(address to, uint256 tokenId) public virtual {\n        _approve(to, tokenId, _msgSender());\n    }\n\n    /**\n     * @dev See {IERC721-getApproved}.\n     */\n    function getApproved(uint256 tokenId) public view virtual returns (address) {\n        _requireOwned(tokenId);\n\n        return _getApproved(tokenId);\n    }\n\n    /**\n     * @dev See {IERC721-setApprovalForAll}.\n     */\n    function setApprovalForAll(address operator, bool approved) public virtual {\n        _setApprovalForAll(_msgSender(), operator, approved);\n    }\n\n    /**\n     * @dev See {IERC721-isApprovedForAll}.\n     */\n    function isApprovedForAll(address owner, address operator) public view virtual returns (bool) {\n        return _operatorApprovals[owner][operator];\n    }\n\n    /**\n     * @dev See {IERC721-transferFrom}.\n     */\n    function transferFrom(address from, address to, uint256 tokenId) public virtual {\n        if (to == address(0)) {\n            revert ERC721InvalidReceiver(address(0));\n        }\n        // Setting an \"auth\" arguments enables the `_isAuthorized` check which verifies that the token exists\n        // (from != 0). Therefore, it is not needed to verify that the return value is not 0 here.\n        address previousOwner = _update(to, tokenId, _msgSender());\n        if (previousOwner != from) {\n            revert ERC721IncorrectOwner(from, tokenId, previousOwner);\n        }\n    }\n\n    /**\n     * @dev See {IERC721-safeTransferFrom}.\n     */\n    function safeTransferFrom(address from, address to, uint256 tokenId) public {\n        safeTransferFrom(from, to, tokenId, \"\");\n    }\n\n    /**\n     * @dev See {IERC721-safeTransferFrom}.\n     */\n    function safeTransferFrom(address from, address to, uint256 tokenId, bytes memory data) public virtual {\n        transferFrom(from, to, tokenId);\n        _checkOnERC721Received(from, to, tokenId, data);\n    }\n\n    /**\n     * @dev Returns the owner of the `tokenId`. Does NOT revert if token doesn't exist\n     *\n     * IMPORTANT: Any overrides to this function that add ownership of tokens not tracked by the\n     * core ERC721 logic MUST be matched with the use of {_increaseBalance} to keep balances\n     * consistent with ownership. The invariant to preserve is that for any address `a` the value returned by\n     * `balanceOf(a)` must be equal to the number of tokens such that `_ownerOf(tokenId)` is `a`.\n     */\n    function _ownerOf(uint256 tokenId) internal view virtual returns (address) {\n        return _owners[tokenId];\n    }\n\n    /**\n     * @dev Returns the approved address for `tokenId`. Returns 0 if `tokenId` is not minted.\n     */\n    function _getApproved(uint256 tokenId) internal view virtual returns (address) {\n        return _tokenApprovals[tokenId];\n    }\n\n    /**\n     * @dev Returns whether `spender` is allowed to manage `owner`'s tokens, or `tokenId` in\n     * particular (ignoring whether it is owned by `owner`).\n     *\n     * WARNING: This function assumes that `owner` is the actual owner of `tokenId` and does not verify this\n     * assumption.\n     */\n    function _isAuthorized(address owner, address spender, uint256 tokenId) internal view virtual returns (bool) {\n        return spender != address(0)\n            && (owner == spender || isApprovedForAll(owner, spender) || _getApproved(tokenId) == spender);\n    }\n\n    /**\n     * @dev Checks if `spender` can operate on `tokenId`, assuming the provided `owner` is the actual owner.\n     * Reverts if `spender` does not have approval from the provided `owner` for the given token or for all its assets\n     * the `spender` for the specific `tokenId`.\n     *\n     * WARNING: This function assumes that `owner` is the actual owner of `tokenId` and does not verify this\n     * assumption.\n     */\n    function _checkAuthorized(address owner, address spender, uint256 tokenId) internal view virtual {\n        if (!_isAuthorized(owner, spender, tokenId)) {\n            if (owner == address(0)) {\n                revert ERC721NonexistentToken(tokenId);\n            } else {\n                revert ERC721InsufficientApproval(spender, tokenId);\n            }\n        }\n    }\n\n    /**\n     * @dev Unsafe write access to the balances, used by extensions that \"mint\" tokens using an {ownerOf} override.\n     *\n     * NOTE: the value is limited to type(uint128).max. This protect against _balance overflow. It is unrealistic that\n     * a uint256 would ever overflow from increments when these increments are bounded to uint128 values.\n     *\n     * WARNING: Increasing an account's balance using this function tends to be paired with an override of the\n     * {_ownerOf} function to resolve the ownership of the corresponding tokens so that balances and ownership\n     * remain consistent with one another.\n     */\n    function _increaseBalance(address account, uint128 value) internal virtual {\n        unchecked {\n            _balances[account] += value;\n        }\n    }\n\n    /**\n     * @dev Transfers `tokenId` from its current owner to `to`, or alternatively mints (or burns) if the current owner\n     * (or `to`) is the zero address. Returns the owner of the `tokenId` before the update.\n     *\n     * The `auth` argument is optional. If the value passed is non 0, then this function will check that\n     * `auth` is either the owner of the token, or approved to operate on the token (by the owner).\n     *\n     * Emits a {Transfer} event.\n     *\n     * NOTE: If overriding this function in a way that tracks balances, see also {_increaseBalance}.\n     */\n    function _update(address to, uint256 tokenId, address auth) internal virtual returns (address) {\n        address from = _ownerOf(tokenId);\n\n        // Perform (optional) operator check\n        if (auth != address(0)) {\n            _checkAuthorized(from, auth, tokenId);\n        }\n\n        // Execute the update\n        if (from != address(0)) {\n            // Clear approval. No need to re-authorize or emit the Approval event\n            _approve(address(0), tokenId, address(0), false);\n\n            unchecked {\n                _balances[from] -= 1;\n            }\n        }\n\n        if (to != address(0)) {\n            unchecked {\n                _balances[to] += 1;\n            }\n        }\n\n        _owners[tokenId] = to;\n\n        emit Transfer(from, to, tokenId);\n\n        return from;\n    }\n\n    /**\n     * @dev Mints `tokenId` and transfers it to `to`.\n     *\n     * WARNING: Usage of this method is discouraged, use {_safeMint} whenever possible\n     *\n     * Requirements:\n     *\n     * - `tokenId` must not exist.\n     * - `to` cannot be the zero address.\n     *\n     * Emits a {Transfer} event.\n     */\n    function _mint(address to, uint256 tokenId) internal {\n        if (to == address(0)) {\n            revert ERC721InvalidReceiver(address(0));\n        }\n        address previousOwner = _update(to, tokenId, address(0));\n        if (previousOwner != address(0)) {\n            revert ERC721InvalidSender(address(0));\n        }\n    }\n\n    /**\n     * @dev Mints `tokenId`, transfers it to `to` and checks for `to` acceptance.\n     *\n     * Requirements:\n     *\n     * - `tokenId` must not exist.\n     * - If `to` refers to a smart contract, it must implement {IERC721Receiver-onERC721Received}, which is called upon\n     * a safe transfer.\n     *\n     * Emits a {Transfer} event.\n     */\n    function _safeMint(address to, uint256 tokenId) internal {\n        _safeMint(to, tokenId, \"\");\n    }\n\n    /**\n     * @dev Same as {xref-ERC721-_safeMint-address-uint256-}[`_safeMint`], with an additional `data` parameter which is\n     * forwarded in {IERC721Receiver-onERC721Received} to contract recipients.\n     */\n    function _safeMint(address to, uint256 tokenId, bytes memory data) internal virtual {\n        _mint(to, tokenId);\n        _checkOnERC721Received(address(0), to, tokenId, data);\n    }\n\n    /**\n     * @dev Destroys `tokenId`.\n     * The approval is cleared when the token is burned.\n     * This is an internal function that does not check if the sender is authorized to operate on the token.\n     *\n     * Requirements:\n     *\n     * - `tokenId` must exist.\n     *\n     * Emits a {Transfer} event.\n     */\n    function _burn(uint256 tokenId) internal {\n        address previousOwner = _update(address(0), tokenId, address(0));\n        if (previousOwner == address(0)) {\n            revert ERC721NonexistentToken(tokenId);\n        }\n    }\n\n    /**\n     * @dev Transfers `tokenId` from `from` to `to`.\n     *  As opposed to {transferFrom}, this imposes no restrictions on msg.sender.\n     *\n     * Requirements:\n     *\n     * - `to` cannot be the zero address.\n     * - `tokenId` token must be owned by `from`.\n     *\n     * Emits a {Transfer} event.\n     */\n    function _transfer(address from, address to, uint256 tokenId) internal {\n        if (to == address(0)) {\n            revert ERC721InvalidReceiver(address(0));\n        }\n        address previousOwner = _update(to, tokenId, address(0));\n        if (previousOwner == address(0)) {\n            revert ERC721NonexistentToken(tokenId);\n        } else if (previousOwner != from) {\n            revert ERC721IncorrectOwner(from, tokenId, previousOwner);\n        }\n    }\n\n    /**\n     * @dev Safely transfers `tokenId` token from `from` to `to`, checking that contract recipients\n     * are aware of the ERC721 standard to prevent tokens from being forever locked.\n     *\n     * `data` is additional data, it has no specified format and it is sent in call to `to`.\n     *\n     * This internal function is like {safeTransferFrom} in the sense that it invokes\n     * {IERC721Receiver-onERC721Received} on the receiver, and can be used to e.g.\n     * implement alternative mechanisms to perform token transfer, such as signature-based.\n     *\n     * Requirements:\n     *\n     * - `tokenId` token must exist and be owned by `from`.\n     * - `to` cannot be the zero address.\n     * - `from` cannot be the zero address.\n     * - If `to` refers to a smart contract, it must implement {IERC721Receiver-onERC721Received}, which is called upon\n     * a safe transfer.\n     *\n     * Emits a {Transfer} event.\n     */\n    function _safeTransfer(address from, address to, uint256 tokenId) internal {\n        _safeTransfer(from, to, tokenId, \"\");\n    }\n\n    /**\n     * @dev Same as {xref-ERC721-_safeTransfer-address-address-uint256-}[`_safeTransfer`], with an additional `data`\n     * parameter which is\n     * forwarded in {IERC721Receiver-onERC721Received} to contract recipients.\n     */\n    function _safeTransfer(address from, address to, uint256 tokenId, bytes memory data) internal virtual {\n        _transfer(from, to, tokenId);\n        _checkOnERC721Received(from, to, tokenId, data);\n    }\n\n    /**\n     * @dev Approve `to` to operate on `tokenId`\n     *\n     * The `auth` argument is optional. If the value passed is non 0, then this function will check that `auth` is\n     * either the owner of the token, or approved to operate on all tokens held by this owner.\n     *\n     * Emits an {Approval} event.\n     *\n     * Overrides to this logic should be done to the variant with an additional `bool emitEvent` argument.\n     */\n    function _approve(address to, uint256 tokenId, address auth) internal {\n        _approve(to, tokenId, auth, true);\n    }\n\n    /**\n     * @dev Variant of `_approve` with an optional flag to enable or disable the {Approval} event. The event is not\n     * emitted in the context of transfers.\n     */\n    function _approve(address to, uint256 tokenId, address auth, bool emitEvent) internal virtual {\n        // Avoid reading the owner unless necessary\n        if (emitEvent || auth != address(0)) {\n            address owner = _requireOwned(tokenId);\n\n            // We do not use _isAuthorized because single-token approvals should not be able to call approve\n            if (auth != address(0) && owner != auth && !isApprovedForAll(owner, auth)) {\n                revert ERC721InvalidApprover(auth);\n            }\n\n            if (emitEvent) {\n                emit Approval(owner, to, tokenId);\n            }\n        }\n\n        _tokenApprovals[tokenId] = to;\n    }\n\n    /**\n     * @dev Approve `operator` to operate on all of `owner` tokens\n     *\n     * Requirements:\n     * - operator can't be the address zero.\n     *\n     * Emits an {ApprovalForAll} event.\n     */\n    function _setApprovalForAll(address owner, address operator, bool approved) internal virtual {\n        if (operator == address(0)) {\n            revert ERC721InvalidOperator(operator);\n        }\n        _operatorApprovals[owner][operator] = approved;\n        emit ApprovalForAll(owner, operator, approved);\n    }\n\n    /**\n     * @dev Reverts if the `tokenId` doesn't have a current owner (it hasn't been minted, or it has been burned).\n     * Returns the owner.\n     *\n     * Overrides to ownership logic should be done to {_ownerOf}.\n     */\n    function _requireOwned(uint256 tokenId) internal view returns (address) {\n        address owner = _ownerOf(tokenId);\n        if (owner == address(0)) {\n            revert ERC721NonexistentToken(tokenId);\n        }\n        return owner;\n    }\n\n    /**\n     * @dev Private function to invoke {IERC721Receiver-onERC721Received} on a target address. This will revert if the\n     * recipient doesn't accept the token transfer. The call is not executed if the target address is not a contract.\n     *\n     * @param from address representing the previous owner of the given token ID\n     * @param to target address that will receive the tokens\n     * @param tokenId uint256 ID of the token to be transferred\n     * @param data bytes optional data to send along with the call\n     */\n    function _checkOnERC721Received(address from, address to, uint256 tokenId, bytes memory data) private {\n        if (to.code.length > 0) {\n            try IERC721Receiver(to).onERC721Received(_msgSender(), from, tokenId, data) returns (bytes4 retval) {\n                if (retval != IERC721Receiver.onERC721Received.selector) {\n                    revert ERC721InvalidReceiver(to);\n                }\n            } catch (bytes memory reason) {\n                if (reason.length == 0) {\n                    revert ERC721InvalidReceiver(to);\n                } else {\n                    /// @solidity memory-safe-assembly\n                    assembly {\n                        revert(add(32, reason), mload(reason))\n                    }\n                }\n            }\n        }\n    }\n}\n"
+			},
+			"node_modules/@bananapus/721-hook/src/interfaces/IJB721Hook.sol": {
+				"content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\nimport {IJBDirectory} from \"@bananapus/core/src/interfaces/IJBDirectory.sol\";\n\ninterface IJB721Hook {\n    function PROJECT_ID() external view returns (uint256);\n\n    function DIRECTORY() external view returns (IJBDirectory);\n\n    function METADATA_ID_TARGET() external view returns (address);\n}\n"
+			},
+			"node_modules/@bananapus/721-hook/src/interfaces/IJB721TiersHook.sol": {
+				"content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\nimport {IJBRulesets} from \"@bananapus/core/src/interfaces/IJBRulesets.sol\";\nimport {IJBPrices} from \"@bananapus/core/src/interfaces/IJBPrices.sol\";\n\nimport {IJB721Hook} from \"./IJB721Hook.sol\";\nimport {IJB721TokenUriResolver} from \"./IJB721TokenUriResolver.sol\";\nimport {IJB721TiersHookStore} from \"./IJB721TiersHookStore.sol\";\nimport {JB721InitTiersConfig} from \"./../structs/JB721InitTiersConfig.sol\";\nimport {JB721TierConfig} from \"./../structs/JB721TierConfig.sol\";\nimport {JB721TiersHookFlags} from \"./../structs/JB721TiersHookFlags.sol\";\nimport {JB721TiersMintReservesConfig} from \"./../structs/JB721TiersMintReservesConfig.sol\";\n\ninterface IJB721TiersHook is IJB721Hook {\n    event Mint(\n        uint256 indexed tokenId,\n        uint256 indexed tierId,\n        address indexed beneficiary,\n        uint256 totalAmountPaid,\n        address caller\n    );\n\n    event MintReservedNft(uint256 indexed tokenId, uint256 indexed tierId, address indexed beneficiary, address caller);\n\n    event AddTier(uint256 indexed tierId, JB721TierConfig tier, address caller);\n\n    event RemoveTier(uint256 indexed tierId, address caller);\n\n    event SetEncodedIPFSUri(uint256 indexed tierId, bytes32 encodedIPFSUri, address caller);\n\n    event SetBaseUri(string indexed baseUri, address caller);\n\n    event SetContractUri(string indexed contractUri, address caller);\n\n    event SetTokenUriResolver(IJB721TokenUriResolver indexed newResolver, address caller);\n\n    event AddPayCredits(\n        uint256 indexed amount, uint256 indexed newTotalCredits, address indexed account, address caller\n    );\n\n    event UsePayCredits(\n        uint256 indexed amount, uint256 indexed newTotalCredits, address indexed account, address caller\n    );\n\n    function STORE() external view returns (IJB721TiersHookStore);\n\n    function RULESETS() external view returns (IJBRulesets);\n\n    function pricingContext() external view returns (uint256, uint256, IJBPrices);\n\n    function payCreditsOf(address addr) external view returns (uint256);\n\n    function firstOwnerOf(uint256 tokenId) external view returns (address);\n\n    function baseURI() external view returns (string memory);\n\n    function contractURI() external view returns (string memory);\n\n    function adjustTiers(JB721TierConfig[] memory tierDataToAdd, uint256[] memory tierIdsToRemove) external;\n\n    function mintPendingReservesFor(JB721TiersMintReservesConfig[] memory reserveMintConfigs) external;\n\n    function mintPendingReservesFor(uint256 tierId, uint256 count) external;\n\n    function mintFor(uint16[] calldata tierIds, address beneficiary) external returns (uint256[] memory tokenIds);\n\n    function setMetadata(\n        string memory baseUri,\n        string calldata contractMetadataUri,\n        IJB721TokenUriResolver tokenUriResolver,\n        uint256 encodedIPFSUriTierId,\n        bytes32 encodedIPFSUri\n    )\n        external;\n\n    function initialize(\n        uint256 projectId,\n        string memory name,\n        string memory symbol,\n        IJBRulesets rulesets,\n        string memory baseUri,\n        IJB721TokenUriResolver tokenUriResolver,\n        string memory contractUri,\n        JB721InitTiersConfig memory tiersConfig,\n        IJB721TiersHookStore store,\n        JB721TiersHookFlags memory flags\n    )\n        external;\n}\n"
+			},
+			"node_modules/@bananapus/721-hook/src/interfaces/IJB721TiersHookStore.sol": {
+				"content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\nimport {IJB721TokenUriResolver} from \"./IJB721TokenUriResolver.sol\";\nimport {JB721TierConfig} from \"../structs/JB721TierConfig.sol\";\nimport {JB721Tier} from \"../structs/JB721Tier.sol\";\nimport {JB721TiersHookFlags} from \"../structs/JB721TiersHookFlags.sol\";\n\ninterface IJB721TiersHookStore {\n    event CleanTiers(address indexed hook, address caller);\n\n    function totalSupplyOf(address hook) external view returns (uint256);\n\n    function balanceOf(address hook, address owner) external view returns (uint256);\n\n    function maxTierIdOf(address hook) external view returns (uint256);\n\n    function tiersOf(\n        address hook,\n        uint256[] calldata categories,\n        bool includeResolvedUri,\n        uint256 startingSortIndex,\n        uint256 size\n    )\n        external\n        view\n        returns (JB721Tier[] memory tiers);\n\n    function tierOf(address hook, uint256 id, bool includeResolvedUri) external view returns (JB721Tier memory tier);\n\n    function tierBalanceOf(address hook, address owner, uint256 tier) external view returns (uint256);\n\n    function tierOfTokenId(\n        address hook,\n        uint256 tokenId,\n        bool includeResolvedUri\n    )\n        external\n        view\n        returns (JB721Tier memory tier);\n\n    function tierIdOfToken(uint256 tokenId) external pure returns (uint256);\n\n    function encodedIPFSUriOf(address hook, uint256 tierId) external view returns (bytes32);\n\n    function redemptionWeightOf(address hook, uint256[] memory tokenIds) external view returns (uint256 weight);\n\n    function totalRedemptionWeight(address hook) external view returns (uint256 weight);\n\n    function numberOfPendingReservesFor(address hook, uint256 tierId) external view returns (uint256);\n\n    function numberOfReservesMintedFor(address hook, uint256 tierId) external view returns (uint256);\n\n    function numberOfBurnedFor(address hook, uint256 tierId) external view returns (uint256);\n\n    function isTierRemoved(address hook, uint256 tierId) external view returns (bool);\n\n    function flagsOf(address hook) external view returns (JB721TiersHookFlags memory);\n\n    function votingUnitsOf(address hook, address account) external view returns (uint256 units);\n\n    function tierVotingUnitsOf(address hook, address account, uint256 tierId) external view returns (uint256 units);\n\n    function defaultReserveBeneficiaryOf(address hook) external view returns (address);\n\n    function reserveBeneficiaryOf(address hook, uint256 tierId) external view returns (address);\n\n    function tokenUriResolverOf(address hook) external view returns (IJB721TokenUriResolver);\n\n    function encodedTierIPFSUriOf(address hook, uint256 tokenId) external view returns (bytes32);\n\n    function recordAddTiers(JB721TierConfig[] memory tierData) external returns (uint256[] memory tierIds);\n\n    function recordMintReservesFor(uint256 tierId, uint256 count) external returns (uint256[] memory tokenIds);\n\n    function recordBurn(uint256[] memory tokenIds) external;\n\n    function recordMint(\n        uint256 amount,\n        uint16[] calldata tierIds,\n        bool isOwnerMint\n    )\n        external\n        returns (uint256[] memory tokenIds, uint256 leftoverAmount);\n\n    function recordTransferForTier(uint256 tierId, address from, address to) external;\n\n    function recordRemoveTierIds(uint256[] memory tierIds) external;\n\n    function recordSetTokenUriResolver(IJB721TokenUriResolver resolver) external;\n\n    function recordSetEncodedIPFSUriOf(uint256 tierId, bytes32 encodedIPFSUri) external;\n\n    function recordFlags(JB721TiersHookFlags calldata flag) external;\n\n    function cleanTiers(address hook) external;\n}\n"
+			},
+			"node_modules/@bananapus/721-hook/src/interfaces/IJB721TokenUriResolver.sol": {
+				"content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\ninterface IJB721TokenUriResolver {\n    function tokenUriOf(address nft, uint256 tokenId) external view returns (string memory tokenUri);\n}\n"
+			},
+			"node_modules/@bananapus/721-hook/src/libraries/JBIpfsDecoder.sol": {
+				"content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.17;\n\n/// @title JBIpfsDecoder\n/// @notice Utilities to decode an IPFS hash.\n/// @dev This is fairly gas intensive due to multiple nested loops. Onchain IPFS hash decoding is not advised –\n/// storing them as a string *might* be more efficient for that use-case.\nlibrary JBIpfsDecoder {\n    //*********************************************************************//\n    // ------------------- internal constant properties ------------------ //\n    //*********************************************************************//\n\n    /// @notice Just a kind reminder to our readers.\n    /// @dev Used in `base58ToString`\n    bytes internal constant ALPHABET = \"123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz\";\n\n    function decode(string memory baseUri, bytes32 hexString) internal pure returns (string memory) {\n        // All IPFS hashes start with a fixed sequence (0x12 and 0x20)\n        bytes memory completeHexString = abi.encodePacked(bytes2(0x1220), hexString);\n\n        // Convert the hex string to a hash\n        string memory ipfsHash = _toBase58(completeHexString);\n\n        // Concatenate with the base URI\n        return string(abi.encodePacked(baseUri, ipfsHash));\n    }\n\n    /// @notice Convert a hex string to base58\n    /// @notice Written by Martin Ludfall - Licence: MIT\n    function _toBase58(bytes memory source) private pure returns (string memory) {\n        if (source.length == 0) return new string(0);\n\n        uint8[] memory digits = new uint8[](46); // hash size with the prefix\n\n        digits[0] = 0;\n\n        uint8 digitlength = 1;\n        uint256 sourceLength = source.length;\n\n        for (uint256 i; i < sourceLength; i++) {\n            uint256 carry = uint8(source[i]);\n\n            for (uint256 j; j < digitlength;) {\n                carry += uint256(digits[j]) << 8; // mul 256\n                digits[j] = uint8(carry % 58);\n                carry = carry / 58;\n\n                unchecked {\n                    ++j;\n                }\n            }\n\n            while (carry > 0) {\n                digits[digitlength] = uint8(carry % 58);\n                unchecked {\n                    ++digitlength;\n                }\n                carry = carry / 58;\n            }\n        }\n        return string(_toAlphabet(_reverse(_truncate(digits, digitlength))));\n    }\n\n    function _truncate(uint8[] memory array, uint8 length) private pure returns (uint8[] memory) {\n        uint8[] memory output = new uint8[](length);\n        for (uint256 i; i < length; i++) {\n            output[i] = array[i];\n        }\n        return output;\n    }\n\n    function _reverse(uint8[] memory input) private pure returns (uint8[] memory) {\n        uint256 inputLength = input.length;\n        uint8[] memory output = new uint8[](inputLength);\n        for (uint256 i; i < inputLength; i++) {\n            unchecked {\n                output[i] = input[input.length - 1 - i];\n            }\n        }\n        return output;\n    }\n\n    function _toAlphabet(uint8[] memory indices) private pure returns (bytes memory) {\n        uint256 indicesLength = indices.length;\n        bytes memory output = new bytes(indicesLength);\n        for (uint256 i; i < indicesLength; i++) {\n            output[i] = ALPHABET[indices[i]];\n        }\n        return output;\n    }\n}\n"
+			},
+			"node_modules/@bananapus/721-hook/src/structs/JB721InitTiersConfig.sol": {
+				"content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\nimport {IJBPrices} from \"@bananapus/core/src/interfaces/IJBPrices.sol\";\nimport {JB721TierConfig} from \"./JB721TierConfig.sol\";\n\n/// @notice Config to initialize a `JB721TiersHook` with tiers and price data.\n/// @dev The `tiers` must be sorted by price (from least to greatest).\n/// @custom:member tiers The tiers to initialize the hook with.\n/// @custom:member currency The currency that the tier prices are denoted in. See `JBPrices`.\n/// @custom:member decimals The number of decimals in the fixed point tier prices.\n/// @custom:member prices A contract that exposes price feeds that can be used to calculate prices in different\n/// currencies. To only accept payments in `currency`, set `prices` to the zero address. See `JBPrices`.\nstruct JB721InitTiersConfig {\n    JB721TierConfig[] tiers;\n    uint32 currency;\n    uint8 decimals;\n    IJBPrices prices;\n}\n"
+			},
+			"node_modules/@bananapus/721-hook/src/structs/JB721Tier.sol": {
+				"content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\n/// @custom:member id The tier's ID.\n/// @custom:member price The price to buy an NFT in this tier, in terms of the currency in its `JBInitTiersConfig`.\n/// @custom:member remainingSupply The remaining number of NFTs which can be minted from this tier.\n/// @custom:member initialSupply The total number of NFTs which can be minted from this tier.\n/// @custom:member votingUnits The number of votes that each NFT in this tier gets.\n/// @custom:member reserveFrequency The frequency at which an extra NFT is minted for the `reserveBeneficiary` from this\n/// tier. With a `reserveFrequency` of 5, an extra NFT will be minted for the `reserveBeneficiary` for every 5 NFTs\n/// purchased.\n/// @custom:member reserveBeneficiary The address which receives any reserve NFTs from this tier.\n/// @custom:member encodedIPFSUri The IPFS URI to use for each NFT in this tier.\n/// @custom:member category The category that NFTs in this tier belongs to. Used to group NFT tiers.\n/// @custom:member allowOwnerMint A boolean indicating whether the contract's owner can mint NFTs from this tier\n/// on-demand.\n/// @custom:member cannotBeRemoved A boolean indicating whether attempts to remove this tier will revert.\n/// @custom:member transfersPausable A boolean indicating whether transfers for NFTs in tier can be paused.\n/// @custom:member resolvedUri A resolved token URI for NFTs in this tier. Only available if the NFT this tier belongs\n/// to has a resolver.\nstruct JB721Tier {\n    uint32 id;\n    uint104 price;\n    uint32 remainingSupply;\n    uint32 initialSupply;\n    uint104 votingUnits;\n    uint16 reserveFrequency;\n    address reserveBeneficiary;\n    bytes32 encodedIPFSUri;\n    uint24 category;\n    bool allowOwnerMint;\n    bool transfersPausable;\n    bool cannotBeRemoved;\n    string resolvedUri;\n}\n"
+			},
+			"node_modules/@bananapus/721-hook/src/structs/JB721TierConfig.sol": {
+				"content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\n/// @notice Config for a single NFT tier within a `JB721TiersHook`.\n/// @custom:member price The price to buy an NFT in this tier, in terms of the currency in its `JBInitTiersConfig`.\n/// @custom:member initialSupply The total number of NFTs which can be minted from this tier.\n/// @custom:member votingUnits The number of votes that each NFT in this tier gets if `useVotingUnits` is true.\n/// @custom:member reserveFrequency The frequency at which an extra NFT is minted for the `reserveBeneficiary` from this\n/// tier. With a `reserveFrequency` of 5, an extra NFT will be minted for the `reserveBeneficiary` for every 5 NFTs\n/// purchased.\n/// @custom:member reserveBeneficiary The address which receives any reserve NFTs from this tier. Overrides the default\n/// reserve beneficiary if one is set.\n/// @custom:member encodedIPFSUri The IPFS URI to use for each NFT in this tier.\n/// @custom:member category The category that NFTs in this tier belongs to. Used to group NFT tiers.\n/// @custom:member allowOwnerMint A boolean indicating whether the contract's owner can mint NFTs from this tier\n/// on-demand.\n/// @custom:member useReserveBeneficiaryAsDefault A boolean indicating whether this tier's `reserveBeneficiary` should\n/// be stored as the default beneficiary for all tiers.\n/// @custom:member transfersPausable A boolean indicating whether transfers for NFTs in tier can be paused.\n/// @custom:member useVotingUnits A boolean indicating whether the `votingUnits` should be used to calculate voting\n/// power. If `useVotingUnits` is false, voting power is based on the tier's price.\n/// @custom:member cannotBeRemoved If the tier cannot be removed once added.\nstruct JB721TierConfig {\n    uint104 price;\n    uint32 initialSupply;\n    uint32 votingUnits;\n    uint16 reserveFrequency;\n    address reserveBeneficiary;\n    bytes32 encodedIPFSUri;\n    uint24 category;\n    bool allowOwnerMint;\n    bool useReserveBeneficiaryAsDefault;\n    bool transfersPausable;\n    bool useVotingUnits;\n    bool cannotBeRemoved;\n}\n"
+			},
+			"node_modules/@bananapus/721-hook/src/structs/JB721TiersHookFlags.sol": {
+				"content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\n/// @custom:member noNewTiersWithReserves A boolean indicating whether attempts to add new tiers with a non-zero\n/// `reserveFrequency` will revert.\n/// @custom:member noNewTiersWithVotes A boolean indicating whether attempts to add new tiers with non-zero\n/// `votingUnits` will revert.\n/// @custom:member noNewTiersWithOwnerMinting A boolean indicating whether attempts to add new tiers with\n/// `allowOwnerMint` set to true will revert.\n/// @custom:member preventOverspending A boolean indicating whether payments attempting to spend more than the price of\n/// the NFTs being minted will revert.\nstruct JB721TiersHookFlags {\n    bool noNewTiersWithReserves;\n    bool noNewTiersWithVotes;\n    bool noNewTiersWithOwnerMinting;\n    bool preventOverspending;\n}\n"
+			},
+			"node_modules/@bananapus/721-hook/src/structs/JB721TiersMintReservesConfig.sol": {
+				"content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\n/// @custom:member tierId The ID of the tier to mint from.\n/// @custom:member count The number of NFTs to mint from that tier.\nstruct JB721TiersMintReservesConfig {\n    uint32 tierId;\n    uint16 count;\n}\n"
+			},
+			"node_modules/@bananapus/core/src/enums/JBApprovalStatus.sol": {
+				"content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\n/// @notice A ruleset's approval status in a ruleset approval hook.\nenum JBApprovalStatus {\n    Empty,\n    Upcoming,\n    Active,\n    ApprovalExpected,\n    Approved,\n    Failed\n}\n"
+			},
+			"node_modules/@bananapus/core/src/interfaces/IJBDirectory.sol": {
+				"content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\nimport {IERC165} from \"@openzeppelin/contracts/utils/introspection/IERC165.sol\";\n\nimport {IJBProjects} from \"./IJBProjects.sol\";\nimport {IJBTerminal} from \"./IJBTerminal.sol\";\n\ninterface IJBDirectory {\n    event SetController(uint256 indexed projectId, IERC165 indexed controller, address caller);\n\n    event AddTerminal(uint256 indexed projectId, IJBTerminal indexed terminal, address caller);\n\n    event SetTerminals(uint256 indexed projectId, IJBTerminal[] terminals, address caller);\n\n    event SetPrimaryTerminal(\n        uint256 indexed projectId, address indexed token, IJBTerminal indexed terminal, address caller\n    );\n\n    event SetIsAllowedToSetFirstController(address indexed addr, bool indexed flag, address caller);\n\n    function PROJECTS() external view returns (IJBProjects);\n\n    function controllerOf(uint256 projectId) external view returns (IERC165);\n\n    function isAllowedToSetFirstController(address account) external view returns (bool);\n\n    function terminalsOf(uint256 projectId) external view returns (IJBTerminal[] memory);\n\n    function isTerminalOf(uint256 projectId, IJBTerminal terminal) external view returns (bool);\n\n    function primaryTerminalOf(uint256 projectId, address token) external view returns (IJBTerminal);\n\n    function setControllerOf(uint256 projectId, IERC165 controller) external;\n\n    function setTerminalsOf(uint256 projectId, IJBTerminal[] calldata terminals) external;\n\n    function setPrimaryTerminalOf(uint256 projectId, address token, IJBTerminal terminal) external;\n\n    function setIsAllowedToSetFirstController(address account, bool flag) external;\n}\n"
+			},
+			"node_modules/@bananapus/core/src/interfaces/IJBPayHook.sol": {
+				"content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\nimport {IERC165} from \"@openzeppelin/contracts/utils/introspection/IERC165.sol\";\n\nimport {JBAfterPayRecordedContext} from \"./../structs/JBAfterPayRecordedContext.sol\";\n\n/// @notice Hook called after a terminal's `pay(...)` logic completes (if passed by the ruleset's data hook).\ninterface IJBPayHook is IERC165 {\n    /// @notice This function is called by the terminal's `pay(...)` function after the payment has been recorded in the\n    /// terminal store.\n    /// @dev Critical business logic should be protected by appropriate access control.\n    /// @param context The context passed in by the terminal, as a `JBAfterPayRecordedContext` struct.\n    function afterPayRecordedWith(JBAfterPayRecordedContext calldata context) external payable;\n}\n"
+			},
+			"node_modules/@bananapus/core/src/interfaces/IJBPriceFeed.sol": {
+				"content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\ninterface IJBPriceFeed {\n    function currentUnitPrice(uint256 targetDecimals) external view returns (uint256);\n}\n"
+			},
+			"node_modules/@bananapus/core/src/interfaces/IJBPrices.sol": {
+				"content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\nimport {IJBPriceFeed} from \"./IJBPriceFeed.sol\";\nimport {IJBProjects} from \"./IJBProjects.sol\";\n\ninterface IJBPrices {\n    event AddPriceFeed(\n        uint256 indexed projectId, uint256 indexed pricingCurrency, uint256 indexed unitCurrency, IJBPriceFeed feed\n    );\n\n    function DEFAULT_PROJECT_ID() external view returns (uint256);\n\n    function PROJECTS() external view returns (IJBProjects);\n\n    function priceFeedFor(\n        uint256 projectId,\n        uint256 pricingCurrency,\n        uint256 unitCurrency\n    )\n        external\n        view\n        returns (IJBPriceFeed);\n\n    function pricePerUnitOf(\n        uint256 projectId,\n        uint256 pricingCurrency,\n        uint256 unitCurrency,\n        uint256 decimals\n    )\n        external\n        view\n        returns (uint256);\n\n    function addPriceFeedFor(\n        uint256 projectId,\n        uint256 pricingCurrency,\n        uint256 unitCurrency,\n        IJBPriceFeed feed\n    )\n        external;\n}\n"
+			},
+			"node_modules/@bananapus/core/src/interfaces/IJBProjects.sol": {
+				"content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\nimport {IERC721} from \"@openzeppelin/contracts/token/ERC721/IERC721.sol\";\n\nimport {IJBTokenUriResolver} from \"./IJBTokenUriResolver.sol\";\n\ninterface IJBProjects is IERC721 {\n    event Create(uint256 indexed projectId, address indexed owner, address caller);\n\n    event SetTokenUriResolver(IJBTokenUriResolver indexed resolver, address caller);\n\n    function count() external view returns (uint256);\n\n    function tokenUriResolver() external view returns (IJBTokenUriResolver);\n\n    function createFor(address owner) external returns (uint256 projectId);\n\n    function setTokenUriResolver(IJBTokenUriResolver newResolver) external;\n}\n"
+			},
+			"node_modules/@bananapus/core/src/interfaces/IJBRulesetApprovalHook.sol": {
+				"content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\nimport {IERC165} from \"@openzeppelin/contracts/utils/introspection/IERC165.sol\";\n\nimport {JBApprovalStatus} from \"./../enums/JBApprovalStatus.sol\";\n\n/// @notice `IJBRulesetApprovalHook`s are used to determine whether the next ruleset in the ruleset queue is approved or\n/// rejected.\n/// @dev Project rulesets are stored in a queue. Rulesets take effect after the previous ruleset in the queue ends, and\n/// only if they are approved by the previous ruleset's approval hook.\ninterface IJBRulesetApprovalHook is IERC165 {\n    function DURATION() external view returns (uint256);\n\n    function approvalStatusOf(\n        uint256 projectId,\n        uint256 rulesetId,\n        uint256 start\n    )\n        external\n        view\n        returns (JBApprovalStatus);\n}\n"
+			},
+			"node_modules/@bananapus/core/src/interfaces/IJBRulesets.sol": {
+				"content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\nimport {JBApprovalStatus} from \"./../enums/JBApprovalStatus.sol\";\nimport {JBRuleset} from \"./../structs/JBRuleset.sol\";\nimport {IJBRulesetApprovalHook} from \"./IJBRulesetApprovalHook.sol\";\n\ninterface IJBRulesets {\n    event RulesetQueued(\n        uint256 indexed rulesetId,\n        uint256 indexed projectId,\n        uint256 duration,\n        uint256 weight,\n        uint256 decayPercent,\n        IJBRulesetApprovalHook hook,\n        uint256 metadata,\n        uint256 mustStartAtOrAfter,\n        address caller\n    );\n\n    event RulesetInitialized(uint256 indexed rulesetId, uint256 indexed projectId, uint256 indexed basedOnId);\n\n    function latestRulesetIdOf(uint256 projectId) external view returns (uint256);\n\n    function getRulesetOf(uint256 projectId, uint256 rulesetId) external view returns (JBRuleset memory);\n\n    function latestQueuedOf(uint256 projectId)\n        external\n        view\n        returns (JBRuleset memory ruleset, JBApprovalStatus approvalStatus);\n\n    function rulesetsOf(\n        uint256 projectId,\n        uint256 startingId,\n        uint256 size\n    )\n        external\n        view\n        returns (JBRuleset[] memory rulesets);\n\n    function upcomingOf(uint256 projectId) external view returns (JBRuleset memory ruleset);\n\n    function currentOf(uint256 projectId) external view returns (JBRuleset memory ruleset);\n\n    function currentApprovalStatusForLatestRulesetOf(uint256 projectId) external view returns (JBApprovalStatus);\n\n    function queueFor(\n        uint256 projectId,\n        uint256 duration,\n        uint256 weight,\n        uint256 decayPercent,\n        IJBRulesetApprovalHook approvalHook,\n        uint256 metadata,\n        uint256 mustStartAtOrAfter\n    )\n        external\n        returns (JBRuleset memory ruleset);\n\n    function updateRulesetWeightCache(uint256 projectId) external;\n}\n"
+			},
+			"node_modules/@bananapus/core/src/interfaces/IJBTerminal.sol": {
+				"content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\nimport {IERC165} from \"@openzeppelin/contracts/utils/introspection/IERC165.sol\";\n\nimport {JBAccountingContext} from \"../structs/JBAccountingContext.sol\";\nimport {JBAfterPayRecordedContext} from \"../structs/JBAfterPayRecordedContext.sol\";\nimport {IJBPayHook} from \"../interfaces/IJBPayHook.sol\";\n\n/// @notice A terminal that accepts payments and can be migrated.\ninterface IJBTerminal is IERC165 {\n    event MigrateTerminal(\n        uint256 indexed projectId, address indexed token, IJBTerminal indexed to, uint256 amount, address caller\n    );\n\n    event AddToBalance(\n        uint256 indexed projectId, uint256 amount, uint256 unlockedFees, string memo, bytes metadata, address caller\n    );\n\n    event SetAccountingContext(uint256 indexed projectId, JBAccountingContext context, address caller);\n\n    event Pay(\n        uint256 indexed rulesetId,\n        uint256 indexed rulesetCycleNumber,\n        uint256 indexed projectId,\n        address payer,\n        address beneficiary,\n        uint256 amount,\n        uint256 beneficiaryTokenCount,\n        string memo,\n        bytes metadata,\n        address caller\n    );\n\n    event HookAfterRecordPay(\n        IJBPayHook indexed hook, JBAfterPayRecordedContext context, uint256 specificationAmount, address caller\n    );\n\n    function accountingContextForTokenOf(\n        uint256 projectId,\n        address token\n    )\n        external\n        view\n        returns (JBAccountingContext memory);\n\n    function accountingContextsOf(uint256 projectId) external view returns (JBAccountingContext[] memory);\n\n    function currentSurplusOf(uint256 projectId, uint256 decimals, uint256 currency) external view returns (uint256);\n\n    function migrateBalanceOf(uint256 projectId, address token, IJBTerminal to) external returns (uint256 balance);\n\n    function addAccountingContextsFor(uint256 projectId, JBAccountingContext[] calldata accountingContexts) external;\n\n    function pay(\n        uint256 projectId,\n        address token,\n        uint256 amount,\n        address beneficiary,\n        uint256 minReturnedTokens,\n        string calldata memo,\n        bytes calldata metadata\n    )\n        external\n        payable\n        returns (uint256 beneficiaryTokenCount);\n\n    function addToBalanceOf(\n        uint256 projectId,\n        address token,\n        uint256 amount,\n        bool shouldReturnHeldFees,\n        string calldata memo,\n        bytes calldata metadata\n    )\n        external\n        payable;\n}\n"
+			},
+			"node_modules/@bananapus/core/src/interfaces/IJBTokenUriResolver.sol": {
+				"content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\ninterface IJBTokenUriResolver {\n    function getUri(uint256 projectId) external view returns (string memory tokenUri);\n}\n"
+			},
+			"node_modules/@bananapus/core/src/structs/JBAccountingContext.sol": {
+				"content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\n/// @custom:member token The address of the token that accounting is being done with.\n/// @custom:member decimals The number of decimals expected in that token's fixed point accounting.\n/// @custom:member currency The currency that the token is priced in terms of. By convention, this is\n/// `uint32(uint160(tokenAddress))` for tokens, or a constant ID from e.g. `JBCurrencyIds` for other currencies.\nstruct JBAccountingContext {\n    address token;\n    uint8 decimals;\n    uint32 currency;\n}\n"
+			},
+			"node_modules/@bananapus/core/src/structs/JBAfterPayRecordedContext.sol": {
+				"content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\nimport {JBTokenAmount} from \"./JBTokenAmount.sol\";\n\n/// @custom:member payer The address the payment originated from.\n/// @custom:member projectId The ID of the project being paid.\n/// @custom:member rulesetId The ID of the ruleset the payment is being made during.\n/// @custom:member amount The payment's token amount. Includes the token being paid, the value, the number of decimals\n/// included, and the currency of the amount.\n/// @custom:member forwardedAmount The token amount being forwarded to the pay hook. Includes the token\n/// being paid, the value, the number of decimals included, and the currency of the amount.\n/// @custom:member weight The current ruleset's weight (used to determine how many tokens should be minted).\n/// @custom:member projectTokenCount The number of project tokens minted for the beneficiary.\n/// @custom:member beneficiary The address which receives any tokens this payment yields.\n/// @custom:member hookMetadata Extra data specified by the data hook, which is sent to the pay hook.\n/// @custom:member payerMetadata Extra data specified by the payer, which is sent to the pay hook.\nstruct JBAfterPayRecordedContext {\n    address payer;\n    uint256 projectId;\n    uint256 rulesetId;\n    JBTokenAmount amount;\n    JBTokenAmount forwardedAmount;\n    uint256 weight;\n    uint256 projectTokenCount;\n    address beneficiary;\n    bytes hookMetadata;\n    bytes payerMetadata;\n}\n"
+			},
+			"node_modules/@bananapus/core/src/structs/JBRuleset.sol": {
+				"content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\nimport {IJBRulesetApprovalHook} from \"./../interfaces/IJBRulesetApprovalHook.sol\";\n\n/// @dev `JBRuleset` timestamps are unix timestamps (seconds since 00:00 January 1st, 1970 UTC).\n/// @custom:member cycleNumber The ruleset's cycle number. Each ruleset's `cycleNumber` is the previous ruleset's\n/// `cycleNumber` plus one. Each project's first ruleset has a `cycleNumber` of 1.\n/// @custom:member id The ruleset's ID, which is a timestamp of when this ruleset's rules were initialized. The\n/// `rulesetId` stays the same for rulesets that automatically cycle over from a manually queued ruleset.\n/// @custom:member basedOnId The `rulesetId` of the ruleset which was active when this ruleset was created.\n/// @custom:member start The timestamp from which this ruleset is considered active.\n/// @custom:member duration The number of seconds the ruleset lasts for. After this duration, a new ruleset will start.\n/// The project owner can queue new rulesets at any time, which will take effect once the current ruleset's duration is\n/// over. If the `duration` is 0, newly queued rulesets will take effect immediately. If a ruleset ends and there are no\n/// new rulesets queued, the current ruleset cycles over to another one with the same properties but a new `start`\n/// timestamp and a `weight` reduced by the ruleset's `decayPercent`.\n/// @custom:member weight A fixed point number with 18 decimals which is typically used by payment terminals to\n/// determine how many tokens should be minted when a payment is received. This can be used by other contracts for\n/// arbitrary calculations.\n/// @custom:member decayPercent The percentage by which to reduce the `weight` each time a new ruleset starts. `weight`\n/// is\n/// a percentage out of `JBConstants.MAX_DECAY_PERCENT`. If it's 0, the next ruleset will have the same `weight` by\n/// default. If it's 90%, the next ruleset's `weight` will be 10% smaller. If a ruleset explicitly sets a new `weight`,\n/// the `decayPercent` doesn't apply.\n/// @custom:member approvalHook An address of a contract that says whether a queued ruleset should be approved or\n/// rejected. If a\n/// ruleset is rejected, it won't go into effect. An approval hook can be used to create rules which dictate how a\n/// project owner can change their ruleset over time.\n/// @custom:member metadata Extra data associated with a ruleset which can be used by other contracts.\nstruct JBRuleset {\n    uint48 cycleNumber;\n    uint48 id;\n    uint48 basedOnId;\n    uint48 start;\n    uint32 duration;\n    uint112 weight;\n    uint32 decayPercent;\n    IJBRulesetApprovalHook approvalHook;\n    uint256 metadata;\n}\n"
+			},
+			"node_modules/@bananapus/core/src/structs/JBTokenAmount.sol": {
+				"content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\n/// @custom:member token The token the payment was made in.\n/// @custom:member decimals The number of decimals included in the value fixed point number.\n/// @custom:member currency The currency. By convention, this is `uint32(uint160(tokenAddress))` for tokens, or a\n/// constant ID from e.g. `JBCurrencyIds` for other currencies.\n/// @custom:member value The amount of tokens that was paid, as a fixed point number.\nstruct JBTokenAmount {\n    address token;\n    uint8 decimals;\n    uint32 currency;\n    uint256 value;\n}\n"
+			},
+			"node_modules/@openzeppelin/contracts/access/Ownable.sol": {
+				"content": "// SPDX-License-Identifier: MIT\n// OpenZeppelin Contracts (last updated v5.0.0) (access/Ownable.sol)\n\npragma solidity ^0.8.20;\n\nimport {Context} from \"../utils/Context.sol\";\n\n/**\n * @dev Contract module which provides a basic access control mechanism, where\n * there is an account (an owner) that can be granted exclusive access to\n * specific functions.\n *\n * The initial owner is set to the address provided by the deployer. This can\n * later be changed with {transferOwnership}.\n *\n * This module is used through inheritance. It will make available the modifier\n * `onlyOwner`, which can be applied to your functions to restrict their use to\n * the owner.\n */\nabstract contract Ownable is Context {\n    address private _owner;\n\n    /**\n     * @dev The caller account is not authorized to perform an operation.\n     */\n    error OwnableUnauthorizedAccount(address account);\n\n    /**\n     * @dev The owner is not a valid owner account. (eg. `address(0)`)\n     */\n    error OwnableInvalidOwner(address owner);\n\n    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);\n\n    /**\n     * @dev Initializes the contract setting the address provided by the deployer as the initial owner.\n     */\n    constructor(address initialOwner) {\n        if (initialOwner == address(0)) {\n            revert OwnableInvalidOwner(address(0));\n        }\n        _transferOwnership(initialOwner);\n    }\n\n    /**\n     * @dev Throws if called by any account other than the owner.\n     */\n    modifier onlyOwner() {\n        _checkOwner();\n        _;\n    }\n\n    /**\n     * @dev Returns the address of the current owner.\n     */\n    function owner() public view virtual returns (address) {\n        return _owner;\n    }\n\n    /**\n     * @dev Throws if the sender is not the owner.\n     */\n    function _checkOwner() internal view virtual {\n        if (owner() != _msgSender()) {\n            revert OwnableUnauthorizedAccount(_msgSender());\n        }\n    }\n\n    /**\n     * @dev Leaves the contract without owner. It will not be possible to call\n     * `onlyOwner` functions. Can only be called by the current owner.\n     *\n     * NOTE: Renouncing ownership will leave the contract without an owner,\n     * thereby disabling any functionality that is only available to the owner.\n     */\n    function renounceOwnership() public virtual onlyOwner {\n        _transferOwnership(address(0));\n    }\n\n    /**\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\n     * Can only be called by the current owner.\n     */\n    function transferOwnership(address newOwner) public virtual onlyOwner {\n        if (newOwner == address(0)) {\n            revert OwnableInvalidOwner(address(0));\n        }\n        _transferOwnership(newOwner);\n    }\n\n    /**\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\n     * Internal function without access restriction.\n     */\n    function _transferOwnership(address newOwner) internal virtual {\n        address oldOwner = _owner;\n        _owner = newOwner;\n        emit OwnershipTransferred(oldOwner, newOwner);\n    }\n}\n"
+			},
+			"node_modules/@openzeppelin/contracts/interfaces/draft-IERC6093.sol": {
+				"content": "// SPDX-License-Identifier: MIT\n// OpenZeppelin Contracts (last updated v5.0.0) (interfaces/draft-IERC6093.sol)\npragma solidity ^0.8.20;\n\n/**\n * @dev Standard ERC20 Errors\n * Interface of the https://eips.ethereum.org/EIPS/eip-6093[ERC-6093] custom errors for ERC20 tokens.\n */\ninterface IERC20Errors {\n    /**\n     * @dev Indicates an error related to the current `balance` of a `sender`. Used in transfers.\n     * @param sender Address whose tokens are being transferred.\n     * @param balance Current balance for the interacting account.\n     * @param needed Minimum amount required to perform a transfer.\n     */\n    error ERC20InsufficientBalance(address sender, uint256 balance, uint256 needed);\n\n    /**\n     * @dev Indicates a failure with the token `sender`. Used in transfers.\n     * @param sender Address whose tokens are being transferred.\n     */\n    error ERC20InvalidSender(address sender);\n\n    /**\n     * @dev Indicates a failure with the token `receiver`. Used in transfers.\n     * @param receiver Address to which tokens are being transferred.\n     */\n    error ERC20InvalidReceiver(address receiver);\n\n    /**\n     * @dev Indicates a failure with the `spender`’s `allowance`. Used in transfers.\n     * @param spender Address that may be allowed to operate on tokens without being their owner.\n     * @param allowance Amount of tokens a `spender` is allowed to operate with.\n     * @param needed Minimum amount required to perform a transfer.\n     */\n    error ERC20InsufficientAllowance(address spender, uint256 allowance, uint256 needed);\n\n    /**\n     * @dev Indicates a failure with the `approver` of a token to be approved. Used in approvals.\n     * @param approver Address initiating an approval operation.\n     */\n    error ERC20InvalidApprover(address approver);\n\n    /**\n     * @dev Indicates a failure with the `spender` to be approved. Used in approvals.\n     * @param spender Address that may be allowed to operate on tokens without being their owner.\n     */\n    error ERC20InvalidSpender(address spender);\n}\n\n/**\n * @dev Standard ERC721 Errors\n * Interface of the https://eips.ethereum.org/EIPS/eip-6093[ERC-6093] custom errors for ERC721 tokens.\n */\ninterface IERC721Errors {\n    /**\n     * @dev Indicates that an address can't be an owner. For example, `address(0)` is a forbidden owner in EIP-20.\n     * Used in balance queries.\n     * @param owner Address of the current owner of a token.\n     */\n    error ERC721InvalidOwner(address owner);\n\n    /**\n     * @dev Indicates a `tokenId` whose `owner` is the zero address.\n     * @param tokenId Identifier number of a token.\n     */\n    error ERC721NonexistentToken(uint256 tokenId);\n\n    /**\n     * @dev Indicates an error related to the ownership over a particular token. Used in transfers.\n     * @param sender Address whose tokens are being transferred.\n     * @param tokenId Identifier number of a token.\n     * @param owner Address of the current owner of a token.\n     */\n    error ERC721IncorrectOwner(address sender, uint256 tokenId, address owner);\n\n    /**\n     * @dev Indicates a failure with the token `sender`. Used in transfers.\n     * @param sender Address whose tokens are being transferred.\n     */\n    error ERC721InvalidSender(address sender);\n\n    /**\n     * @dev Indicates a failure with the token `receiver`. Used in transfers.\n     * @param receiver Address to which tokens are being transferred.\n     */\n    error ERC721InvalidReceiver(address receiver);\n\n    /**\n     * @dev Indicates a failure with the `operator`’s approval. Used in transfers.\n     * @param operator Address that may be allowed to operate on tokens without being their owner.\n     * @param tokenId Identifier number of a token.\n     */\n    error ERC721InsufficientApproval(address operator, uint256 tokenId);\n\n    /**\n     * @dev Indicates a failure with the `approver` of a token to be approved. Used in approvals.\n     * @param approver Address initiating an approval operation.\n     */\n    error ERC721InvalidApprover(address approver);\n\n    /**\n     * @dev Indicates a failure with the `operator` to be approved. Used in approvals.\n     * @param operator Address that may be allowed to operate on tokens without being their owner.\n     */\n    error ERC721InvalidOperator(address operator);\n}\n\n/**\n * @dev Standard ERC1155 Errors\n * Interface of the https://eips.ethereum.org/EIPS/eip-6093[ERC-6093] custom errors for ERC1155 tokens.\n */\ninterface IERC1155Errors {\n    /**\n     * @dev Indicates an error related to the current `balance` of a `sender`. Used in transfers.\n     * @param sender Address whose tokens are being transferred.\n     * @param balance Current balance for the interacting account.\n     * @param needed Minimum amount required to perform a transfer.\n     * @param tokenId Identifier number of a token.\n     */\n    error ERC1155InsufficientBalance(address sender, uint256 balance, uint256 needed, uint256 tokenId);\n\n    /**\n     * @dev Indicates a failure with the token `sender`. Used in transfers.\n     * @param sender Address whose tokens are being transferred.\n     */\n    error ERC1155InvalidSender(address sender);\n\n    /**\n     * @dev Indicates a failure with the token `receiver`. Used in transfers.\n     * @param receiver Address to which tokens are being transferred.\n     */\n    error ERC1155InvalidReceiver(address receiver);\n\n    /**\n     * @dev Indicates a failure with the `operator`’s approval. Used in transfers.\n     * @param operator Address that may be allowed to operate on tokens without being their owner.\n     * @param owner Address of the current owner of a token.\n     */\n    error ERC1155MissingApprovalForAll(address operator, address owner);\n\n    /**\n     * @dev Indicates a failure with the `approver` of a token to be approved. Used in approvals.\n     * @param approver Address initiating an approval operation.\n     */\n    error ERC1155InvalidApprover(address approver);\n\n    /**\n     * @dev Indicates a failure with the `operator` to be approved. Used in approvals.\n     * @param operator Address that may be allowed to operate on tokens without being their owner.\n     */\n    error ERC1155InvalidOperator(address operator);\n\n    /**\n     * @dev Indicates an array length mismatch between ids and values in a safeBatchTransferFrom operation.\n     * Used in batch transfers.\n     * @param idsLength Length of the array of token identifiers\n     * @param valuesLength Length of the array of token amounts\n     */\n    error ERC1155InvalidArrayLength(uint256 idsLength, uint256 valuesLength);\n}\n"
+			},
+			"node_modules/@openzeppelin/contracts/metatx/ERC2771Context.sol": {
+				"content": "// SPDX-License-Identifier: MIT\n// OpenZeppelin Contracts (last updated v5.0.1) (metatx/ERC2771Context.sol)\n\npragma solidity ^0.8.20;\n\nimport {Context} from \"../utils/Context.sol\";\n\n/**\n * @dev Context variant with ERC2771 support.\n *\n * WARNING: Avoid using this pattern in contracts that rely in a specific calldata length as they'll\n * be affected by any forwarder whose `msg.data` is suffixed with the `from` address according to the ERC2771\n * specification adding the address size in bytes (20) to the calldata size. An example of an unexpected\n * behavior could be an unintended fallback (or another function) invocation while trying to invoke the `receive`\n * function only accessible if `msg.data.length == 0`.\n *\n * WARNING: The usage of `delegatecall` in this contract is dangerous and may result in context corruption.\n * Any forwarded request to this contract triggering a `delegatecall` to itself will result in an invalid {_msgSender}\n * recovery.\n */\nabstract contract ERC2771Context is Context {\n    /// @custom:oz-upgrades-unsafe-allow state-variable-immutable\n    address private immutable _trustedForwarder;\n\n    /**\n     * @dev Initializes the contract with a trusted forwarder, which will be able to\n     * invoke functions on this contract on behalf of other accounts.\n     *\n     * NOTE: The trusted forwarder can be replaced by overriding {trustedForwarder}.\n     */\n    /// @custom:oz-upgrades-unsafe-allow constructor\n    constructor(address trustedForwarder_) {\n        _trustedForwarder = trustedForwarder_;\n    }\n\n    /**\n     * @dev Returns the address of the trusted forwarder.\n     */\n    function trustedForwarder() public view virtual returns (address) {\n        return _trustedForwarder;\n    }\n\n    /**\n     * @dev Indicates whether any particular address is the trusted forwarder.\n     */\n    function isTrustedForwarder(address forwarder) public view virtual returns (bool) {\n        return forwarder == trustedForwarder();\n    }\n\n    /**\n     * @dev Override for `msg.sender`. Defaults to the original `msg.sender` whenever\n     * a call is not performed by the trusted forwarder or the calldata length is less than\n     * 20 bytes (an address length).\n     */\n    function _msgSender() internal view virtual override returns (address) {\n        uint256 calldataLength = msg.data.length;\n        uint256 contextSuffixLength = _contextSuffixLength();\n        if (isTrustedForwarder(msg.sender) && calldataLength >= contextSuffixLength) {\n            return address(bytes20(msg.data[calldataLength - contextSuffixLength:]));\n        } else {\n            return super._msgSender();\n        }\n    }\n\n    /**\n     * @dev Override for `msg.data`. Defaults to the original `msg.data` whenever\n     * a call is not performed by the trusted forwarder or the calldata length is less than\n     * 20 bytes (an address length).\n     */\n    function _msgData() internal view virtual override returns (bytes calldata) {\n        uint256 calldataLength = msg.data.length;\n        uint256 contextSuffixLength = _contextSuffixLength();\n        if (isTrustedForwarder(msg.sender) && calldataLength >= contextSuffixLength) {\n            return msg.data[:calldataLength - contextSuffixLength];\n        } else {\n            return super._msgData();\n        }\n    }\n\n    /**\n     * @dev ERC-2771 specifies the context as being a single address (20 bytes).\n     */\n    function _contextSuffixLength() internal view virtual override returns (uint256) {\n        return 20;\n    }\n}\n"
+			},
+			"node_modules/@openzeppelin/contracts/token/ERC721/IERC721.sol": {
+				"content": "// SPDX-License-Identifier: MIT\n// OpenZeppelin Contracts (last updated v5.0.0) (token/ERC721/IERC721.sol)\n\npragma solidity ^0.8.20;\n\nimport {IERC165} from \"../../utils/introspection/IERC165.sol\";\n\n/**\n * @dev Required interface of an ERC721 compliant contract.\n */\ninterface IERC721 is IERC165 {\n    /**\n     * @dev Emitted when `tokenId` token is transferred from `from` to `to`.\n     */\n    event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);\n\n    /**\n     * @dev Emitted when `owner` enables `approved` to manage the `tokenId` token.\n     */\n    event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId);\n\n    /**\n     * @dev Emitted when `owner` enables or disables (`approved`) `operator` to manage all of its assets.\n     */\n    event ApprovalForAll(address indexed owner, address indexed operator, bool approved);\n\n    /**\n     * @dev Returns the number of tokens in ``owner``'s account.\n     */\n    function balanceOf(address owner) external view returns (uint256 balance);\n\n    /**\n     * @dev Returns the owner of the `tokenId` token.\n     *\n     * Requirements:\n     *\n     * - `tokenId` must exist.\n     */\n    function ownerOf(uint256 tokenId) external view returns (address owner);\n\n    /**\n     * @dev Safely transfers `tokenId` token from `from` to `to`.\n     *\n     * Requirements:\n     *\n     * - `from` cannot be the zero address.\n     * - `to` cannot be the zero address.\n     * - `tokenId` token must exist and be owned by `from`.\n     * - If the caller is not `from`, it must be approved to move this token by either {approve} or {setApprovalForAll}.\n     * - If `to` refers to a smart contract, it must implement {IERC721Receiver-onERC721Received}, which is called upon\n     *   a safe transfer.\n     *\n     * Emits a {Transfer} event.\n     */\n    function safeTransferFrom(address from, address to, uint256 tokenId, bytes calldata data) external;\n\n    /**\n     * @dev Safely transfers `tokenId` token from `from` to `to`, checking first that contract recipients\n     * are aware of the ERC721 protocol to prevent tokens from being forever locked.\n     *\n     * Requirements:\n     *\n     * - `from` cannot be the zero address.\n     * - `to` cannot be the zero address.\n     * - `tokenId` token must exist and be owned by `from`.\n     * - If the caller is not `from`, it must have been allowed to move this token by either {approve} or\n     *   {setApprovalForAll}.\n     * - If `to` refers to a smart contract, it must implement {IERC721Receiver-onERC721Received}, which is called upon\n     *   a safe transfer.\n     *\n     * Emits a {Transfer} event.\n     */\n    function safeTransferFrom(address from, address to, uint256 tokenId) external;\n\n    /**\n     * @dev Transfers `tokenId` token from `from` to `to`.\n     *\n     * WARNING: Note that the caller is responsible to confirm that the recipient is capable of receiving ERC721\n     * or else they may be permanently lost. Usage of {safeTransferFrom} prevents loss, though the caller must\n     * understand this adds an external call which potentially creates a reentrancy vulnerability.\n     *\n     * Requirements:\n     *\n     * - `from` cannot be the zero address.\n     * - `to` cannot be the zero address.\n     * - `tokenId` token must be owned by `from`.\n     * - If the caller is not `from`, it must be approved to move this token by either {approve} or {setApprovalForAll}.\n     *\n     * Emits a {Transfer} event.\n     */\n    function transferFrom(address from, address to, uint256 tokenId) external;\n\n    /**\n     * @dev Gives permission to `to` to transfer `tokenId` token to another account.\n     * The approval is cleared when the token is transferred.\n     *\n     * Only a single account can be approved at a time, so approving the zero address clears previous approvals.\n     *\n     * Requirements:\n     *\n     * - The caller must own the token or be an approved operator.\n     * - `tokenId` must exist.\n     *\n     * Emits an {Approval} event.\n     */\n    function approve(address to, uint256 tokenId) external;\n\n    /**\n     * @dev Approve or remove `operator` as an operator for the caller.\n     * Operators can call {transferFrom} or {safeTransferFrom} for any token owned by the caller.\n     *\n     * Requirements:\n     *\n     * - The `operator` cannot be the address zero.\n     *\n     * Emits an {ApprovalForAll} event.\n     */\n    function setApprovalForAll(address operator, bool approved) external;\n\n    /**\n     * @dev Returns the account approved for `tokenId` token.\n     *\n     * Requirements:\n     *\n     * - `tokenId` must exist.\n     */\n    function getApproved(uint256 tokenId) external view returns (address operator);\n\n    /**\n     * @dev Returns if the `operator` is allowed to manage all of the assets of `owner`.\n     *\n     * See {setApprovalForAll}\n     */\n    function isApprovedForAll(address owner, address operator) external view returns (bool);\n}\n"
+			},
+			"node_modules/@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol": {
+				"content": "// SPDX-License-Identifier: MIT\n// OpenZeppelin Contracts (last updated v5.0.0) (token/ERC721/IERC721Receiver.sol)\n\npragma solidity ^0.8.20;\n\n/**\n * @title ERC721 token receiver interface\n * @dev Interface for any contract that wants to support safeTransfers\n * from ERC721 asset contracts.\n */\ninterface IERC721Receiver {\n    /**\n     * @dev Whenever an {IERC721} `tokenId` token is transferred to this contract via {IERC721-safeTransferFrom}\n     * by `operator` from `from`, this function is called.\n     *\n     * It must return its Solidity selector to confirm the token transfer.\n     * If any other value is returned or the interface is not implemented by the recipient, the transfer will be\n     * reverted.\n     *\n     * The selector can be obtained in Solidity with `IERC721Receiver.onERC721Received.selector`.\n     */\n    function onERC721Received(\n        address operator,\n        address from,\n        uint256 tokenId,\n        bytes calldata data\n    ) external returns (bytes4);\n}\n"
+			},
+			"node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol": {
+				"content": "// SPDX-License-Identifier: MIT\n// OpenZeppelin Contracts (last updated v5.0.0) (token/ERC721/extensions/IERC721Metadata.sol)\n\npragma solidity ^0.8.20;\n\nimport {IERC721} from \"../IERC721.sol\";\n\n/**\n * @title ERC-721 Non-Fungible Token Standard, optional metadata extension\n * @dev See https://eips.ethereum.org/EIPS/eip-721\n */\ninterface IERC721Metadata is IERC721 {\n    /**\n     * @dev Returns the token collection name.\n     */\n    function name() external view returns (string memory);\n\n    /**\n     * @dev Returns the token collection symbol.\n     */\n    function symbol() external view returns (string memory);\n\n    /**\n     * @dev Returns the Uniform Resource Identifier (URI) for `tokenId` token.\n     */\n    function tokenURI(uint256 tokenId) external view returns (string memory);\n}\n"
+			},
+			"node_modules/@openzeppelin/contracts/utils/Context.sol": {
+				"content": "// SPDX-License-Identifier: MIT\n// OpenZeppelin Contracts (last updated v5.0.1) (utils/Context.sol)\n\npragma solidity ^0.8.20;\n\n/**\n * @dev Provides information about the current execution context, including the\n * sender of the transaction and its data. While these are generally available\n * via msg.sender and msg.data, they should not be accessed in such a direct\n * manner, since when dealing with meta-transactions the account sending and\n * paying for execution may not be the actual sender (as far as an application\n * is concerned).\n *\n * This contract is only required for intermediate, library-like contracts.\n */\nabstract contract Context {\n    function _msgSender() internal view virtual returns (address) {\n        return msg.sender;\n    }\n\n    function _msgData() internal view virtual returns (bytes calldata) {\n        return msg.data;\n    }\n\n    function _contextSuffixLength() internal view virtual returns (uint256) {\n        return 0;\n    }\n}\n"
+			},
+			"node_modules/@openzeppelin/contracts/utils/Strings.sol": {
+				"content": "// SPDX-License-Identifier: MIT\n// OpenZeppelin Contracts (last updated v5.0.0) (utils/Strings.sol)\n\npragma solidity ^0.8.20;\n\nimport {Math} from \"./math/Math.sol\";\nimport {SignedMath} from \"./math/SignedMath.sol\";\n\n/**\n * @dev String operations.\n */\nlibrary Strings {\n    bytes16 private constant HEX_DIGITS = \"0123456789abcdef\";\n    uint8 private constant ADDRESS_LENGTH = 20;\n\n    /**\n     * @dev The `value` string doesn't fit in the specified `length`.\n     */\n    error StringsInsufficientHexLength(uint256 value, uint256 length);\n\n    /**\n     * @dev Converts a `uint256` to its ASCII `string` decimal representation.\n     */\n    function toString(uint256 value) internal pure returns (string memory) {\n        unchecked {\n            uint256 length = Math.log10(value) + 1;\n            string memory buffer = new string(length);\n            uint256 ptr;\n            /// @solidity memory-safe-assembly\n            assembly {\n                ptr := add(buffer, add(32, length))\n            }\n            while (true) {\n                ptr--;\n                /// @solidity memory-safe-assembly\n                assembly {\n                    mstore8(ptr, byte(mod(value, 10), HEX_DIGITS))\n                }\n                value /= 10;\n                if (value == 0) break;\n            }\n            return buffer;\n        }\n    }\n\n    /**\n     * @dev Converts a `int256` to its ASCII `string` decimal representation.\n     */\n    function toStringSigned(int256 value) internal pure returns (string memory) {\n        return string.concat(value < 0 ? \"-\" : \"\", toString(SignedMath.abs(value)));\n    }\n\n    /**\n     * @dev Converts a `uint256` to its ASCII `string` hexadecimal representation.\n     */\n    function toHexString(uint256 value) internal pure returns (string memory) {\n        unchecked {\n            return toHexString(value, Math.log256(value) + 1);\n        }\n    }\n\n    /**\n     * @dev Converts a `uint256` to its ASCII `string` hexadecimal representation with fixed length.\n     */\n    function toHexString(uint256 value, uint256 length) internal pure returns (string memory) {\n        uint256 localValue = value;\n        bytes memory buffer = new bytes(2 * length + 2);\n        buffer[0] = \"0\";\n        buffer[1] = \"x\";\n        for (uint256 i = 2 * length + 1; i > 1; --i) {\n            buffer[i] = HEX_DIGITS[localValue & 0xf];\n            localValue >>= 4;\n        }\n        if (localValue != 0) {\n            revert StringsInsufficientHexLength(value, length);\n        }\n        return string(buffer);\n    }\n\n    /**\n     * @dev Converts an `address` with fixed length of 20 bytes to its not checksummed ASCII `string` hexadecimal\n     * representation.\n     */\n    function toHexString(address addr) internal pure returns (string memory) {\n        return toHexString(uint256(uint160(addr)), ADDRESS_LENGTH);\n    }\n\n    /**\n     * @dev Returns true if the two strings are equal.\n     */\n    function equal(string memory a, string memory b) internal pure returns (bool) {\n        return bytes(a).length == bytes(b).length && keccak256(bytes(a)) == keccak256(bytes(b));\n    }\n}\n"
+			},
+			"node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol": {
+				"content": "// SPDX-License-Identifier: MIT\n// OpenZeppelin Contracts (last updated v5.0.0) (utils/introspection/ERC165.sol)\n\npragma solidity ^0.8.20;\n\nimport {IERC165} from \"./IERC165.sol\";\n\n/**\n * @dev Implementation of the {IERC165} interface.\n *\n * Contracts that want to implement ERC165 should inherit from this contract and override {supportsInterface} to check\n * for the additional interface id that will be supported. For example:\n *\n * ```solidity\n * function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {\n *     return interfaceId == type(MyInterface).interfaceId || super.supportsInterface(interfaceId);\n * }\n * ```\n */\nabstract contract ERC165 is IERC165 {\n    /**\n     * @dev See {IERC165-supportsInterface}.\n     */\n    function supportsInterface(bytes4 interfaceId) public view virtual returns (bool) {\n        return interfaceId == type(IERC165).interfaceId;\n    }\n}\n"
+			},
+			"node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol": {
+				"content": "// SPDX-License-Identifier: MIT\n// OpenZeppelin Contracts (last updated v5.0.0) (utils/introspection/IERC165.sol)\n\npragma solidity ^0.8.20;\n\n/**\n * @dev Interface of the ERC165 standard, as defined in the\n * https://eips.ethereum.org/EIPS/eip-165[EIP].\n *\n * Implementers can declare support of contract interfaces, which can then be\n * queried by others ({ERC165Checker}).\n *\n * For an implementation, see {ERC165}.\n */\ninterface IERC165 {\n    /**\n     * @dev Returns true if this contract implements the interface defined by\n     * `interfaceId`. See the corresponding\n     * https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[EIP section]\n     * to learn more about how these ids are created.\n     *\n     * This function call must use less than 30 000 gas.\n     */\n    function supportsInterface(bytes4 interfaceId) external view returns (bool);\n}\n"
+			},
+			"node_modules/@openzeppelin/contracts/utils/math/Math.sol": {
+				"content": "// SPDX-License-Identifier: MIT\n// OpenZeppelin Contracts (last updated v5.0.0) (utils/math/Math.sol)\n\npragma solidity ^0.8.20;\n\n/**\n * @dev Standard math utilities missing in the Solidity language.\n */\nlibrary Math {\n    /**\n     * @dev Muldiv operation overflow.\n     */\n    error MathOverflowedMulDiv();\n\n    enum Rounding {\n        Floor, // Toward negative infinity\n        Ceil, // Toward positive infinity\n        Trunc, // Toward zero\n        Expand // Away from zero\n    }\n\n    /**\n     * @dev Returns the addition of two unsigned integers, with an overflow flag.\n     */\n    function tryAdd(uint256 a, uint256 b) internal pure returns (bool, uint256) {\n        unchecked {\n            uint256 c = a + b;\n            if (c < a) return (false, 0);\n            return (true, c);\n        }\n    }\n\n    /**\n     * @dev Returns the subtraction of two unsigned integers, with an overflow flag.\n     */\n    function trySub(uint256 a, uint256 b) internal pure returns (bool, uint256) {\n        unchecked {\n            if (b > a) return (false, 0);\n            return (true, a - b);\n        }\n    }\n\n    /**\n     * @dev Returns the multiplication of two unsigned integers, with an overflow flag.\n     */\n    function tryMul(uint256 a, uint256 b) internal pure returns (bool, uint256) {\n        unchecked {\n            // Gas optimization: this is cheaper than requiring 'a' not being zero, but the\n            // benefit is lost if 'b' is also tested.\n            // See: https://github.com/OpenZeppelin/openzeppelin-contracts/pull/522\n            if (a == 0) return (true, 0);\n            uint256 c = a * b;\n            if (c / a != b) return (false, 0);\n            return (true, c);\n        }\n    }\n\n    /**\n     * @dev Returns the division of two unsigned integers, with a division by zero flag.\n     */\n    function tryDiv(uint256 a, uint256 b) internal pure returns (bool, uint256) {\n        unchecked {\n            if (b == 0) return (false, 0);\n            return (true, a / b);\n        }\n    }\n\n    /**\n     * @dev Returns the remainder of dividing two unsigned integers, with a division by zero flag.\n     */\n    function tryMod(uint256 a, uint256 b) internal pure returns (bool, uint256) {\n        unchecked {\n            if (b == 0) return (false, 0);\n            return (true, a % b);\n        }\n    }\n\n    /**\n     * @dev Returns the largest of two numbers.\n     */\n    function max(uint256 a, uint256 b) internal pure returns (uint256) {\n        return a > b ? a : b;\n    }\n\n    /**\n     * @dev Returns the smallest of two numbers.\n     */\n    function min(uint256 a, uint256 b) internal pure returns (uint256) {\n        return a < b ? a : b;\n    }\n\n    /**\n     * @dev Returns the average of two numbers. The result is rounded towards\n     * zero.\n     */\n    function average(uint256 a, uint256 b) internal pure returns (uint256) {\n        // (a + b) / 2 can overflow.\n        return (a & b) + (a ^ b) / 2;\n    }\n\n    /**\n     * @dev Returns the ceiling of the division of two numbers.\n     *\n     * This differs from standard division with `/` in that it rounds towards infinity instead\n     * of rounding towards zero.\n     */\n    function ceilDiv(uint256 a, uint256 b) internal pure returns (uint256) {\n        if (b == 0) {\n            // Guarantee the same behavior as in a regular Solidity division.\n            return a / b;\n        }\n\n        // (a + b - 1) / b can overflow on addition, so we distribute.\n        return a == 0 ? 0 : (a - 1) / b + 1;\n    }\n\n    /**\n     * @notice Calculates floor(x * y / denominator) with full precision. Throws if result overflows a uint256 or\n     * denominator == 0.\n     * @dev Original credit to Remco Bloemen under MIT license (https://xn--2-umb.com/21/muldiv) with further edits by\n     * Uniswap Labs also under MIT license.\n     */\n    function mulDiv(uint256 x, uint256 y, uint256 denominator) internal pure returns (uint256 result) {\n        unchecked {\n            // 512-bit multiply [prod1 prod0] = x * y. Compute the product mod 2^256 and mod 2^256 - 1, then use\n            // use the Chinese Remainder Theorem to reconstruct the 512 bit result. The result is stored in two 256\n            // variables such that product = prod1 * 2^256 + prod0.\n            uint256 prod0 = x * y; // Least significant 256 bits of the product\n            uint256 prod1; // Most significant 256 bits of the product\n            assembly {\n                let mm := mulmod(x, y, not(0))\n                prod1 := sub(sub(mm, prod0), lt(mm, prod0))\n            }\n\n            // Handle non-overflow cases, 256 by 256 division.\n            if (prod1 == 0) {\n                // Solidity will revert if denominator == 0, unlike the div opcode on its own.\n                // The surrounding unchecked block does not change this fact.\n                // See https://docs.soliditylang.org/en/latest/control-structures.html#checked-or-unchecked-arithmetic.\n                return prod0 / denominator;\n            }\n\n            // Make sure the result is less than 2^256. Also prevents denominator == 0.\n            if (denominator <= prod1) {\n                revert MathOverflowedMulDiv();\n            }\n\n            ///////////////////////////////////////////////\n            // 512 by 256 division.\n            ///////////////////////////////////////////////\n\n            // Make division exact by subtracting the remainder from [prod1 prod0].\n            uint256 remainder;\n            assembly {\n                // Compute remainder using mulmod.\n                remainder := mulmod(x, y, denominator)\n\n                // Subtract 256 bit number from 512 bit number.\n                prod1 := sub(prod1, gt(remainder, prod0))\n                prod0 := sub(prod0, remainder)\n            }\n\n            // Factor powers of two out of denominator and compute largest power of two divisor of denominator.\n            // Always >= 1. See https://cs.stackexchange.com/q/138556/92363.\n\n            uint256 twos = denominator & (0 - denominator);\n            assembly {\n                // Divide denominator by twos.\n                denominator := div(denominator, twos)\n\n                // Divide [prod1 prod0] by twos.\n                prod0 := div(prod0, twos)\n\n                // Flip twos such that it is 2^256 / twos. If twos is zero, then it becomes one.\n                twos := add(div(sub(0, twos), twos), 1)\n            }\n\n            // Shift in bits from prod1 into prod0.\n            prod0 |= prod1 * twos;\n\n            // Invert denominator mod 2^256. Now that denominator is an odd number, it has an inverse modulo 2^256 such\n            // that denominator * inv = 1 mod 2^256. Compute the inverse by starting with a seed that is correct for\n            // four bits. That is, denominator * inv = 1 mod 2^4.\n            uint256 inverse = (3 * denominator) ^ 2;\n\n            // Use the Newton-Raphson iteration to improve the precision. Thanks to Hensel's lifting lemma, this also\n            // works in modular arithmetic, doubling the correct bits in each step.\n            inverse *= 2 - denominator * inverse; // inverse mod 2^8\n            inverse *= 2 - denominator * inverse; // inverse mod 2^16\n            inverse *= 2 - denominator * inverse; // inverse mod 2^32\n            inverse *= 2 - denominator * inverse; // inverse mod 2^64\n            inverse *= 2 - denominator * inverse; // inverse mod 2^128\n            inverse *= 2 - denominator * inverse; // inverse mod 2^256\n\n            // Because the division is now exact we can divide by multiplying with the modular inverse of denominator.\n            // This will give us the correct result modulo 2^256. Since the preconditions guarantee that the outcome is\n            // less than 2^256, this is the final result. We don't need to compute the high bits of the result and prod1\n            // is no longer required.\n            result = prod0 * inverse;\n            return result;\n        }\n    }\n\n    /**\n     * @notice Calculates x * y / denominator with full precision, following the selected rounding direction.\n     */\n    function mulDiv(uint256 x, uint256 y, uint256 denominator, Rounding rounding) internal pure returns (uint256) {\n        uint256 result = mulDiv(x, y, denominator);\n        if (unsignedRoundsUp(rounding) && mulmod(x, y, denominator) > 0) {\n            result += 1;\n        }\n        return result;\n    }\n\n    /**\n     * @dev Returns the square root of a number. If the number is not a perfect square, the value is rounded\n     * towards zero.\n     *\n     * Inspired by Henry S. Warren, Jr.'s \"Hacker's Delight\" (Chapter 11).\n     */\n    function sqrt(uint256 a) internal pure returns (uint256) {\n        if (a == 0) {\n            return 0;\n        }\n\n        // For our first guess, we get the biggest power of 2 which is smaller than the square root of the target.\n        //\n        // We know that the \"msb\" (most significant bit) of our target number `a` is a power of 2 such that we have\n        // `msb(a) <= a < 2*msb(a)`. This value can be written `msb(a)=2**k` with `k=log2(a)`.\n        //\n        // This can be rewritten `2**log2(a) <= a < 2**(log2(a) + 1)`\n        // → `sqrt(2**k) <= sqrt(a) < sqrt(2**(k+1))`\n        // → `2**(k/2) <= sqrt(a) < 2**((k+1)/2) <= 2**(k/2 + 1)`\n        //\n        // Consequently, `2**(log2(a) / 2)` is a good first approximation of `sqrt(a)` with at least 1 correct bit.\n        uint256 result = 1 << (log2(a) >> 1);\n\n        // At this point `result` is an estimation with one bit of precision. We know the true value is a uint128,\n        // since it is the square root of a uint256. Newton's method converges quadratically (precision doubles at\n        // every iteration). We thus need at most 7 iteration to turn our partial result with one bit of precision\n        // into the expected uint128 result.\n        unchecked {\n            result = (result + a / result) >> 1;\n            result = (result + a / result) >> 1;\n            result = (result + a / result) >> 1;\n            result = (result + a / result) >> 1;\n            result = (result + a / result) >> 1;\n            result = (result + a / result) >> 1;\n            result = (result + a / result) >> 1;\n            return min(result, a / result);\n        }\n    }\n\n    /**\n     * @notice Calculates sqrt(a), following the selected rounding direction.\n     */\n    function sqrt(uint256 a, Rounding rounding) internal pure returns (uint256) {\n        unchecked {\n            uint256 result = sqrt(a);\n            return result + (unsignedRoundsUp(rounding) && result * result < a ? 1 : 0);\n        }\n    }\n\n    /**\n     * @dev Return the log in base 2 of a positive value rounded towards zero.\n     * Returns 0 if given 0.\n     */\n    function log2(uint256 value) internal pure returns (uint256) {\n        uint256 result = 0;\n        unchecked {\n            if (value >> 128 > 0) {\n                value >>= 128;\n                result += 128;\n            }\n            if (value >> 64 > 0) {\n                value >>= 64;\n                result += 64;\n            }\n            if (value >> 32 > 0) {\n                value >>= 32;\n                result += 32;\n            }\n            if (value >> 16 > 0) {\n                value >>= 16;\n                result += 16;\n            }\n            if (value >> 8 > 0) {\n                value >>= 8;\n                result += 8;\n            }\n            if (value >> 4 > 0) {\n                value >>= 4;\n                result += 4;\n            }\n            if (value >> 2 > 0) {\n                value >>= 2;\n                result += 2;\n            }\n            if (value >> 1 > 0) {\n                result += 1;\n            }\n        }\n        return result;\n    }\n\n    /**\n     * @dev Return the log in base 2, following the selected rounding direction, of a positive value.\n     * Returns 0 if given 0.\n     */\n    function log2(uint256 value, Rounding rounding) internal pure returns (uint256) {\n        unchecked {\n            uint256 result = log2(value);\n            return result + (unsignedRoundsUp(rounding) && 1 << result < value ? 1 : 0);\n        }\n    }\n\n    /**\n     * @dev Return the log in base 10 of a positive value rounded towards zero.\n     * Returns 0 if given 0.\n     */\n    function log10(uint256 value) internal pure returns (uint256) {\n        uint256 result = 0;\n        unchecked {\n            if (value >= 10 ** 64) {\n                value /= 10 ** 64;\n                result += 64;\n            }\n            if (value >= 10 ** 32) {\n                value /= 10 ** 32;\n                result += 32;\n            }\n            if (value >= 10 ** 16) {\n                value /= 10 ** 16;\n                result += 16;\n            }\n            if (value >= 10 ** 8) {\n                value /= 10 ** 8;\n                result += 8;\n            }\n            if (value >= 10 ** 4) {\n                value /= 10 ** 4;\n                result += 4;\n            }\n            if (value >= 10 ** 2) {\n                value /= 10 ** 2;\n                result += 2;\n            }\n            if (value >= 10 ** 1) {\n                result += 1;\n            }\n        }\n        return result;\n    }\n\n    /**\n     * @dev Return the log in base 10, following the selected rounding direction, of a positive value.\n     * Returns 0 if given 0.\n     */\n    function log10(uint256 value, Rounding rounding) internal pure returns (uint256) {\n        unchecked {\n            uint256 result = log10(value);\n            return result + (unsignedRoundsUp(rounding) && 10 ** result < value ? 1 : 0);\n        }\n    }\n\n    /**\n     * @dev Return the log in base 256 of a positive value rounded towards zero.\n     * Returns 0 if given 0.\n     *\n     * Adding one to the result gives the number of pairs of hex symbols needed to represent `value` as a hex string.\n     */\n    function log256(uint256 value) internal pure returns (uint256) {\n        uint256 result = 0;\n        unchecked {\n            if (value >> 128 > 0) {\n                value >>= 128;\n                result += 16;\n            }\n            if (value >> 64 > 0) {\n                value >>= 64;\n                result += 8;\n            }\n            if (value >> 32 > 0) {\n                value >>= 32;\n                result += 4;\n            }\n            if (value >> 16 > 0) {\n                value >>= 16;\n                result += 2;\n            }\n            if (value >> 8 > 0) {\n                result += 1;\n            }\n        }\n        return result;\n    }\n\n    /**\n     * @dev Return the log in base 256, following the selected rounding direction, of a positive value.\n     * Returns 0 if given 0.\n     */\n    function log256(uint256 value, Rounding rounding) internal pure returns (uint256) {\n        unchecked {\n            uint256 result = log256(value);\n            return result + (unsignedRoundsUp(rounding) && 1 << (result << 3) < value ? 1 : 0);\n        }\n    }\n\n    /**\n     * @dev Returns whether a provided rounding mode is considered rounding up for unsigned integers.\n     */\n    function unsignedRoundsUp(Rounding rounding) internal pure returns (bool) {\n        return uint8(rounding) % 2 == 1;\n    }\n}\n"
+			},
+			"node_modules/@openzeppelin/contracts/utils/math/SignedMath.sol": {
+				"content": "// SPDX-License-Identifier: MIT\n// OpenZeppelin Contracts (last updated v5.0.0) (utils/math/SignedMath.sol)\n\npragma solidity ^0.8.20;\n\n/**\n * @dev Standard signed math utilities missing in the Solidity language.\n */\nlibrary SignedMath {\n    /**\n     * @dev Returns the largest of two signed numbers.\n     */\n    function max(int256 a, int256 b) internal pure returns (int256) {\n        return a > b ? a : b;\n    }\n\n    /**\n     * @dev Returns the smallest of two signed numbers.\n     */\n    function min(int256 a, int256 b) internal pure returns (int256) {\n        return a < b ? a : b;\n    }\n\n    /**\n     * @dev Returns the average of two signed numbers without overflow.\n     * The result is rounded towards zero.\n     */\n    function average(int256 a, int256 b) internal pure returns (int256) {\n        // Formula from the book \"Hacker's Delight\"\n        int256 x = (a & b) + ((a ^ b) >> 1);\n        return x + (int256(uint256(x) >> 255) & (a ^ b));\n    }\n\n    /**\n     * @dev Returns the absolute unsigned value of a signed value.\n     */\n    function abs(int256 n) internal pure returns (uint256) {\n        unchecked {\n            // must be unchecked in order to support `n = type(int256).min`\n            return uint256(n >= 0 ? n : -n);\n        }\n    }\n}\n"
+			},
+			"src/Banny721TokenUriResolver.sol": {
+				"content": "// SPDX-License-Identifier: MIT\npragma solidity 0.8.23;\n\nimport {Base64} from \"lib/base64/base64.sol\";\nimport {Ownable} from \"@openzeppelin/contracts/access/Ownable.sol\";\nimport {Context} from \"@openzeppelin/contracts/utils/Context.sol\";\nimport {Strings} from \"@openzeppelin/contracts/utils/Strings.sol\";\nimport {ERC2771Context} from \"@openzeppelin/contracts/metatx/ERC2771Context.sol\";\nimport {IJB721TokenUriResolver} from \"@bananapus/721-hook/src/interfaces/IJB721TokenUriResolver.sol\";\nimport {IERC721} from \"@bananapus/721-hook/src/abstract/ERC721.sol\";\nimport {IJB721TiersHook} from \"@bananapus/721-hook/src/interfaces/IJB721TiersHook.sol\";\nimport {IJB721TiersHookStore} from \"@bananapus/721-hook/src/interfaces/IJB721TiersHookStore.sol\";\nimport {JB721Tier} from \"@bananapus/721-hook/src/structs/JB721Tier.sol\";\nimport {JBIpfsDecoder} from \"@bananapus/721-hook/src/libraries/JBIpfsDecoder.sol\";\n\n/// @notice Banny asset manager. Stores and shows Naked Bannys in worlds with outfits on.\ncontract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Ownable {\n    using Strings for uint256;\n\n    event DecorateBanny(\n        address indexed hook, uint256 indexed nakedBannyId, uint256 worldId, uint256[] outfitIds, address caller\n    );\n    event SetSvgContent(uint256 indexed upc, string svgContent, address caller);\n    event SetSvgHash(uint256 indexed upc, bytes32 indexed svgHash, address caller);\n    event SetSvgBaseUri(string baseUri, address caller);\n    event SetProductName(uint256 indexed upc, string name, address caller);\n\n    error HEAD_ALREADY_ADDED();\n    error SUIT_ALREADY_ADDED();\n    error UNRECOGNIZED_WORLD();\n    error UNAUTHORIZED_NAKED_BANNY();\n    error UNAUTHORIZED_WORLD();\n    error UNAUTHORIZED_OUTFIT();\n    error UNRECOGNIZED_CATEGORY();\n    error UNRECOGNIZED_OUTFIT();\n    error UNORDERED_CATEGORIES();\n    error CONTENTS_ALREADY_STORED();\n    error HASH_NOT_FOUND();\n    error CONTENTS_MISMATCH();\n    error HASH_ALREADY_STORED();\n    error UNRECOGNIZED_PRODUCT();\n    error OUTFIT_IS_ALREADY_BEING_WORN();\n    error WORLD_IS_ALREADY_BEING_USED();\n\n    /// @notice Just a kind reminder to our readers.\n    /// @dev Used in 721 token ID generation.\n    uint256 private constant _ONE_BILLION = 1_000_000_000;\n\n    string private constant _NAKED_BANNY =\n        '<g class=\"a1\"><path d=\"M173 53h4v17h-4z\"/></g><g class=\"a2\"><path d=\"M167 57h3v10h-3z\"/><path d=\"M169 53h4v17h-4z\"/></g><g class=\"a3\"><path d=\"M167 53h3v4h-3z\"/><path d=\"M163 57h4v10h-4z\"/><path d=\"M167 67h3v3h-3z\"/></g><g class=\"b1\"><path d=\"M213 253h-3v-3-3h-3v-7-3h-4v-10h-3v-7-7-3h-3v-73h-4v-10h-3v-10h-3v-7h-4v-7h-3v-3h-3v-3h-4v10h4v10h3v10h3v3h4v7 3 70 3h3v7h3v20h4v7h3v3h3v3h4v4h3v3h3v-3-4z\"/><path d=\"M253 307v-4h-3v-3h-3v-3h-4v-4h-3v-3h-3v-3h-4v-4h-3v-3h-3v-3h-4v-4h-3v-6h-3v-7h-4v17h4v3h3v3h3 4v4h3v3h3v3h4v4h3v3h3v3h4v4h3v3h3v3h4v-6h-4z\"/></g><g class=\"b2\"><path d=\"M250 310v-3h-3v-4h-4v-3h-3v-3h-3v-4h-4v-3h-3v-3h-3v-4h-7v-3h-3v-3h-4v-17h-3v-3h-3v-4h-4v-3h-3v-3h-3v-7h-4v-20h-3v-7h-3v-73-3-7h-4v-3h-3v-10h-3v-10h-4V70h-3v-3l-3 100 3-100v40h-3v10h-4v6h-3v14h-3v3 13h-4v44h4v16h3v14h3v13h4v10h3v7h3v3h4v3h3v4h3v3h4v3h3v4h3v3h4v3h3v7h7v7h6v3h7v3h7v4h13v3h3v3h10v-3h-3zm-103-87v-16h3v-10h-3v6h-4v17h-3v10h3v-7h4z\"/><path d=\"M143 230h4v7h-4zm4 10h3v3h-3zm3 7h3v3h-3zm3 6h4v4h-4z\"/><path d=\"M163 257h-6v3h3v3h3v4h4v-4-3h-4v-3z\"/></g><g class=\"b3\"><path d=\"M143 197v6h4v-6h6v-44h4v-16h3v-14h3v-6h4v-10h3V97h-7v6h-3v4h-3v3h-4v3h-3v4 3h-3v3 4h-4v10h-3v16 4h-3v46h3v-6h3z\"/><path d=\"M140 203h3v17h-3z\"/><path d=\"M137 220h3v10h-3z\"/><path d=\"M153 250h-3v-7h-3v-6h-4v-7h-3v10h3v7h4v6h3v4h3v-7zm-3 10h3v7h-3z\"/><path d=\"M147 257h3v3h-3zm6 0h4v3h-4z\"/><path d=\"M160 263v-3h-3v3 7h6v-7h-3zm-10-56v16h-3v7h3v10h3v7h4v6h6v4h7v-4-3h-3v-10h-4v-13h-3v-14h-3v-16h-4v10h-3z\"/><path d=\"M243 313v-3h-3v-3h-10-3v-4h-7v-3h-7v-3h-6v-7h-7v-7h-3v-3h-4v-3h-3v-4h-3v-3h-4v-3h-3v-4h-3v-3h-4v-3h-3v10h-3v3h-4v3h-3v7h3v7h4v6h3v5h4v3h6v3h3v3h4 3v3h3 4v3h3 3v4h10v3h7 7 3v3h10 3v-3h10v-3h4v-4h-14z\"/></g><g class=\"b4\"><path d=\"M183 130h4v7h-4z\"/><path d=\"M180 127h3v3h-3zm-27-4h4v7h-4z\"/><path d=\"M157 117h3v6h-3z\"/><path d=\"M160 110h3v7h-3z\"/><path d=\"M163 107h4v3h-4zm-3 83h3v7h-3z\"/><path d=\"M163 187h4v3h-4zm20 0h7v3h-7z\"/><path d=\"M180 190h3v3h-3zm10-7h3v4h-3z\"/><path d=\"M193 187h4v6h-4zm-20 53h4v7h-4z\"/><path d=\"M177 247h3v6h-3z\"/><path d=\"M180 253h3v7h-3z\"/><path d=\"M183 260h7v3h-7z\"/><path d=\"M190 263h3v4h-3zm0-20h3v4h-3z\"/><path d=\"M187 240h3v3h-3z\"/><path d=\"M190 237h3v3h-3zm13 23h4v3h-4z\"/><path d=\"M207 263h3v7h-3z\"/><path d=\"M210 270h3v3h-3zm-10 7h3v6h-3z\"/><path d=\"M203 283h4v7h-4z\"/><path d=\"M207 290h6v3h-6z\"/></g><g class=\"o\"><path d=\"M133 157h4v50h-4zm0 63h4v10h-4zm27-163h3v10h-3z\"/><path d=\"M163 53h4v4h-4z\"/><path d=\"M167 50h10v3h-10z\"/><path d=\"M177 53h3v17h-3z\"/><path d=\"M173 70h4v27h-4zm-6 0h3v27h-3z\"/><path d=\"M163 67h4v3h-4zm0 30h4v3h-4z\"/><path d=\"M160 100h3v3h-3z\"/><path d=\"M157 103h3v4h-3z\"/><path d=\"M153 107h4v3h-4z\"/><path d=\"M150 110h3v3h-3z\"/><path d=\"M147 113h3v7h-3z\"/><path d=\"M143 120h4v7h-4z\"/><path d=\"M140 127h3v10h-3z\"/><path d=\"M137 137h3v20h-3zm56-10h4v10h-4z\"/><path d=\"M190 117h3v10h-3z\"/><path d=\"M187 110h3v7h-3z\"/><path d=\"M183 103h4v7h-4z\"/><path d=\"M180 100h3v3h-3z\"/><path d=\"M177 97h3v3h-3zm-40 106h3v17h-3zm0 27h3v10h-3zm10 30h3v7h-3z\"/><path d=\"M150 257v-4h-3v-6h-4v-7h-3v10h3v10h4v-3h3z\"/><path d=\"M150 257h3v3h-3z\"/><path d=\"M163 273v-3h-6v-10h-4v7h-3v3h3v3h4v7h3v-7h3z\"/><path d=\"M163 267h4v3h-4z\"/><path d=\"M170 257h-3-4v3h4v7h3v-10z\"/><path d=\"M157 253h6v4h-6z\"/><path d=\"M153 247h4v6h-4z\"/><path d=\"M150 240h3v7h-3z\"/><path d=\"M147 230h3v10h-3zm13 50h3v7h-3z\"/><path d=\"M143 223h4v7h-4z\"/><path d=\"M147 207h3v16h-3z\"/><path d=\"M150 197h3v10h-3zm-10 0h3v6h-3zm50 113h7v3h-7zm23 10h17v3h-17z\"/><path d=\"M230 323h13v4h-13z\"/><path d=\"M243 320h10v3h-10z\"/><path d=\"M253 317h4v3h-4z\"/><path d=\"M257 307h3v10h-3z\"/><path d=\"M253 303h4v4h-4z\"/><path d=\"M250 300h3v3h-3z\"/><path d=\"M247 297h3v3h-3z\"/><path d=\"M243 293h4v4h-4z\"/><path d=\"M240 290h3v3h-3z\"/><path d=\"M237 287h3v3h-3z\"/><path d=\"M233 283h4v4h-4z\"/><path d=\"M230 280h3v3h-3z\"/><path d=\"M227 277h3v3h-3z\"/><path d=\"M223 273h4v4h-4z\"/><path d=\"M220 267h3v6h-3z\"/><path d=\"M217 260h3v7h-3z\"/><path d=\"M213 253h4v7h-4z\"/><path d=\"M210 247h3v6h-3z\"/><path d=\"M207 237h3v10h-3z\"/><path d=\"M203 227h4v10h-4zm-40 60h4v6h-4zm24 20h3v3h-3z\"/><path d=\"M167 293h3v5h-3zm16 14h4v3h-4z\"/><path d=\"M170 298h4v3h-4zm10 6h3v3h-3z\"/><path d=\"M174 301h6v3h-6zm23 12h6v4h-6z\"/><path d=\"M203 317h10v3h-10zm-2-107v-73h-4v73h3v17h3v-17h-2z\"/></g><g class=\"o\"><path d=\"M187 307v-4h3v-6h-3v-4h-4v-3h-3v-3h-7v-4h-6v4h-4v3h4v27h-4v13h-3v10h-4v7h4v3h3 10 14v-3h-4v-4h-3v-3h-3v-3h-4v-7h4v-10h3v-7h3v-3h7v-3h-3zm16 10v-4h-6v17h-4v10h-3v7h3v3h4 6 4 3 14v-3h-4v-4h-7v-3h-3v-3h-3v-10h3v-7h3v-3h-10z\"/></g>';\n    string private constant _DEFAULT_NECKLACE =\n        '<g class=\"o\"><path d=\"M190 173h-37v-3h-10v-4h-6v4h3v3h-3v4h6v3h10v4h37v-4h3v-3h-3v-4zm-40 4h-3v-4h3v4zm7 3v-3h3v3h-3zm6 0v-3h4v3h-4zm7 0v-3h3v3h-3zm7 0v-3h3v3h-3zm10 0h-4v-3h4v3z\"/><path d=\"M190 170h3v3h-3z\"/><path d=\"M193 166h4v4h-4zm0 7h4v4h-4z\"/></g><g class=\"w\"><path d=\"M137 170h3v3h-3zm10 3h3v4h-3zm10 4h3v3h-3zm6 0h4v3h-4zm7 0h3v3h-3zm7 0h3v3h-3zm6 0h4v3h-4zm7-4h3v4h-3z\"/><path d=\"M193 170h4v3h-4z\"/></g>';\n    string private constant _DEFAULT_MOUTH =\n        '<g class=\"o\"><path d=\"M183 160v-4h-20v4h-3v3h3v4h24v-7h-4zm-13 3v-3h10v3h-10z\" fill=\"#ad71c8\"/><path d=\"M170 160h10v3h-10z\"/></g>';\n    string private constant _DEFAULT_STANDARD_EYES =\n        '<g class=\"o\"><path d=\"M177 140v3h6v11h10v-11h4v-3h-20z\"/><path d=\"M153 140v3h7v8 3h7 3v-11h3v-3h-20z\"/></g><g class=\"w\"><path d=\"M153 143h7v4h-7z\"/><path d=\"M157 147h3v3h-3zm20-4h6v4h-6z\"/><path d=\"M180 147h3v3h-3z\"/></g>';\n    string private constant _DEFAULT_ALIEN_EYES =\n        '<g class=\"o\"><path d=\"M190 127h3v3h-3zm3 13h4v3h-4zm-42 0h6v6h-6z\"/><path d=\"M151 133h3v7h-3zm10 0h6v4h-6z\"/><path d=\"M157 137h17v6h-17zm3 13h14v3h-14zm17-13h7v16h-7z\"/><path d=\"M184 137h6v6h-6zm0 10h10v6h-10z\"/><path d=\"M187 143h10v4h-10z\"/><path d=\"M190 140h3v3h-3zm-6-10h3v7h-3z\"/><path d=\"M187 130h6v3h-6zm-36 0h10v3h-10zm16 13h7v7h-7zm-10 0h7v7h-7z\"/><path d=\"M164 147h3v3h-3zm29-20h4v6h-4z\"/><path d=\"M194 133h3v7h-3z\"/></g><g class=\"w\"><path d=\"M154 133h7v4h-7z\"/><path d=\"M154 137h3v3h-3zm10 6h3v4h-3zm20 0h3v4h-3zm3-10h7v4h-7z\"/><path d=\"M190 137h4v3h-4z\"/></g>';\n\n    uint8 private constant _NAKED_CATEGORY = 0;\n    uint8 private constant _WORLD_CATEGORY = 1;\n    uint8 private constant _BACKSIDE_CATEGORY = 2;\n    uint8 private constant _NECKLACE_CATEGORY = 3;\n    uint8 private constant _HEAD_CATEGORY = 4;\n    uint8 private constant _GLASSES_CATEGORY = 5;\n    uint8 private constant _MOUTH_CATEGORY = 6;\n    uint8 private constant _LEGS_CATEGORY = 7;\n    uint8 private constant _SUIT_CATEGORY = 8;\n    uint8 private constant _SUIT_BOTTOM_CATEGORY = 9;\n    uint8 private constant _SUIT_TOP_CATEGORY = 10;\n    uint8 private constant _HEADTOP_CATEGORY = 11;\n    uint8 private constant _FIST_CATEGORY = 12;\n    uint8 private constant _TOPPING_CATEGORY = 13;\n\n    uint8 private constant ALIEN_UPC = 1;\n    uint8 private constant PINK_UPC = 2;\n    uint8 private constant ORANGE_UPC = 3;\n    uint8 private constant ORIGINAL_UPC = 4;\n\n    /// @notice The Naked Banny and outfit SVG hash files.\n    /// @custom:param upc The universal product code that the SVG hash represent.\n    mapping(uint256 upc => bytes32) public svgHashOf;\n\n    /// @notice The base of the domain hosting the SVG files that can be lazily uploaded to the contract.\n    string public svgBaseUri;\n\n    /// @notice The name of each product.\n    /// @custom:param upc The universal product code that the name belongs to.\n    mapping(uint256 upc => string) internal _customProductNameOf;\n\n    /// @notice The Naked Banny and outfit SVG files.\n    /// @custom:param upc The universal product code that the SVG contents represent.\n    mapping(uint256 upc => string) internal _svgContentOf;\n\n    /// @notice The outfits currently attached to each Naked Banny.\n    /// @dev Nakes Banny's will only be shown with outfits currently owned by the owner of the Naked Banny.\n    /// @custom:param hook The hook address of the collection.\n    /// @custom:param nakedBannyId The ID of the Naked Banny of the outfits.\n    mapping(address hook => mapping(uint256 nakedBannyId => uint256[])) internal _attachedOutfitIdsOf;\n\n    /// @notice The world currently attached to each Naked Banny.\n    /// @dev Nakes Banny's will only be shown with a world currently owned by the owner of the Naked Banny.\n    /// @custom:param hook The hook address of the collection.\n    /// @custom:param nakedBannyId The ID of the Naked Banny of the world.\n    mapping(address hook => mapping(uint256 nakedBannyId => uint256)) internal _attachedWorldIdOf;\n\n    /// @notice The ID of the naked banny each world is being used by.\n    /// @custom:param hook The hook address of the collection.\n    /// @custom:param worldId The ID of the world.\n    mapping(address hook => mapping(uint256 worldId => uint256)) internal _userOf;\n\n    /// @notice The ID of the naked banny each outfit is being worn by.\n    /// @custom:param hook The hook address of the collection.\n    /// @custom:param outfitId The ID of the outfit.\n    mapping(address hook => mapping(uint256 outfitId => uint256)) internal _wearerOf;\n\n    /// @notice The assets currently attached to each Naked Banny.\n    /// @custom:param hook The hook address of the collection.\n    /// @param nakedBannyId The ID of the naked banny shows with the associated assets.\n    /// @return worldId The world attached to the Naked Banny.\n    /// @return outfitIds The outfits attached to the Naked Banny.\n    function assetIdsOf(\n        address hook,\n        uint256 nakedBannyId\n    )\n        public\n        view\n        returns (uint256 worldId, uint256[] memory outfitIds)\n    {\n        // Keep a reference to the outfit IDs currently stored as attached to the Naked Banny.\n        uint256[] memory storedOutfitIds = _attachedOutfitIdsOf[hook][nakedBannyId];\n\n        // Keep a reference to the number of outfit IDs currently attached.\n        uint256 numberOfStoredOutfitIds = storedOutfitIds.length;\n\n        // Initiate the outfit IDs array with the same number of entries.\n        outfitIds = new uint256[](numberOfStoredOutfitIds);\n\n        // Keep a reference to the number of included outfits.\n        uint256 numberOfIncludedOutfits = 0;\n\n        // Keep a reference to the stored outfit ID being iterated on.\n        uint256 storedOutfitId;\n\n        // Return the outfit's that are still being worn by the naked banny.\n        for (uint256 i; i < numberOfStoredOutfitIds; i++) {\n            // Set the stored outfit ID being iterated on.\n            storedOutfitId = storedOutfitIds[i];\n\n            // If the stored outfit is still being worn, return it.\n            if (wearerOf(hook, storedOutfitId) == nakedBannyId) outfitIds[numberOfIncludedOutfits++] = storedOutfitId;\n        }\n\n        // Keep a reference to the world currently stored as attached to the naked Banny.\n        uint256 storedWorldOf = _attachedWorldIdOf[hook][nakedBannyId];\n\n        // If the world is still being used, return it.\n        if (userOf(hook, storedWorldOf) == nakedBannyId) worldId = storedWorldOf;\n    }\n\n    /// @notice Checks to see which naked banny is currently using a particular world.\n    /// @custom:param hook The hook address of the collection.\n    /// @param worldId The ID of the world being used.\n    /// @return The ID of the naked banny using the world.\n    function userOf(address hook, uint256 worldId) public view returns (uint256) {\n        // Get a reference to the naked banny using the world.\n        uint256 nakedBannyId = _userOf[hook][worldId];\n\n        // If no naked banny is wearing the outfit, or if its no longer the world attached, return 0.\n        if (nakedBannyId == 0 || _attachedWorldIdOf[hook][nakedBannyId] != worldId) return 0;\n\n        // Return the naked banny ID.\n        return nakedBannyId;\n    }\n\n    /// @notice Checks to see which naked banny is currently wearing a particular outfit.\n    /// @custom:param hook The hook address of the collection.\n    /// @param outfitId The ID of the outfit being worn.\n    /// @return The ID of the naked banny wearing the outfit.\n    function wearerOf(address hook, uint256 outfitId) public view returns (uint256) {\n        // Get a reference to the naked banny wearing the outfit.\n        uint256 nakedBannyId = _wearerOf[hook][outfitId];\n\n        // If no naked banny is wearing the outfit, return 0.\n        if (nakedBannyId == 0) return 0;\n\n        // Keep a reference to the outfit IDs currently attached to a naked banny.\n        uint256[] memory attachedOutfitIds = _attachedOutfitIdsOf[hook][nakedBannyId];\n\n        // Keep a reference to the number of outfit IDs currently attached.\n        uint256 numberOfAttachedOutfitIds = attachedOutfitIds.length;\n        for (uint256 i; i < numberOfAttachedOutfitIds; i++) {\n            // If the outfit is still attached, return the naked banny ID.\n            if (attachedOutfitIds[i] == outfitId) return nakedBannyId;\n        }\n\n        // If the outfit is no longer attached, return 0.\n        return 0;\n    }\n\n    /// @notice Returns the SVG showing a dressed Naked Banny in a world.\n    /// @param tokenId The ID of the token to show. If the ID belongs to a Naked Banny, it will be shown with its\n    /// current outfits in its current world.\n    /// @return tokenUri The URI representing the SVG.\n    function tokenUriOf(address hook, uint256 tokenId) external view returns (string memory) {\n        // Get a reference to the product for the given token ID.\n        JB721Tier memory product = _productOfTokenId(hook, tokenId);\n\n        // If the token's product ID doesn't exist, return an empty uri.\n        if (product.id == 0) return \"\";\n\n        string memory contents;\n\n        string memory extraMetadata = \"\";\n\n        // If this isn't a Naked Banny, return the asset SVG alone (or on a manakin banny).\n        if (product.category != _NAKED_CATEGORY) {\n            // Keep a reference to the SVG contents.\n            contents = _svgOf(hook, product.id);\n\n            // Layer the outfit SVG over the mannequin Banny\n            // Start with the mannequin SVG if we're not returning a world.\n            if (bytes(contents).length != 0) {\n                if (product.category != _WORLD_CATEGORY) {\n                    contents = string.concat(_mannequinBannySvg(), contents);\n                }\n                contents = _layeredSvg(contents);\n            }\n\n            // If the world or outfit is attached to a naked banny, add it to the metadata.\n            if (product.category == _WORLD_CATEGORY) {\n                uint256 nakedBannyId = userOf(hook, tokenId);\n                extraMetadata = string.concat('\"usedByNakedBannyId\": ', nakedBannyId.toString(), \",\");\n            } else {\n                uint256 nakedBannyId = wearerOf(hook, tokenId);\n                extraMetadata = string.concat('\"wornByNakedBannyId\": ', nakedBannyId.toString(), \",\");\n            }\n        } else {\n            // Compose the contents.\n            contents =\n                svgOf({hook: hook, tokenId: tokenId, shouldDressNakedBanny: true, shouldIncludeWorldOnNakedBanny: true});\n\n            // Get a reference to each asset ID currently attached to the Naked Banny.\n            (uint256 worldId, uint256[] memory outfitIds) = assetIdsOf(hook, tokenId);\n\n            // Keep a reference to the number of outfits\n            uint256 numberOfOutfits = outfitIds.length;\n\n            extraMetadata = '\"outfitIds\": [';\n\n            for (uint256 i; i < numberOfOutfits; i++) {\n                extraMetadata = string.concat(extraMetadata, outfitIds[i].toString(), \",\");\n            }\n\n            extraMetadata = string.concat(extraMetadata, \"],\");\n\n            if (worldId != 0) extraMetadata = string.concat(extraMetadata, '\"worldId\": ', worldId.toString(), \",\");\n        }\n\n        if (bytes(contents).length == 0) {\n            // If the product's category is greater than the last expected category, use the default base URI of the 721\n            // contract. Otherwise use the SVG URI.\n            string memory baseUri = product.category > _TOPPING_CATEGORY ? IJB721TiersHook(hook).baseURI() : svgBaseUri;\n\n            // Fallback to returning an IPFS hash if present.\n            return JBIpfsDecoder.decode(baseUri, _storeOf(hook).encodedTierIPFSUriOf(hook, tokenId));\n        }\n\n        // Get a reference to the pricing context.\n        (uint256 currency, uint256 decimals,) = IJB721TiersHook(hook).pricingContext();\n\n        return string.concat(\n            \"data:application/json;base64,\",\n            Base64.encode(\n                abi.encodePacked(\n                    '{\"name\":\"',\n                    _fullNameOf(tokenId, product),\n                    '\", \"productName\": \"',\n                    _productNameOf(product.id),\n                    '\", \"categoryName\": \"',\n                    _categoryNameOf(product.category),\n                    '\", \"tokenId\": ',\n                    tokenId.toString(),\n                    ', \"upc\": ',\n                    uint256(product.id).toString(),\n                    ', \"category\": ',\n                    uint256(product.category).toString(),\n                    ', \"supply\": ',\n                    uint256(product.initialSupply).toString(),\n                    ', \"remaining\": ',\n                    uint256(product.remainingSupply).toString(),\n                    ', \"price\": ',\n                    uint256(product.price).toString(),\n                    ', \"decimals\": ',\n                    decimals.toString(),\n                    ', \"currency\": ',\n                    currency.toString(),\n                    \", \",\n                    extraMetadata,\n                    '\"description\":\"A piece of the Bannyverse\",\"image\":\"data:image/svg+xml;base64,',\n                    Base64.encode(abi.encodePacked(contents)),\n                    '\"}'\n                )\n            )\n        );\n    }\n\n    /// @notice Returns the SVG showing either a naked banny with/without outfits and a world, or the stand alone outfit\n    /// or world.\n    /// @param hook The hook storing the assets.\n    /// @param tokenId The ID of the token to show. If the ID belongs to a Naked Banny, it will be shown with its\n    /// current outfits in its current world if specified.\n    /// @param shouldDressNakedBanny Whether the naked banny should be dressed.\n    /// @param shouldIncludeWorldOnNakedBanny Whether the world should be included on the naked banny.\n    /// @return svg The SVG.\n    function svgOf(\n        address hook,\n        uint256 tokenId,\n        bool shouldDressNakedBanny,\n        bool shouldIncludeWorldOnNakedBanny\n    )\n        public\n        view\n        returns (string memory)\n    {\n        // Get a reference to the product for the given token ID.\n        JB721Tier memory product = _productOfTokenId(hook, tokenId);\n\n        // If the token's product doesn't exist, return an empty uri.\n        if (product.id == 0) return \"\";\n\n        // Compose the contents.\n        string memory contents;\n\n        // If this isn't a Naked Banny and there's an SVG available, return the asset SVG alone.\n        if (product.category != _NAKED_CATEGORY) {\n            // Keep a reference to the SVG contents.\n            contents = _svgOf(hook, product.id);\n\n            // Return the svg if it exists.\n            return (bytes(contents).length == 0) ? \"\" : _layeredSvg(contents);\n        }\n\n        // Get a reference to each asset ID currently attached to the Naked Banny.\n        (uint256 worldId, uint256[] memory outfitIds) = assetIdsOf(hook, tokenId);\n\n        // Add the world if needed.\n        if (worldId != 0 && shouldIncludeWorldOnNakedBanny) contents = string.concat(contents, _svgOf(hook, worldId));\n\n        // Start with the Naked Banny.\n        contents = string.concat(contents, _nakedBannySvgOf(product.id));\n\n        // Add eyes.\n        if (product.id == ALIEN_UPC) contents = string.concat(contents, _DEFAULT_ALIEN_EYES);\n        else contents = string.concat(contents, _DEFAULT_STANDARD_EYES);\n\n        if (shouldDressNakedBanny) {\n            // Get the outfit contents.\n            string memory outfitContents = _outfitContentsFor({hook: hook, outfitIds: outfitIds});\n\n            // Add the outfit contents if there are any.\n            if (bytes(outfitContents).length != 0) {\n                contents = string.concat(contents, outfitContents);\n            }\n        }\n\n        // Return the SVG contents.\n        return _layeredSvg(contents);\n    }\n\n    /// @notice Returns the name of the token.\n    /// @param hook The hook storing the assets.\n    /// @param tokenId The ID of the token to show.\n    /// @return fullName The full name of the token.\n    /// @return categoryName The name of the token's category.\n    /// @return productName The name of the token's product.\n    function namesOf(address hook, uint256 tokenId) public view returns (string memory, string memory, string memory) {\n        // Get a reference to the product for the given token ID.\n        JB721Tier memory product = _productOfTokenId(hook, tokenId);\n\n        return (_fullNameOf(tokenId, product), _categoryNameOf(product.category), _productNameOf(tokenId));\n    }\n\n    /// @param owner The owner allowed to add SVG files that correspond to product IDs.\n    /// @param trustedForwarder The trusted forwarder for the ERC2771Context.\n    constructor(address owner, address trustedForwarder) Ownable(owner) ERC2771Context(trustedForwarder) {}\n\n    /// @notice Dress your Naked Banny with outfits.\n    /// @dev The caller must own the naked banny being dressed and all outfits being worn.\n    /// @param hook The hook storing the assets.\n    /// @param nakedBannyId The ID of the Naked Banny being dressed.\n    /// @param worldId The ID of the world that'll be associated with the specified banny.\n    /// @param outfitIds The IDs of the outfits that'll be associated with the specified banny. Only one outfit per\n    /// outfit category allowed at a time and they must be passed in order.\n    function decorateBannyWith(\n        address hook,\n        uint256 nakedBannyId,\n        uint256 worldId,\n        uint256[] calldata outfitIds\n    )\n        external\n    {\n        // Make sure call is being made by owner of Naked Banny.\n        if (_ownerOf(hook, nakedBannyId) != _msgSender()) revert UNAUTHORIZED_NAKED_BANNY();\n\n        // Add the world.\n        _decorateBannyWithWorld(hook, nakedBannyId, worldId);\n\n        // Add the outfits.\n        _decorateBannyWithOutfits(hook, nakedBannyId, outfitIds);\n\n        emit DecorateBanny(hook, nakedBannyId, worldId, outfitIds, _msgSender());\n    }\n\n    /// @notice Add a world to a Naked Banny.\n    /// @param hook The hook storing the assets.\n    /// @param nakedBannyId The ID of the Naked Banny being dressed.\n    /// @param worldId The ID of the world that'll be associated with the specified banny.\n    function _decorateBannyWithWorld(address hook, uint256 nakedBannyId, uint256 worldId) internal {\n        // Keep a reference to the previous world attached.\n        uint256 previousWorldId = _attachedWorldIdOf[hook][nakedBannyId];\n\n        // If the world is changing, add the lateset world and transfer the old one back to the owner.\n        if (worldId != previousWorldId) {\n            // Add the world if needed.\n            if (worldId != 0) {\n                // Check if the call is being made by the world's owner, or the owner of a naked banny using it.\n                if (_msgSender() != _ownerOf(hook, worldId) && _msgSender() != _ownerOf(hook, userOf(hook, worldId))) {\n                    revert UNAUTHORIZED_WORLD();\n                }\n\n                // Get the world's product info.\n                JB721Tier memory worldProduct = _productOfTokenId(hook, worldId);\n\n                // World must exist\n                if (worldProduct.id == 0) revert UNRECOGNIZED_WORLD();\n\n                // Transfer the world to this contract.\n                _transferFrom({hook: hook, from: _msgSender(), to: address(this), assetId: worldId});\n\n                // Store the world for the banny.\n                _attachedWorldIdOf[hook][nakedBannyId] = worldId;\n\n                // Store the banny that's in the world.\n                _userOf[hook][worldId] = nakedBannyId;\n            } else {\n                _attachedWorldIdOf[hook][nakedBannyId] = 0;\n            }\n\n            // If there's a previous world, transfer it back to the owner.\n            if (previousWorldId != 0) {\n                // Transfer the previous world to the owner of the banny.\n                _transferFrom({hook: hook, from: address(this), to: _msgSender(), assetId: previousWorldId});\n            }\n        }\n    }\n\n    /// @notice Add outfits to a naked banny.\n    /// @dev The caller must own the naked banny being dressed and all outfits being worn.\n    /// @param hook The hook storing the assets.\n    /// @param nakedBannyId The ID of the Naked Banny being dressed.\n    /// @param outfitIds The IDs of the outfits that'll be associated with the specified banny. Only one outfit per\n    /// outfit category allowed at a time and they must be passed in order.\n    function _decorateBannyWithOutfits(address hook, uint256 nakedBannyId, uint256[] memory outfitIds) internal {\n        // Keep a reference to the outfit being iterated on.\n        uint256 outfitId;\n\n        // Keep a reference to the category of the last outfit iterated on.\n        uint256 lastAssetCategory;\n\n        // Keep a reference to the product category of the outfit being iterated on.\n        uint256 outfitProductCategory;\n\n        // Keep track of certain outfits being used along the way to prevent conflicting outfits.\n        bool hasHead;\n        bool hasSuit;\n\n        // Keep a reference to the currently attached outfits on the naked banny.\n        uint256[] memory previousOutfitIds = _attachedOutfitIdsOf[hook][nakedBannyId];\n\n        // Keep a reference to the number of currently attached outfits.\n        uint256 numberOfPreviousOutfits = previousOutfitIds.length;\n\n        // Keep a index counter that'll help with tracking progress.\n        uint256 previousOutfitIndex;\n\n        // Keep a reference to the previous outfit being iterated on when removing.\n        uint256 previousOutfitId;\n\n        // Get the outfit's product info.\n        uint256 previousOutfitProductCategory;\n\n        // Set the previous values if there are previous outfits.\n        if (numberOfPreviousOutfits > 0) {\n            previousOutfitId = previousOutfitIds[previousOutfitIndex];\n            previousOutfitProductCategory = _productOfTokenId(hook, previousOutfitId).category;\n        }\n\n        // Iterate through each outfit, transfering them in and adding them to the banny if needed, while transfering\n        // out and removing old outfits no longer being worn.\n        for (uint256 i; i < outfitIds.length; i++) {\n            // Set the outfit ID being iterated on.\n            outfitId = outfitIds[i];\n\n            // Check if the call is being made either by the outfit's owner or the owner of the naked banny currently\n            // wearing it.\n            if (_msgSender() != _ownerOf(hook, outfitId) && _msgSender() != _ownerOf(hook, wearerOf(hook, outfitId))) {\n                revert UNAUTHORIZED_OUTFIT();\n            }\n\n            // Get the outfit's product info.\n            outfitProductCategory = _productOfTokenId(hook, outfitId).category;\n\n            // The product's category must be a known category.\n            if (outfitProductCategory < _BACKSIDE_CATEGORY || outfitProductCategory > _TOPPING_CATEGORY) {\n                revert UNRECOGNIZED_CATEGORY();\n            }\n\n            // Make sure the category is an increment of the previous outfit's category.\n            if (i != 0 && outfitProductCategory <= lastAssetCategory) revert UNORDERED_CATEGORIES();\n\n            if (outfitProductCategory == _HEAD_CATEGORY) {\n                hasHead = true;\n            } else if (outfitProductCategory == _SUIT_CATEGORY) {\n                hasSuit = true;\n            } else if (\n                (\n                    outfitProductCategory == _GLASSES_CATEGORY || outfitProductCategory == _MOUTH_CATEGORY\n                        || outfitProductCategory == _HEADTOP_CATEGORY\n                ) && hasHead\n            ) {\n                revert HEAD_ALREADY_ADDED();\n            } else if (\n                (outfitProductCategory == _SUIT_TOP_CATEGORY || outfitProductCategory == _SUIT_BOTTOM_CATEGORY)\n                    && hasSuit\n            ) {\n                revert SUIT_ALREADY_ADDED();\n            }\n\n            // Remove all previous assets up to and including the current category being iterated on.\n            while (previousOutfitProductCategory <= outfitProductCategory && previousOutfitProductCategory != 0) {\n                if (previousOutfitId != outfitId) {\n                    // Transfer the previous outfit to the owner of the banny.\n                    _transferFrom({hook: hook, from: address(this), to: _msgSender(), assetId: previousOutfitId});\n                }\n\n                if (previousOutfitIndex++ < numberOfPreviousOutfits) {\n                    // remove previous product.\n                    previousOutfitId = previousOutfitIds[previousOutfitIndex++];\n                    // Get the next previous outfit.\n                    previousOutfitProductCategory = _productOfTokenId(hook, previousOutfitId).category;\n                } else {\n                    previousOutfitId = 0;\n                    previousOutfitProductCategory = 0;\n                }\n            }\n            if (previousOutfitId != outfitId) {\n                // Store the banny that's in the world.\n                _wearerOf[hook][outfitId] = nakedBannyId;\n\n                // Transfer the outfit to this contract.\n                _transferFrom({hook: hook, from: _msgSender(), to: address(this), assetId: outfitId});\n            }\n\n            // Keep a reference to the last outfit's category.\n            lastAssetCategory = outfitProductCategory;\n        }\n\n        // Remove and transfer out any remaining assets no longer being worn.\n        while (previousOutfitId != 0) {\n            // Transfer the previous world to the owner of the banny.\n            _transferFrom({hook: hook, from: address(this), to: _msgSender(), assetId: previousOutfitId});\n\n            if (previousOutfitIndex++ < numberOfPreviousOutfits) {\n                // remove previous product.\n                previousOutfitId = previousOutfitIds[previousOutfitIndex];\n            } else {\n                previousOutfitId = 0;\n            }\n        }\n\n        // Store the outfits.\n        _attachedOutfitIdsOf[hook][nakedBannyId] = outfitIds;\n    }\n\n    /// @notice The owner of this contract can store SVG files for product IDs.\n    /// @param upcs The universal product codes of the products having SVGs stored.\n    /// @param svgContents The svg contents being stored, not including the parent <svg></svg> element.\n    function setSvgContentsOf(uint256[] memory upcs, string[] calldata svgContents) external {\n        uint256 numberOfProducts = upcs.length;\n\n        uint256 upc;\n        string memory svgContent;\n\n        for (uint256 i; i < numberOfProducts; i++) {\n            upc = upcs[i];\n            svgContent = svgContents[i];\n\n            // Make sure there isn't already contents for the specified universal product code.\n            if (bytes(_svgContentOf[upc]).length != 0) revert CONTENTS_ALREADY_STORED();\n\n            // Get the stored svg hash for the product.\n            bytes32 svgHash = svgHashOf[upc];\n\n            // Make sure a hash exists.\n            if (svgHash == bytes32(0)) revert HASH_NOT_FOUND();\n\n            // Make sure the content matches the hash.\n            if (keccak256(abi.encodePacked(svgContent)) != svgHash) revert CONTENTS_MISMATCH();\n\n            // Store the svg contents.\n            _svgContentOf[upc] = svgContent;\n\n            emit SetSvgContent(upc, svgContent, msg.sender);\n        }\n    }\n\n    /// @notice Allows the owner of this contract to upload the hash of an svg file for a universal product code.\n    /// @dev This allows anyone to lazily upload the correct svg file.\n    /// @param upcs The universal product codes of the products having SVG hashes stored.\n    /// @param svgHashs The svg hashes being stored, not including the parent <svg></svg> element.\n    function setSvgHashsOf(uint256[] memory upcs, bytes32[] memory svgHashs) external onlyOwner {\n        uint256 numberOfProducts = upcs.length;\n\n        uint256 upc;\n        bytes32 svgHash;\n\n        for (uint256 i; i < numberOfProducts; i++) {\n            upc = upcs[i];\n            svgHash = svgHashs[i];\n\n            // Make sure there isn't already contents for the specified universal product code.\n            if (svgHashOf[upc] != bytes32(0)) revert HASH_ALREADY_STORED();\n\n            // Store the svg contents.\n            svgHashOf[upc] = svgHash;\n\n            emit SetSvgHash(upc, svgHash, msg.sender);\n        }\n    }\n\n    /// @notice Allows the owner to set the product's name.\n    /// @param upcs The universal product codes of the products having their name stored.\n    /// @param names The names of the products.\n    function setProductNames(uint256[] memory upcs, string[] memory names) external onlyOwner {\n        uint256 numberOfProducts = upcs.length;\n\n        uint256 upc;\n        string memory name;\n\n        for (uint256 i; i < numberOfProducts; i++) {\n            upc = upcs[i];\n            name = names[i];\n\n            _customProductNameOf[upc] = name;\n\n            emit SetProductName(upc, name, msg.sender);\n        }\n    }\n\n    /// @notice Allows the owner of this contract to specify the base of the domain hosting the SVG files.\n    function setSvgBaseUri(string calldata baseUri) external onlyOwner {\n        // Store the base URI.\n        svgBaseUri = baseUri;\n\n        emit SetSvgBaseUri(baseUri, msg.sender);\n    }\n\n    /// @notice Returns the standard dimension SVG containing dynamic contents and SVG metadata.\n    /// @param contents The contents of the SVG\n    function _layeredSvg(string memory contents) internal pure returns (string memory) {\n        return string.concat(\n            '<svg width=\"400\" height=\"400\" viewBox=\"0 0 400 400\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><style>.o{fill:#050505;}.w{fill:#f9f9f9;}</style>',\n            contents,\n            \"</svg>\"\n        );\n    }\n\n    function _mannequinBannySvg() internal pure returns (string memory) {\n        return string.concat(\n            \"<style>.o{fill:#808080;}.b2{fill:none;}.b3{fill:none;}.b4{fill:none;}.a1{fill:none;}.a2{fill:none;}.a3{fill:none;}</style>\",\n            _NAKED_BANNY\n        );\n    }\n\n    function _nakedBannySvgOf(uint256 upc) internal pure returns (string memory) {\n        (\n            string memory b1,\n            string memory b2,\n            string memory b3,\n            string memory b4,\n            string memory a1,\n            string memory a2,\n            string memory a3\n        ) = _fillsFor(upc);\n        return string.concat(\n            \"<style>.b1{fill:#\",\n            b1,\n            \";}.b2{fill:#\",\n            b2,\n            \";}.b3{fill:#\",\n            b3,\n            \";}.b4{fill:#\",\n            b4,\n            \";}.a1{fill:#\",\n            a1,\n            \";}.a2{fill:#\",\n            a2,\n            \";}.a3{fill:#\",\n            a3,\n            \";}</style>\",\n            _NAKED_BANNY\n        );\n    }\n\n    function _fillsFor(uint256 upc)\n        internal\n        pure\n        returns (\n            string memory,\n            string memory,\n            string memory,\n            string memory,\n            string memory,\n            string memory,\n            string memory\n        )\n    {\n        if (upc == ALIEN_UPC) {\n            return (\"67d757\", \"30a220\", \"217a15\", \"none\", \"e483ef\", \"dc2fef\", \"dc2fef\");\n        } else if (upc == PINK_UPC) {\n            return (\"ffd8c5\", \"ff96a9\", \"fe588b\", \"c92f45\", \"ffd8c5\", \"ff96a9\", \"fe588b\");\n        } else if (upc == ORANGE_UPC) {\n            return (\"f3a603\", \"ff7c02\", \"fd3600\", \"c32e0d\", \"f3a603\", \"ff7c02\", \"fd3600\");\n        } else if (upc == ORIGINAL_UPC) {\n            return (\"ffe900\", \"ffc700\", \"f3a603\", \"965a1a\", \"ffe900\", \"ffc700\", \"f3a603\");\n        }\n\n        revert UNRECOGNIZED_PRODUCT();\n    }\n\n    /// @notice The SVG contents for a list of outfit IDs.\n    /// @param hook The address of the hook storing the assets.\n    /// @param outfitIds The IDs of the outfits that'll be associated with the specified banny.\n    function _outfitContentsFor(\n        address hook,\n        uint256[] memory outfitIds\n    )\n        internal\n        view\n        returns (string memory contents)\n    {\n        // Get a reference to the number of outfits are on the Naked Banny.\n        uint256 numberOfOutfits = outfitIds.length;\n\n        // Keep a reference to the outfit ID being iterated on.\n        uint256 outfitId;\n\n        // Keep a reference to the category of the outfit being iterated on.\n        uint256 category;\n\n        // Keep a reference to if certain accessories have been added.\n        bool hasNecklace;\n        bool hasMouth;\n\n        // Keep a reference to the custom necklace. Needed because the custom necklace is layered differently than the\n        // default.\n        string memory customNecklace;\n\n        // Loop once more to make sure all default outfits are added.\n        uint256 numberOfIterations = numberOfOutfits + 1;\n\n        // For each outfit, add the SVG layer if it's owned by the same owner as the Naked Banny being dressed.\n        for (uint256 i; i < numberOfIterations; i++) {\n            // If the outfit is within the bounds of the number of outfits there are, add it normally.\n            if (i < numberOfOutfits) {\n                // Set the outfit ID being iterated on.\n                outfitId = outfitIds[i];\n\n                // Set the category of the outfit being iterated on.\n                category = _productOfTokenId(hook, outfitId).category;\n            } else {\n                // Set the category to be more than all other categories to force adding defaults.\n                category = _TOPPING_CATEGORY + 1;\n                outfitId = 0;\n            }\n\n            if (category == _NECKLACE_CATEGORY) {\n                hasNecklace = true;\n                customNecklace = _svgOf(hook, outfitId);\n            } else if (category > _NECKLACE_CATEGORY && !hasNecklace) {\n                contents = string.concat(contents, _DEFAULT_NECKLACE);\n                hasNecklace = true;\n            }\n\n            if (category == _MOUTH_CATEGORY) {\n                hasMouth = true;\n            } else if (category > _MOUTH_CATEGORY && !hasMouth) {\n                contents = string.concat(contents, _DEFAULT_MOUTH);\n                hasMouth = true;\n            }\n\n            // Add the custom necklace if needed.\n            if (category > _SUIT_TOP_CATEGORY && bytes(customNecklace).length != 0) {\n                contents = string.concat(contents, customNecklace);\n                // Reset.\n                customNecklace = \"\";\n            }\n\n            // Add the outfit if needed.\n            if (outfitId != 0 && category != _NECKLACE_CATEGORY) {\n                contents = string.concat(contents, _svgOf(hook, outfitId));\n            }\n        }\n    }\n\n    /// @notice The name of each token's product type.\n    /// @param upc The ID of the token whose product type is being named.\n    /// @return name The item's product name.\n    function _productNameOf(uint256 upc) internal view returns (string memory) {\n        // Get the token's name.\n        if (upc == ALIEN_UPC) {\n            return \"Alien\";\n        } else if (upc == PINK_UPC) {\n            return \"Pink\";\n        } else if (upc == ORANGE_UPC) {\n            return \"Orange\";\n        } else if (upc == ORIGINAL_UPC) {\n            return \"Original\";\n        } else {\n            // Get the product's name that has been uploaded.\n            return _customProductNameOf[upc];\n        }\n    }\n\n    /// @notice The name of each token's category.\n    /// @param category The category of the token being named.\n    /// @return name The token's category name.\n    function _categoryNameOf(uint256 category) internal pure returns (string memory) {\n        if (category == _NAKED_CATEGORY) {\n            return \"Naked Banny\";\n        } else if (category == _WORLD_CATEGORY) {\n            return \"World\";\n        } else if (category == _BACKSIDE_CATEGORY) {\n            return \"Backside\";\n        } else if (category == _LEGS_CATEGORY) {\n            return \"Legs\";\n        } else if (category == _NECKLACE_CATEGORY) {\n            return \"Necklace\";\n        } else if (category == _GLASSES_CATEGORY) {\n            return \"Glasses\";\n        } else if (category == _MOUTH_CATEGORY) {\n            return \"Mouth\";\n        } else if (category == _HEADTOP_CATEGORY) {\n            return \"Head top\";\n        } else if (category == _HEAD_CATEGORY) {\n            return \"Head\";\n        } else if (category == _SUIT_CATEGORY) {\n            return \"Suit\";\n        } else if (category == _SUIT_TOP_CATEGORY) {\n            return \"Suit top\";\n        } else if (category == _SUIT_BOTTOM_CATEGORY) {\n            return \"Suit bottom\";\n        } else if (category == _FIST_CATEGORY) {\n            return \"Fist\";\n        } else if (category == _TOPPING_CATEGORY) {\n            return \"Topping\";\n        }\n        return \"\";\n    }\n\n    /// @notice The full name of each product, including category and inventory.\n    /// @param tokenId The ID of the token being named.\n    /// @param product The product of the token being named.\n    /// @return name The full name.\n    function _fullNameOf(uint256 tokenId, JB721Tier memory product) internal view returns (string memory name) {\n        // Start with the item's name.\n        name = string.concat(_productNameOf(product.id), \" \");\n\n        // Get just the token ID without the product ID included.\n        uint256 rawTokenId = tokenId % _ONE_BILLION;\n\n        // If there's a raw token id, append it to the name before appending it to the category.\n        if (rawTokenId != 0) {\n            name = string.concat(name, rawTokenId.toString(), \"/\", uint256(product.initialSupply).toString());\n        } else if (product.remainingSupply == 0) {\n            name = string.concat(\n                name,\n                \" (SOLD OUT) \",\n                uint256(product.remainingSupply).toString(),\n                \"/\",\n                uint256(product.initialSupply).toString(),\n                \" remaining\"\n            );\n        } else {\n            name = string.concat(\n                name,\n                uint256(product.remainingSupply).toString(),\n                \"/\",\n                uint256(product.initialSupply).toString(),\n                \" remaining\"\n            );\n        }\n\n        // Append a separator.\n        name = string.concat(name, \" : \");\n\n        // Get a reference to the categorie's name.\n        string memory categoryName = _categoryNameOf(product.category);\n\n        // If there's a category name, append it.\n        if (bytes(categoryName).length != 0) {\n            name = string.concat(name, categoryName, \" \");\n        }\n\n        // Append the product ID as a universal product code.\n        name = string.concat(name, \"UPC #\", uint256(product.id).toString());\n    }\n\n    /// @notice The Naked Banny and outfit SVG files.\n    /// @param upc The universal product code of the product that the SVG contents represent.\n    function _svgOf(address hook, uint256 upc) internal view returns (string memory) {\n        // Keep a reference to the stored scg contents.\n        string memory svgContents = _svgContentOf[upc];\n\n        if (bytes(svgContents).length != 0) return svgContents;\n\n        return string.concat(\n            '<image href=\"',\n            JBIpfsDecoder.decode(svgBaseUri, _storeOf(hook).encodedIPFSUriOf(hook, upc)),\n            '\" width=\"400\" height=\"400\"/>'\n        );\n    }\n\n    /// @notice The store of the hook.\n    /// @param hook The hook to get the store of.\n    /// @return store The store of the hook.\n    function _storeOf(address hook) internal view returns (IJB721TiersHookStore) {\n        return IJB721TiersHook(hook).STORE();\n    }\n\n    /// @notice Get the product of the 721 with the provided token ID in the provided 721 contract.\n    /// @param hook The 721 contract that the product belongs to.\n    /// @param tokenId The token ID of the 721 to get the product of.\n    /// @return product The product.\n    function _productOfTokenId(address hook, uint256 tokenId) internal view returns (JB721Tier memory) {\n        return _storeOf(hook).tierOfTokenId({hook: hook, tokenId: tokenId, includeResolvedUri: false});\n    }\n\n    /// @notice Get the owner of.\n    /// @param hook The 721 contract to check ownership within.\n    /// @param outfitId The outfit ID to check ownership of.\n    /// @return owner The owner of the outfit.\n    function _ownerOf(address hook, uint256 outfitId) internal view returns (address) {\n        return IERC721(hook).ownerOf(outfitId);\n    }\n\n    /// @notice Transfer a token from one address to another.\n    /// @param hook The 721 contract of the token being transfered.\n    /// @param from The address to transfer the token from.\n    /// @param to The address to transfer the token to.\n    /// @param assetId The ID of the token to transfer.\n    function _transferFrom(address hook, address from, address to, uint256 assetId) internal {\n        IERC721(hook).safeTransferFrom({from: from, to: to, tokenId: assetId});\n    }\n\n    //*********************************************************************//\n    // ---------------------- internal transactions ---------------------- //\n    //*********************************************************************//\n\n    /// @notice Returns the sender, prefered to use over `msg.sender`\n    /// @return sender the sender address of this call.\n    function _msgSender() internal view override(ERC2771Context, Context) returns (address sender) {\n        return ERC2771Context._msgSender();\n    }\n\n    /// @notice Returns the calldata, prefered to use over `msg.data`\n    /// @return calldata the `msg.data` of this call\n    function _msgData() internal view override(ERC2771Context, Context) returns (bytes calldata) {\n        return ERC2771Context._msgData();\n    }\n\n    /// @dev ERC-2771 specifies the context as being a single address (20 bytes).\n    function _contextSuffixLength() internal view virtual override(ERC2771Context, Context) returns (uint256) {\n        return super._contextSuffixLength();\n    }\n}\n"
+			}
+		}
+	}
+}

@@ -1,6 +1,6 @@
 {
     "name": "@bannyverse/core",
-    "version": "0.0.23",
+    "version": "0.0.25",
     "license": "MIT",
     "repository": {
         "type": "git",
@@ -15,19 +15,20 @@
         "deploy:mainnets": "source ./.env && export START_TIME=$(date +%s) && npx sphinx propose ./script/Deploy.s.sol --networks mainnets",
         "deploy:testnets": "source ./.env && export START_TIME=$(date +%s) && npx sphinx propose ./script/Deploy.s.sol --networks testnets",
         "deploy:testnets:drop:1": "source ./.env && npx sphinx propose ./script/Drop1.s.sol --networks testnets",
-        "artifacts": "source ./.env && npx sphinx artifacts --org-id 'cltepuu9u0003j58rjtbd0hvu' --project-name 'bannyverse-core-testnet'"
+        "artifacts": "source ./.env && npx sphinx artifacts --org-id 'my-org-id' --project-name 'bannyverse-core-testnet'"
     },
     "dependencies": {
-        "@bananapus/721-hook": "^0.0.21",
-        "@bananapus/core": "^0.0.24",
+        "@bananapus/721-hook": "^0.0.22",
+        "@bananapus/buyback-hook": "^0.0.18",
+        "@bananapus/core": "^0.0.25",
         "@bananapus/ownable": "^0.0.6",
         "@bananapus/permission-ids": "^0.0.11",
-        "@croptop/core": "^0.0.13",
+        "@bananapus/suckers": "^0.0.20",
+        "@bananapus/swap-terminal": "^0.0.18",
+        "@croptop/core": "^0.0.15",
         "@openzeppelin/contracts": "^5.0.2",
-        "@rev-net/core": "^0.0.31",
-        "@bananapus/suckers": "^0.0.17",
-        "@bananapus/buyback-hook": "^0.0.15"
-    },  
+        "@rev-net/core": "^0.0.32"
+    },
     "devDependencies": {
         "@sphinx-labs/plugins": "0.33.0"
     }
