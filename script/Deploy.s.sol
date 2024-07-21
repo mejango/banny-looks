@@ -7,6 +7,7 @@ import "@bananapus/suckers/script/helpers/SuckerDeploymentLib.sol";
 import "@croptop/core/script/helpers/CroptopDeploymentLib.sol";
 import "@rev-net/core/script/helpers/RevnetCoreDeploymentLib.sol";
 import "@bananapus/buyback-hook/script/helpers/BuybackDeploymentLib.sol";
+import "@bananapus/swap-terminal/script/helpers/SwapTerminalDeploymentLib.sol";
 
 import {JBPermissionIds} from "@bananapus/permission-ids/src/JBPermissionIds.sol";
 import {IJBPrices} from "@bananapus/core/src/interfaces/IJBPrices.sol";
@@ -61,6 +62,8 @@ contract DeployScript is Script, Sphinx {
     Hook721Deployment hook;
     /// @notice tracks the deployment of the buyback hook.
     BuybackDeployment buybackHook;
+    /// @notice tracks the deployment of the swap terminal.
+    SwapTerminalDeployment swapTerminal;
 
     BannyverseRevnetConfig bannyverseConfig;
 
@@ -105,6 +108,10 @@ contract DeployScript is Script, Sphinx {
         buybackHook = BuybackDeploymentLib.getDeployment(
             vm.envOr("NANA_BUYBACK_HOOK_DEPLOYMENT_PATH", string("node_modules/@bananapus/buyback-hook/deployments/"))
         );
+        // Get the deployment addresses for the 721 hook contracts for this chain.
+        swapTerminal = SwapTerminalDeploymentLib.getDeployment(
+            vm.envOr("NANA_SWAP_TERMINAL_DEPLOYMENT_PATH", string("node_modules/@bananapus/swap-terminal/deployments/"))
+        );
 
         // Set the operator to be this safe.
         OPERATOR = safeAddress();
@@ -141,7 +148,7 @@ contract DeployScript is Script, Sphinx {
         uint24 nakedBannyCategory = 0;
 
         // The terminals that the project will accept funds through.
-        JBTerminalConfig[] memory terminalConfigurations = new JBTerminalConfig[](1);
+        JBTerminalConfig[] memory terminalConfigurations = new JBTerminalConfig[](2);
         JBAccountingContext[] memory accountingContextsToAccept = new JBAccountingContext[](1);
 
         // Accept the chain's native currency through the multi terminal.
@@ -153,6 +160,11 @@ contract DeployScript is Script, Sphinx {
 
         terminalConfigurations[0] =
             JBTerminalConfig({terminal: core.terminal, accountingContextsToAccept: accountingContextsToAccept});
+
+        terminalConfigurations[1] = JBTerminalConfig({
+            terminal: swapTerminal.swap_terminal,
+            accountingContextsToAccept: new JBAccountingContext[](0)
+        });
 
         REVMintConfig[] memory mintConfs = new REVMintConfig[](1);
         mintConfs[0] = REVMintConfig({
@@ -321,8 +333,8 @@ contract DeployScript is Script, Sphinx {
             suckerDeployerConfigurations[1] =
                 JBSuckerDeployerConfig({deployer: suckers.baseDeployer, mappings: tokenMappings});
 
-            suckerDeployerConfigurations[2] =
-                JBSuckerDeployerConfig({deployer: suckers.arbitrumDeployer, mappings: tokenMappings});
+            // suckerDeployerConfigurations[2] =
+            //     JBSuckerDeployerConfig({deployer: suckers.arbitrumDeployer, mappings: tokenMappings});
         } else {
             suckerDeployerConfigurations = new JBSuckerDeployerConfig[](1);
             // L2 -> Mainnet
