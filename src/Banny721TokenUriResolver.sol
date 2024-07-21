@@ -203,7 +203,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     /// @return tokenUri The URI representing the SVG.
     function tokenUriOf(address hook, uint256 tokenId) external view returns (string memory) {
         // Get a reference to the product for the given token ID.
-        JB721Tier memory product = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, tokenId, false);
+        JB721Tier memory product = _productOfTokenId(hook, tokenId);
 
         // If the token's product ID doesn't exist, return an empty uri.
         if (product.id == 0) return "";
@@ -323,7 +323,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         returns (string memory)
     {
         // Get a reference to the product for the given token ID.
-        JB721Tier memory product = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, tokenId, false);
+        JB721Tier memory product = _productOfTokenId(hook, tokenId);
 
         // If the token's product doesn't exist, return an empty uri.
         if (product.id == 0) return "";
@@ -375,7 +375,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     /// @return productName The name of the token's product.
     function namesOf(address hook, uint256 tokenId) public view returns (string memory, string memory, string memory) {
         // Get a reference to the product for the given token ID.
-        JB721Tier memory product = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, tokenId, false);
+        JB721Tier memory product = _productOfTokenId(hook, tokenId);
 
         return (_fullNameOf(tokenId, product), _categoryNameOf(product.category), _productNameOf(tokenId));
     }
@@ -400,7 +400,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         external
     {
         // Make sure call is being made by owner of Naked Banny.
-        if (IERC721(hook).ownerOf(nakedBannyId) != _msgSender()) revert UNAUTHORIZED_NAKED_BANNY();
+        if (_ownerOf(hook, nakedBannyId) != _msgSender()) revert UNAUTHORIZED_NAKED_BANNY();
 
         // Add the world.
         _decorateBannyWithWorld(hook, nakedBannyId, worldId);
@@ -425,18 +425,23 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             if (worldId != 0) {
                 // Check if the call is being made by the world's owner, or the owner of a naked banny using it.
                 if (
-                    _msgSender() != IERC721(hook).ownerOf(worldId)
-                        && _msgSender() != IERC721(hook).ownerOf(userOf(hook, worldId))
+                    _msgSender() != _ownerOf(hook, worldId)
+                        && _msgSender() != _ownerOf(hook, userOf(hook, worldId))
                 ) revert UNAUTHORIZED_WORLD();
 
                 // Get the world's product info.
-                JB721Tier memory worldProduct = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, worldId, false);
+                JB721Tier memory worldProduct = _productOfTokenId(hook, worldId);
 
                 // World must exist
                 if (worldProduct.id == 0) revert UNRECOGNIZED_WORLD();
 
                 // Transfer the world to this contract.
-                IERC721(hook).transferFrom(_msgSender(), address(this), worldId);
+                _transferFrom({
+                    hook: hook,
+                    from: _msgSender(), 
+                    to: address(this), 
+                    assetId: worldId
+                });
 
                 // Store the world for the banny.
                 _attachedWorldIdOf[hook][nakedBannyId] = worldId;
@@ -450,7 +455,12 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             // If there's a previous world, transfer it back to the owner.
             if (previousWorldId != 0) {
                 // Transfer the previous world to the owner of the banny.
-                IERC721(hook).safeTransferFrom(address(this), _msgSender(), previousWorldId);
+                _transferFrom({
+                    hook: hook,
+                    from: address(this), 
+                    to: _msgSender(), 
+                    assetId: previousWorldId
+                });
             }
         }
     }
@@ -493,8 +503,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         // Set the previous values if there are previous outfits.
         if (numberOfPreviousOutfits > 0) {
             previousOutfitId = previousOutfitIds[previousOutfitIndex];
-            previousOutfitProductCategory =
-                IJB721TiersHook(hook).STORE().tierOfTokenId(hook, previousOutfitId, false).category;
+            previousOutfitProductCategory = _productOfTokenId(hook, previousOutfitId).category;
         }
 
         // Iterate through each outfit, transfering them in and adding them to the banny if needed, while transfering
@@ -506,12 +515,12 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             // Check if the call is being made either by the outfit's owner or the owner of the naked banny currently
             // wearing it.
             if (
-                _msgSender() != IERC721(hook).ownerOf(outfitId)
-                    && _msgSender() != IERC721(hook).ownerOf(wearerOf(hook, outfitId))
+                _msgSender() != _ownerOf(hook, outfitId)
+                    && _msgSender() != _ownerOf(hook, wearerOf(hook, outfitId))
             ) revert UNAUTHORIZED_OUTFIT();
 
             // Get the outfit's product info.
-            outfitProductCategory = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, outfitId, false).category;
+            outfitProductCategory = _productOfTokenId(hook, outfitId).category;
 
             // The product's category must be a known category.
             if (outfitProductCategory < _BACKSIDE_CATEGORY || outfitProductCategory > _TOPPING_CATEGORY) {
@@ -543,15 +552,19 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             while (previousOutfitProductCategory <= outfitProductCategory && previousOutfitProductCategory != 0) {
                 if (previousOutfitId != outfitId) {
                     // Transfer the previous outfit to the owner of the banny.
-                    IERC721(hook).transferFrom(address(this), _msgSender(), previousOutfitId);
+                    _transferFrom({
+                        hook: hook,
+                        from: address(this), 
+                        to: _msgSender(), 
+                        assetId: previousOutfitId
+                    });
                 }
 
                 if (previousOutfitIndex++ < numberOfPreviousOutfits) {
                     // remove previous product.
                     previousOutfitId = previousOutfitIds[previousOutfitIndex++];
                     // Get the next previous outfit.
-                    previousOutfitProductCategory =
-                        IJB721TiersHook(hook).STORE().tierOfTokenId(hook, previousOutfitId, false).category;
+                    previousOutfitProductCategory = _productOfTokenId(hook, previousOutfitId).category;
                 } else {
                     previousOutfitId = 0;
                     previousOutfitProductCategory = 0;
@@ -562,7 +575,12 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
                 _wearerOf[hook][outfitId] = nakedBannyId;
 
                 // Transfer the outfit to this contract.
-                IERC721(hook).transferFrom(_msgSender(), address(this), outfitId);
+                _transferFrom({
+                    hook: hook,
+                    from: _msgSender(), 
+                    to: address(this), 
+                    assetId: outfitId
+                });
             }
 
             // Keep a reference to the last outfit's category.
@@ -572,7 +590,12 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         // Remove and transfer out any remaining assets no longer being worn.
         while (previousOutfitId != 0) {
             // Transfer the previous world to the owner of the banny.
-            IERC721(hook).transferFrom(address(this), _msgSender(), previousOutfitId);
+            _transferFrom({
+                hook: hook,
+                from: address(this), 
+                to: _msgSender(), 
+                assetId: previousOutfitId
+            });
 
             if (previousOutfitIndex++ < numberOfPreviousOutfits) {
                 // remove previous product.
@@ -781,7 +804,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
                 outfitId = outfitIds[i];
 
                 // Set the category of the outfit being iterated on.
-                category = IJB721TiersHook(hook).STORE().tierOfTokenId(hook, outfitId, false).category;
+                category = _productOfTokenId(hook, outfitId).category;
             } else {
                 // Set the category to be more than all other categories to force adding defaults.
                 category = _TOPPING_CATEGORY + 1;
@@ -897,7 +920,11 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             );
         } else {
             name = string.concat(
-                name, uint256(product.remainingSupply).toString(), "/", uint256(product.initialSupply).toString(), " remaining"
+                name,
+                uint256(product.remainingSupply).toString(),
+                "/",
+                uint256(product.initialSupply).toString(),
+                " remaining"
             );
         }
 
@@ -929,6 +956,34 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             JBIpfsDecoder.decode(svgBaseUri, IJB721TiersHook(hook).STORE().encodedIPFSUriOf(hook, upc)),
             '" width="400" height="400"/>'
         );
+    }
+    /// @notice Get the product of the 721 with the provided token ID in the provided 721 contract.
+    /// @param hook The 721 contract that the product belongs to.
+    /// @param tokenId The token ID of the 721 to get the product of.
+    /// @return product The product.
+    function _productOfTokenId(address hook, uint256 tokenId) internal view returns (JB721Tier memory) {
+        return IJB721TiersHook(hook).STORE().tierOfTokenId({hook: hook, tokenId: tokenId, includeResolvedUri: false});
+    }
+
+    /// @notice Get the owner of. 
+    /// @param hook The 721 contract to check ownership within.
+    /// @param outfitId The outfit ID to check ownership of.
+    /// @return owner The owner of the outfit.
+    function _ownerOf(address hook, uint256 outfitId) internal view returns (address) {
+        return IERC721(hook).ownerOf(outfitId);
+    }
+    
+    /// @notice Transfer a token from one address to another.
+    /// @param hook The 721 contract of the token being transfered.
+    /// @param from The address to transfer the token from.
+    /// @param to The address to transfer the token to.
+    /// @param assetId The ID of the token to transfer.
+    function _transferFrom(address hook, address from, address to, uint256 assetId) internal {
+        IERC721(hook).safeTransferFrom({
+            from: from,
+            to: to,
+            tokenId: assetId
+        });
     }
 
     //*********************************************************************//

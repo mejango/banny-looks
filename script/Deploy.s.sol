@@ -146,16 +146,20 @@ contract DeployScript is Script, Sphinx {
 
         // Accept the chain's native currency through the multi terminal.
         accountingContextsToAccept[0] = JBAccountingContext({
-         token: JBConstants.NATIVE_TOKEN,
-         decimals: 18,
-         currency: uint32(uint160(JBConstants.NATIVE_TOKEN))
+            token: JBConstants.NATIVE_TOKEN,
+            decimals: 18,
+            currency: uint32(uint160(JBConstants.NATIVE_TOKEN))
         });
 
-        terminalConfigurations[0] = JBTerminalConfig({terminal: core.terminal, accountingContextsToAccept: accountingContextsToAccept});
+        terminalConfigurations[0] =
+            JBTerminalConfig({terminal: core.terminal, accountingContextsToAccept: accountingContextsToAccept});
 
         REVMintConfig[] memory mintConfs = new REVMintConfig[](1);
-        mintConfs[0] =
-            REVMintConfig({chainId: PREMINT_CHAIN_ID, count: uint104(88_500 * decimalMultiplier), beneficiary: OPERATOR});
+        mintConfs[0] = REVMintConfig({
+            chainId: PREMINT_CHAIN_ID,
+            count: uint104(88_500 * decimalMultiplier),
+            beneficiary: OPERATOR
+        });
 
         // The project's revnet stage configurations.
         REVStageConfig[] memory stageConfigurations = new REVStageConfig[](3);
@@ -317,10 +321,8 @@ contract DeployScript is Script, Sphinx {
             suckerDeployerConfigurations[1] =
                 JBSuckerDeployerConfig({deployer: suckers.baseDeployer, mappings: tokenMappings});
 
-            suckerDeployerConfigurations[2] = JBSuckerDeployerConfig({
-                deployer: suckers.arbitrumDeployer,
-                mappings: tokenMappings
-            });
+            suckerDeployerConfigurations[2] =
+                JBSuckerDeployerConfig({deployer: suckers.arbitrumDeployer, mappings: tokenMappings});
         } else {
             suckerDeployerConfigurations = new JBSuckerDeployerConfig[](1);
             // L2 -> Mainnet
