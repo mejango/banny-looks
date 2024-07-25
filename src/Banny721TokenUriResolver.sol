@@ -25,6 +25,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     event SetSvgBaseUri(string baseUri, address caller);
     event SetProductName(uint256 indexed upc, string name, address caller);
 
+    error CANT_ACCELERATE_THE_LOCK();
     error HEAD_ALREADY_ADDED();
     error SUIT_ALREADY_ADDED();
     error UNRECOGNIZED_WORLD();
@@ -39,23 +40,20 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     error CONTENTS_MISMATCH();
     error HASH_ALREADY_STORED();
     error UNRECOGNIZED_PRODUCT();
+    error OUTFIT_CHANGES_LOCKED();
     error OUTFIT_IS_ALREADY_BEING_WORN();
     error WORLD_IS_ALREADY_BEING_USED();
+    error LOCKED_NAKED_BANNY();
 
     /// @notice Just a kind reminder to our readers.
     /// @dev Used in 721 token ID generation.
     uint256 private constant _ONE_BILLION = 1_000_000_000;
 
-    string private constant _NAKED_BANNY =
-        '<g class="a1"><path d="M173 53h4v17h-4z"/></g><g class="a2"><path d="M167 57h3v10h-3z"/><path d="M169 53h4v17h-4z"/></g><g class="a3"><path d="M167 53h3v4h-3z"/><path d="M163 57h4v10h-4z"/><path d="M167 67h3v3h-3z"/></g><g class="b1"><path d="M213 253h-3v-3-3h-3v-7-3h-4v-10h-3v-7-7-3h-3v-73h-4v-10h-3v-10h-3v-7h-4v-7h-3v-3h-3v-3h-4v10h4v10h3v10h3v3h4v7 3 70 3h3v7h3v20h4v7h3v3h3v3h4v4h3v3h3v-3-4z"/><path d="M253 307v-4h-3v-3h-3v-3h-4v-4h-3v-3h-3v-3h-4v-4h-3v-3h-3v-3h-4v-4h-3v-6h-3v-7h-4v17h4v3h3v3h3 4v4h3v3h3v3h4v4h3v3h3v3h4v4h3v3h3v3h4v-6h-4z"/></g><g class="b2"><path d="M250 310v-3h-3v-4h-4v-3h-3v-3h-3v-4h-4v-3h-3v-3h-3v-4h-7v-3h-3v-3h-4v-17h-3v-3h-3v-4h-4v-3h-3v-3h-3v-7h-4v-20h-3v-7h-3v-73-3-7h-4v-3h-3v-10h-3v-10h-4V70h-3v-3l-3 100 3-100v40h-3v10h-4v6h-3v14h-3v3 13h-4v44h4v16h3v14h3v13h4v10h3v7h3v3h4v3h3v4h3v3h4v3h3v4h3v3h4v3h3v7h7v7h6v3h7v3h7v4h13v3h3v3h10v-3h-3zm-103-87v-16h3v-10h-3v6h-4v17h-3v10h3v-7h4z"/><path d="M143 230h4v7h-4zm4 10h3v3h-3zm3 7h3v3h-3zm3 6h4v4h-4z"/><path d="M163 257h-6v3h3v3h3v4h4v-4-3h-4v-3z"/></g><g class="b3"><path d="M143 197v6h4v-6h6v-44h4v-16h3v-14h3v-6h4v-10h3V97h-7v6h-3v4h-3v3h-4v3h-3v4 3h-3v3 4h-4v10h-3v16 4h-3v46h3v-6h3z"/><path d="M140 203h3v17h-3z"/><path d="M137 220h3v10h-3z"/><path d="M153 250h-3v-7h-3v-6h-4v-7h-3v10h3v7h4v6h3v4h3v-7zm-3 10h3v7h-3z"/><path d="M147 257h3v3h-3zm6 0h4v3h-4z"/><path d="M160 263v-3h-3v3 7h6v-7h-3zm-10-56v16h-3v7h3v10h3v7h4v6h6v4h7v-4-3h-3v-10h-4v-13h-3v-14h-3v-16h-4v10h-3z"/><path d="M243 313v-3h-3v-3h-10-3v-4h-7v-3h-7v-3h-6v-7h-7v-7h-3v-3h-4v-3h-3v-4h-3v-3h-4v-3h-3v-4h-3v-3h-4v-3h-3v10h-3v3h-4v3h-3v7h3v7h4v6h3v5h4v3h6v3h3v3h4 3v3h3 4v3h3 3v4h10v3h7 7 3v3h10 3v-3h10v-3h4v-4h-14z"/></g><g class="b4"><path d="M183 130h4v7h-4z"/><path d="M180 127h3v3h-3zm-27-4h4v7h-4z"/><path d="M157 117h3v6h-3z"/><path d="M160 110h3v7h-3z"/><path d="M163 107h4v3h-4zm-3 83h3v7h-3z"/><path d="M163 187h4v3h-4zm20 0h7v3h-7z"/><path d="M180 190h3v3h-3zm10-7h3v4h-3z"/><path d="M193 187h4v6h-4zm-20 53h4v7h-4z"/><path d="M177 247h3v6h-3z"/><path d="M180 253h3v7h-3z"/><path d="M183 260h7v3h-7z"/><path d="M190 263h3v4h-3zm0-20h3v4h-3z"/><path d="M187 240h3v3h-3z"/><path d="M190 237h3v3h-3zm13 23h4v3h-4z"/><path d="M207 263h3v7h-3z"/><path d="M210 270h3v3h-3zm-10 7h3v6h-3z"/><path d="M203 283h4v7h-4z"/><path d="M207 290h6v3h-6z"/></g><g class="o"><path d="M133 157h4v50h-4zm0 63h4v10h-4zm27-163h3v10h-3z"/><path d="M163 53h4v4h-4z"/><path d="M167 50h10v3h-10z"/><path d="M177 53h3v17h-3z"/><path d="M173 70h4v27h-4zm-6 0h3v27h-3z"/><path d="M163 67h4v3h-4zm0 30h4v3h-4z"/><path d="M160 100h3v3h-3z"/><path d="M157 103h3v4h-3z"/><path d="M153 107h4v3h-4z"/><path d="M150 110h3v3h-3z"/><path d="M147 113h3v7h-3z"/><path d="M143 120h4v7h-4z"/><path d="M140 127h3v10h-3z"/><path d="M137 137h3v20h-3zm56-10h4v10h-4z"/><path d="M190 117h3v10h-3z"/><path d="M187 110h3v7h-3z"/><path d="M183 103h4v7h-4z"/><path d="M180 100h3v3h-3z"/><path d="M177 97h3v3h-3zm-40 106h3v17h-3zm0 27h3v10h-3zm10 30h3v7h-3z"/><path d="M150 257v-4h-3v-6h-4v-7h-3v10h3v10h4v-3h3z"/><path d="M150 257h3v3h-3z"/><path d="M163 273v-3h-6v-10h-4v7h-3v3h3v3h4v7h3v-7h3z"/><path d="M163 267h4v3h-4z"/><path d="M170 257h-3-4v3h4v7h3v-10z"/><path d="M157 253h6v4h-6z"/><path d="M153 247h4v6h-4z"/><path d="M150 240h3v7h-3z"/><path d="M147 230h3v10h-3zm13 50h3v7h-3z"/><path d="M143 223h4v7h-4z"/><path d="M147 207h3v16h-3z"/><path d="M150 197h3v10h-3zm-10 0h3v6h-3zm50 113h7v3h-7zm23 10h17v3h-17z"/><path d="M230 323h13v4h-13z"/><path d="M243 320h10v3h-10z"/><path d="M253 317h4v3h-4z"/><path d="M257 307h3v10h-3z"/><path d="M253 303h4v4h-4z"/><path d="M250 300h3v3h-3z"/><path d="M247 297h3v3h-3z"/><path d="M243 293h4v4h-4z"/><path d="M240 290h3v3h-3z"/><path d="M237 287h3v3h-3z"/><path d="M233 283h4v4h-4z"/><path d="M230 280h3v3h-3z"/><path d="M227 277h3v3h-3z"/><path d="M223 273h4v4h-4z"/><path d="M220 267h3v6h-3z"/><path d="M217 260h3v7h-3z"/><path d="M213 253h4v7h-4z"/><path d="M210 247h3v6h-3z"/><path d="M207 237h3v10h-3z"/><path d="M203 227h4v10h-4zm-40 60h4v6h-4zm24 20h3v3h-3z"/><path d="M167 293h3v5h-3zm16 14h4v3h-4z"/><path d="M170 298h4v3h-4zm10 6h3v3h-3z"/><path d="M174 301h6v3h-6zm23 12h6v4h-6z"/><path d="M203 317h10v3h-10zm-2-107v-73h-4v73h3v17h3v-17h-2z"/></g><g class="o"><path d="M187 307v-4h3v-6h-3v-4h-4v-3h-3v-3h-7v-4h-6v4h-4v3h4v27h-4v13h-3v10h-4v7h4v3h3 10 14v-3h-4v-4h-3v-3h-3v-3h-4v-7h4v-10h3v-7h3v-3h7v-3h-3zm16 10v-4h-6v17h-4v10h-3v7h3v3h4 6 4 3 14v-3h-4v-4h-7v-3h-3v-3h-3v-10h3v-7h3v-3h-10z"/></g>';
-    string private constant _DEFAULT_NECKLACE =
-        '<g class="o"><path d="M190 173h-37v-3h-10v-4h-6v4h3v3h-3v4h6v3h10v4h37v-4h3v-3h-3v-4zm-40 4h-3v-4h3v4zm7 3v-3h3v3h-3zm6 0v-3h4v3h-4zm7 0v-3h3v3h-3zm7 0v-3h3v3h-3zm10 0h-4v-3h4v3z"/><path d="M190 170h3v3h-3z"/><path d="M193 166h4v4h-4zm0 7h4v4h-4z"/></g><g class="w"><path d="M137 170h3v3h-3zm10 3h3v4h-3zm10 4h3v3h-3zm6 0h4v3h-4zm7 0h3v3h-3zm7 0h3v3h-3zm6 0h4v3h-4zm7-4h3v4h-3z"/><path d="M193 170h4v3h-4z"/></g>';
-    string private constant _DEFAULT_MOUTH =
-        '<g class="o"><path d="M183 160v-4h-20v4h-3v3h3v4h24v-7h-4zm-13 3v-3h10v3h-10z" fill="#ad71c8"/><path d="M170 160h10v3h-10z"/></g>';
-    string private constant _DEFAULT_STANDARD_EYES =
-        '<g class="o"><path d="M177 140v3h6v11h10v-11h4v-3h-20z"/><path d="M153 140v3h7v8 3h7 3v-11h3v-3h-20z"/></g><g class="w"><path d="M153 143h7v4h-7z"/><path d="M157 147h3v3h-3zm20-4h6v4h-6z"/><path d="M180 147h3v3h-3z"/></g>';
-    string private constant _DEFAULT_ALIEN_EYES =
-        '<g class="o"><path d="M190 127h3v3h-3zm3 13h4v3h-4zm-42 0h6v6h-6z"/><path d="M151 133h3v7h-3zm10 0h6v4h-6z"/><path d="M157 137h17v6h-17zm3 13h14v3h-14zm17-13h7v16h-7z"/><path d="M184 137h6v6h-6zm0 10h10v6h-10z"/><path d="M187 143h10v4h-10z"/><path d="M190 140h3v3h-3zm-6-10h3v7h-3z"/><path d="M187 130h6v3h-6zm-36 0h10v3h-10zm16 13h7v7h-7zm-10 0h7v7h-7z"/><path d="M164 147h3v3h-3zm29-20h4v6h-4z"/><path d="M194 133h3v7h-3z"/></g><g class="w"><path d="M154 133h7v4h-7z"/><path d="M154 137h3v3h-3zm10 6h3v4h-3zm20 0h3v4h-3zm3-10h7v4h-7z"/><path d="M190 137h4v3h-4z"/></g>';
+    string private _NAKED_BANNY;
+    string private _DEFAULT_NECKLACE;
+    string private _DEFAULT_MOUTH;
+    string private _DEFAULT_STANDARD_EYES;
+    string private _DEFAULT_ALIEN_EYES;
 
     uint8 private constant _NAKED_CATEGORY = 0;
     uint8 private constant _WORLD_CATEGORY = 1;
@@ -83,6 +81,12 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
 
     /// @notice The base of the domain hosting the SVG files that can be lazily uploaded to the contract.
     string public svgBaseUri;
+
+    /// @notice The amount of time each naked banny is currently locked for.
+    /// @custom:param hook The hook address of the collection.
+    /// @custom:param owner The owner of the naked banny.
+    /// @custom:param nakedBannyId The ID of the Naked Banny to lock.
+    mapping(address hook => mapping(address owner => mapping(uint256 upc => uint256))) public outfitLockedUntil;
 
     /// @notice The name of each product.
     /// @custom:param upc The universal product code that the name belongs to.
@@ -255,6 +259,12 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             extraMetadata = string.concat(extraMetadata, "],");
 
             if (worldId != 0) extraMetadata = string.concat(extraMetadata, '"worldId": ', worldId.toString(), ",");
+
+            uint256 lockedUntil = outfitLockedUntil[_ownerOf(hook, tokenId)][hook][tokenId];
+
+            if (lockedUntil > block.timestamp) {
+                extraMetadata = string.concat(extraMetadata, '"decorationsLockedUntil": ', lockedUntil.toString(), ",");
+            }
         }
 
         if (bytes(contents).length == 0) {
@@ -267,6 +277,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         }
 
         // Get a reference to the pricing context.
+        // slither-disable-next-line unused-return
         (uint256 currency, uint256 decimals,) = IJB721TiersHook(hook).pricingContext();
 
         return string.concat(
@@ -383,7 +394,24 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
 
     /// @param owner The owner allowed to add SVG files that correspond to product IDs.
     /// @param trustedForwarder The trusted forwarder for the ERC2771Context.
-    constructor(address owner, address trustedForwarder) Ownable(owner) ERC2771Context(trustedForwarder) {}
+    constructor(
+        address owner,
+        address trustedForwarder,
+        string memory nakedBanny,
+        string memory defaultNecklace,
+        string memory defaultMouth,
+        string memory defaultStandardEyes,
+        string memory defaultAlienEyes
+    )
+        Ownable(owner)
+        ERC2771Context(trustedForwarder)
+    {
+        _NAKED_BANNY = nakedBanny;
+        _DEFAULT_NECKLACE = defaultNecklace;
+        _DEFAULT_MOUTH = defaultMouth;
+        _DEFAULT_STANDARD_EYES = defaultStandardEyes;
+        _DEFAULT_ALIEN_EYES = defaultAlienEyes;
+    }
 
     /// @notice Dress your Naked Banny with outfits.
     /// @dev The caller must own the naked banny being dressed and all outfits being worn.
@@ -400,16 +428,39 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     )
         external
     {
-        // Make sure call is being made by owner of Naked Banny.
-        if (_ownerOf(hook, nakedBannyId) != _msgSender()) revert UNAUTHORIZED_NAKED_BANNY();
+        _checkIfSenderIsOwner({hook: hook, upc: nakedBannyId});
+
+        // Can't decorate a banny that's locked.
+        if (outfitLockedUntil[_msgSender()][hook][nakedBannyId] > block.timestamp) revert OUTFIT_CHANGES_LOCKED();
+
+        emit DecorateBanny(hook, nakedBannyId, worldId, outfitIds, _msgSender());
 
         // Add the world.
         _decorateBannyWithWorld(hook, nakedBannyId, worldId);
 
         // Add the outfits.
         _decorateBannyWithOutfits(hook, nakedBannyId, outfitIds);
+    }
 
-        emit DecorateBanny(hook, nakedBannyId, worldId, outfitIds, _msgSender());
+    /// @notice Locks a naked banny ID so that it can't change its outfit for a period of time.
+    /// @param hook The hook address of the collection.
+    /// @param nakedBannyId The ID of the Naked Banny to lock.
+    /// @param duration The amount of seconds to lock the naked banny for.
+    function lockOutfitChangesFor(address hook, uint256 nakedBannyId, uint256 duration) public {
+        // Make sure only the naked banny's owner can lock it.
+        _checkIfSenderIsOwner(hook, nakedBannyId);
+
+        // Keep a reference to the current lock.
+        uint256 currentLockedUntil = outfitLockedUntil[_msgSender()][hook][nakedBannyId];
+
+        // Calculate the new time at which the lock will expire.
+        uint256 newLockUntil = block.timestamp + duration;
+
+        // Make sure the new lock is at least as big as the current lock.
+        if (currentLockedUntil > newLockUntil) revert CANT_ACCELERATE_THE_LOCK();
+
+        // Set the lock.
+        outfitLockedUntil[_msgSender()][hook][nakedBannyId] = newLockUntil;
     }
 
     /// @notice Add a world to a Naked Banny.
@@ -435,14 +486,15 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
                 // World must exist
                 if (worldProduct.id == 0) revert UNRECOGNIZED_WORLD();
 
-                // Transfer the world to this contract.
-                _transferFrom({hook: hook, from: _msgSender(), to: address(this), assetId: worldId});
-
                 // Store the world for the banny.
                 _attachedWorldIdOf[hook][nakedBannyId] = worldId;
 
                 // Store the banny that's in the world.
                 _userOf[hook][worldId] = nakedBannyId;
+
+                // Transfer the world to this contract.
+                _transferFrom({hook: hook, from: _msgSender(), to: address(this), assetId: worldId});
+
             } else {
                 _attachedWorldIdOf[hook][nakedBannyId] = 0;
             }
@@ -541,6 +593,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
             while (previousOutfitProductCategory <= outfitProductCategory && previousOutfitProductCategory != 0) {
                 if (previousOutfitId != outfitId) {
                     // Transfer the previous outfit to the owner of the banny.
+                    // slither-disable-next-line reentrancy-no-eth
                     _transferFrom({hook: hook, from: address(this), to: _msgSender(), assetId: previousOutfitId});
                 }
 
@@ -559,6 +612,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
                 _wearerOf[hook][outfitId] = nakedBannyId;
 
                 // Transfer the outfit to this contract.
+                // slither-disable-next-line reentrancy-no-eth
                 _transferFrom({hook: hook, from: _msgSender(), to: address(this), assetId: outfitId});
             }
 
@@ -569,6 +623,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         // Remove and transfer out any remaining assets no longer being worn.
         while (previousOutfitId != 0) {
             // Transfer the previous world to the owner of the banny.
+            // slither-disable-next-line reentrancy-no-eth
             _transferFrom({hook: hook, from: address(this), to: _msgSender(), assetId: previousOutfitId});
 
             if (previousOutfitIndex++ < numberOfPreviousOutfits) {
@@ -676,14 +731,27 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         );
     }
 
-    function _mannequinBannySvg() internal pure returns (string memory) {
+    function _mannequinBannySvg() internal view returns (string memory) {
+        string memory fillNoneString = string.concat("{fill:none;}");
         return string.concat(
-            "<style>.o{fill:#808080;}.b2{fill:none;}.b3{fill:none;}.b4{fill:none;}.a1{fill:none;}.a2{fill:none;}.a3{fill:none;}</style>",
+            "<style>.o{fill:#808080;}.b2",
+            fillNoneString,
+            ".b3",
+            fillNoneString,
+            ".b4",
+            fillNoneString,
+            ".a1",
+            fillNoneString,
+            ".a2",
+            fillNoneString,
+            ".a3",
+            fillNoneString,
+            "</style>",
             _NAKED_BANNY
         );
     }
 
-    function _nakedBannySvgOf(uint256 upc) internal pure returns (string memory) {
+    function _nakedBannySvgOf(uint256 upc) internal view returns (string memory) {
         (
             string memory b1,
             string memory b2,
@@ -880,6 +948,8 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
         // Get just the token ID without the product ID included.
         uint256 rawTokenId = tokenId % _ONE_BILLION;
 
+        string memory remainingString = " remaining";
+
         // If there's a raw token id, append it to the name before appending it to the category.
         if (rawTokenId != 0) {
             name = string.concat(name, rawTokenId.toString(), "/", uint256(product.initialSupply).toString());
@@ -890,7 +960,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
                 uint256(product.remainingSupply).toString(),
                 "/",
                 uint256(product.initialSupply).toString(),
-                " remaining"
+                remainingString
             );
         } else {
             name = string.concat(
@@ -898,7 +968,7 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
                 uint256(product.remainingSupply).toString(),
                 "/",
                 uint256(product.initialSupply).toString(),
-                " remaining"
+                remainingString
             );
         }
 
@@ -962,6 +1032,13 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
     /// @param assetId The ID of the token to transfer.
     function _transferFrom(address hook, address from, address to, uint256 assetId) internal {
         IERC721(hook).safeTransferFrom({from: from, to: to, tokenId: assetId});
+    }
+
+    /// @notice Make sure the message sender own's the token.
+    /// @param hook The 721 contract of the token having ownership checked.
+    /// @param upc The product's UPC to check ownership of.
+    function _checkIfSenderIsOwner(address hook, uint256 upc) internal view {
+        if (_ownerOf(hook, upc) != _msgSender()) revert UNAUTHORIZED_NAKED_BANNY();
     }
 
     //*********************************************************************//
