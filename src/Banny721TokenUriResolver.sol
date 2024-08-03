@@ -6,6 +6,7 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {Context} from "@openzeppelin/contracts/utils/Context.sol";
 import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 import {ERC2771Context} from "@openzeppelin/contracts/metatx/ERC2771Context.sol";
+import {IERC721Receiver} from "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import {IJB721TokenUriResolver} from "@bananapus/721-hook/src/interfaces/IJB721TokenUriResolver.sol";
 import {IERC721} from "@bananapus/721-hook/src/abstract/ERC721.sol";
 import {IJB721TiersHook} from "@bananapus/721-hook/src/interfaces/IJB721TiersHook.sol";
@@ -14,7 +15,7 @@ import {JB721Tier} from "@bananapus/721-hook/src/structs/JB721Tier.sol";
 import {JBIpfsDecoder} from "@bananapus/721-hook/src/libraries/JBIpfsDecoder.sol";
 
 /// @notice Banny asset manager. Stores and shows Naked Bannys in worlds with outfits on.
-contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Ownable {
+contract Banny721TokenUriResolver is Ownable, ERC2771Context, IJB721TokenUriResolver, IERC721Receiver {
     using Strings for uint256;
 
     event DecorateBanny(
@@ -505,6 +506,14 @@ contract Banny721TokenUriResolver is IJB721TokenUriResolver, ERC2771Context, Own
                 _transferFrom({hook: hook, from: address(this), to: _msgSender(), assetId: previousWorldId});
             }
         }
+    }
+
+    /// @dev Make sure tokens can be receieved if the transaction was initiated by this contract.
+    function onERC721Received(address operator, address, uint256 tokenId, bytes calldata) external view returns (bytes4) {
+        // Make sure the transaction's operator is this contract.
+        if (operator != address(this)) revert();
+
+        return IERC721Receiver.onERC721Received.selector;
     }
 
     /// @notice Add outfits to a naked banny.
