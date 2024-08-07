@@ -261,11 +261,13 @@ contract Banny721TokenUriResolver is Ownable, ERC2771Context, IJB721TokenUriReso
 
             if (worldId != 0) extraMetadata = string.concat(extraMetadata, '"worldId": ', worldId.toString(), ",");
 
-            uint256 lockedUntil = outfitLockedUntil[_ownerOf(hook, tokenId)][hook][tokenId];
-
-            if (lockedUntil > block.timestamp) {
-                extraMetadata = string.concat(extraMetadata, '"decorationsLockedUntil": ', lockedUntil.toString(), ",");
-            }
+            // // If the token has an owner, check if the owner has locked the token.
+            // try _ownerOf(hook, tokenId) returns (address owner) {
+            //     uint256 lockedUntil = outfitLockedUntil[owner][hook][tokenId];
+            //     if (lockedUntil > block.timestamp) {
+            //         extraMetadata = string.concat(extraMetadata, '"decorationsLockedUntil": ', lockedUntil.toString(), ",");
+            //     }
+            // } catch {}
         }
 
         if (bytes(contents).length == 0) {
