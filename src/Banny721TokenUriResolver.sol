@@ -265,7 +265,8 @@ contract Banny721TokenUriResolver is Ownable, ERC2771Context, IJB721TokenUriReso
             try IERC721(hook).ownerOf(tokenId) returns (address owner) {
                 uint256 lockedUntil = outfitLockedUntil[owner][hook][tokenId];
                 if (lockedUntil > block.timestamp) {
-                    extraMetadata = string.concat(extraMetadata, '"decorationsLockedUntil": ', lockedUntil.toString(), ",");
+                    extraMetadata =
+                        string.concat(extraMetadata, '"decorationsLockedUntil": ', lockedUntil.toString(), ",");
                 }
             } catch {}
         }
@@ -479,7 +480,10 @@ contract Banny721TokenUriResolver is Ownable, ERC2771Context, IJB721TokenUriReso
             // Add the world if needed.
             if (worldId != 0) {
                 // Check if the call is being made by the world's owner, or the owner of a naked banny using it.
-                if (_msgSender() != IERC721(hook).ownerOf(worldId)  && _msgSender() != IERC721(hook).ownerOf(userOf(hook, worldId))) {
+                if (
+                    _msgSender() != IERC721(hook).ownerOf(worldId)
+                        && _msgSender() != IERC721(hook).ownerOf(userOf(hook, worldId))
+                ) {
                     revert UNAUTHORIZED_WORLD();
                 }
 
@@ -497,7 +501,6 @@ contract Banny721TokenUriResolver is Ownable, ERC2771Context, IJB721TokenUriReso
 
                 // Transfer the world to this contract.
                 _transferFrom({hook: hook, from: _msgSender(), to: address(this), assetId: worldId});
-
             } else {
                 _attachedWorldIdOf[hook][nakedBannyId] = 0;
             }
@@ -511,7 +514,16 @@ contract Banny721TokenUriResolver is Ownable, ERC2771Context, IJB721TokenUriReso
     }
 
     /// @dev Make sure tokens can be receieved if the transaction was initiated by this contract.
-    function onERC721Received(address operator, address, uint256 tokenId, bytes calldata) external view returns (bytes4) {
+    function onERC721Received(
+        address operator,
+        address,
+        uint256 tokenId,
+        bytes calldata
+    )
+        external
+        view
+        returns (bytes4)
+    {
         // Make sure the transaction's operator is this contract.
         if (operator != address(this)) revert();
 
@@ -541,9 +553,6 @@ contract Banny721TokenUriResolver is Ownable, ERC2771Context, IJB721TokenUriReso
         // Keep a reference to the currently attached outfits on the naked banny.
         uint256[] memory previousOutfitIds = _attachedOutfitIdsOf[hook][nakedBannyId];
 
-        // Keep a reference to the number of currently attached outfits.
-        uint256 numberOfPreviousOutfits = previousOutfitIds.length;
-
         // Keep a index counter that'll help with tracking progress.
         uint256 previousOutfitIndex;
 
@@ -554,7 +563,7 @@ contract Banny721TokenUriResolver is Ownable, ERC2771Context, IJB721TokenUriReso
         uint256 previousOutfitProductCategory;
 
         // Set the previous values if there are previous outfits.
-        if (numberOfPreviousOutfits > 0) {
+        if (previousOutfitIds.length > 0) {
             previousOutfitId = previousOutfitIds[previousOutfitIndex];
             previousOutfitProductCategory = _productOfTokenId(hook, previousOutfitId).category;
         }
@@ -567,7 +576,10 @@ contract Banny721TokenUriResolver is Ownable, ERC2771Context, IJB721TokenUriReso
 
             // Check if the call is being made either by the outfit's owner or the owner of the naked banny currently
             // wearing it.
-            if (_msgSender() != IERC721(hook).ownerOf(outfitId) && _msgSender() != IERC721(hook).ownerOf(wearerOf(hook, outfitId))) {
+            if (
+                _msgSender() != IERC721(hook).ownerOf(outfitId)
+                    && _msgSender() != IERC721(hook).ownerOf(wearerOf(hook, outfitId))
+            ) {
                 revert UNAUTHORIZED_OUTFIT();
             }
 
@@ -608,7 +620,7 @@ contract Banny721TokenUriResolver is Ownable, ERC2771Context, IJB721TokenUriReso
                     _transferFrom({hook: hook, from: address(this), to: _msgSender(), assetId: previousOutfitId});
                 }
 
-                if (previousOutfitIndex++ < numberOfPreviousOutfits) {
+                if (previousOutfitIndex++ < previousOutfitIds.length) {
                     // remove previous product.
                     previousOutfitId = previousOutfitIds[previousOutfitIndex++];
                     // Get the next previous outfit.
@@ -637,7 +649,7 @@ contract Banny721TokenUriResolver is Ownable, ERC2771Context, IJB721TokenUriReso
             // slither-disable-next-line reentrancy-no-eth
             _transferFrom({hook: hook, from: address(this), to: _msgSender(), assetId: previousOutfitId});
 
-            if (previousOutfitIndex++ < numberOfPreviousOutfits) {
+            if (previousOutfitIndex++ < previousOutfitIds.length) {
                 // remove previous product.
                 previousOutfitId = previousOutfitIds[previousOutfitIndex];
             } else {
