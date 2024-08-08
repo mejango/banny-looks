@@ -261,13 +261,13 @@ contract Banny721TokenUriResolver is Ownable, ERC2771Context, IJB721TokenUriReso
 
             if (worldId != 0) extraMetadata = string.concat(extraMetadata, '"worldId": ', worldId.toString(), ",");
 
-            // // If the token has an owner, check if the owner has locked the token.
-            // try _ownerOf(hook, tokenId) returns (address owner) {
-            //     uint256 lockedUntil = outfitLockedUntil[owner][hook][tokenId];
-            //     if (lockedUntil > block.timestamp) {
-            //         extraMetadata = string.concat(extraMetadata, '"decorationsLockedUntil": ', lockedUntil.toString(), ",");
-            //     }
-            // } catch {}
+            // If the token has an owner, check if the owner has locked the token.
+            try IERC721(hook).ownerOf(tokenId) returns (address owner) {
+                uint256 lockedUntil = outfitLockedUntil[owner][hook][tokenId];
+                if (lockedUntil > block.timestamp) {
+                    extraMetadata = string.concat(extraMetadata, '"decorationsLockedUntil": ', lockedUntil.toString(), ",");
+                }
+            } catch {}
         }
 
         if (bytes(contents).length == 0) {
@@ -479,7 +479,7 @@ contract Banny721TokenUriResolver is Ownable, ERC2771Context, IJB721TokenUriReso
             // Add the world if needed.
             if (worldId != 0) {
                 // Check if the call is being made by the world's owner, or the owner of a naked banny using it.
-                if (_msgSender() != _ownerOf(hook, worldId) && _msgSender() != _ownerOf(hook, userOf(hook, worldId))) {
+                if (_msgSender() != IERC721(hook).ownerOf(worldId)  && _msgSender() != IERC721(hook).ownerOf(userOf(hook, worldId))) {
                     revert UNAUTHORIZED_WORLD();
                 }
 
@@ -567,7 +567,7 @@ contract Banny721TokenUriResolver is Ownable, ERC2771Context, IJB721TokenUriReso
 
             // Check if the call is being made either by the outfit's owner or the owner of the naked banny currently
             // wearing it.
-            if (_msgSender() != _ownerOf(hook, outfitId) && _msgSender() != _ownerOf(hook, wearerOf(hook, outfitId))) {
+            if (_msgSender() != IERC721(hook).ownerOf(outfitId) && _msgSender() != IERC721(hook).ownerOf(wearerOf(hook, outfitId))) {
                 revert UNAUTHORIZED_OUTFIT();
             }
 
@@ -1028,14 +1028,6 @@ contract Banny721TokenUriResolver is Ownable, ERC2771Context, IJB721TokenUriReso
         return _storeOf(hook).tierOfTokenId({hook: hook, tokenId: tokenId, includeResolvedUri: false});
     }
 
-    /// @notice Get the owner of.
-    /// @param hook The 721 contract to check ownership within.
-    /// @param outfitId The outfit ID to check ownership of.
-    /// @return owner The owner of the outfit.
-    function _ownerOf(address hook, uint256 outfitId) internal view returns (address) {
-        return IERC721(hook).ownerOf(outfitId);
-    }
-
     /// @notice Transfer a token from one address to another.
     /// @param hook The 721 contract of the token being transfered.
     /// @param from The address to transfer the token from.
@@ -1049,7 +1041,7 @@ contract Banny721TokenUriResolver is Ownable, ERC2771Context, IJB721TokenUriReso
     /// @param hook The 721 contract of the token having ownership checked.
     /// @param upc The product's UPC to check ownership of.
     function _checkIfSenderIsOwner(address hook, uint256 upc) internal view {
-        if (_ownerOf(hook, upc) != _msgSender()) revert UNAUTHORIZED_NAKED_BANNY();
+        if (IERC721(hook).ownerOf(upc) != _msgSender()) revert UNAUTHORIZED_NAKED_BANNY();
     }
 
     //*********************************************************************//
