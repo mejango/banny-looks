@@ -446,6 +446,23 @@ contract Banny721TokenUriResolver is Ownable, ERC2771Context, IJB721TokenUriReso
         _decorateBannyWithOutfits(hook, nakedBannyId, outfitIds);
     }
 
+    /// @dev Make sure tokens can be receieved if the transaction was initiated by this contract.
+    function onERC721Received(
+        address operator,
+        address,
+        uint256 tokenId,
+        bytes calldata
+    )
+        external
+        view
+        returns (bytes4)
+    {
+        // Make sure the transaction's operator is this contract.
+        if (operator != address(this)) revert();
+
+        return IERC721Receiver.onERC721Received.selector;
+    }
+
     /// @notice Locks a naked banny ID so that it can't change its outfit for a period of time.
     /// @param hook The hook address of the collection.
     /// @param nakedBannyId The ID of the Naked Banny to lock.
@@ -511,23 +528,6 @@ contract Banny721TokenUriResolver is Ownable, ERC2771Context, IJB721TokenUriReso
                 _transferFrom({hook: hook, from: address(this), to: _msgSender(), assetId: previousWorldId});
             }
         }
-    }
-
-    /// @dev Make sure tokens can be receieved if the transaction was initiated by this contract.
-    function onERC721Received(
-        address operator,
-        address,
-        uint256 tokenId,
-        bytes calldata
-    )
-        external
-        view
-        returns (bytes4)
-    {
-        // Make sure the transaction's operator is this contract.
-        if (operator != address(this)) revert();
-
-        return IERC721Receiver.onERC721Received.selector;
     }
 
     /// @notice Add outfits to a naked banny.
@@ -620,7 +620,7 @@ contract Banny721TokenUriResolver is Ownable, ERC2771Context, IJB721TokenUriReso
                     _transferFrom({hook: hook, from: address(this), to: _msgSender(), assetId: previousOutfitId});
                 }
 
-                if (previousOutfitIndex++ < previousOutfitIds.length) {
+                if (previousOutfitIndex < previousOutfitIds.length) {
                     // remove previous product.
                     previousOutfitId = previousOutfitIds[previousOutfitIndex++];
                     // Get the next previous outfit.
@@ -649,9 +649,9 @@ contract Banny721TokenUriResolver is Ownable, ERC2771Context, IJB721TokenUriReso
             // slither-disable-next-line reentrancy-no-eth
             _transferFrom({hook: hook, from: address(this), to: _msgSender(), assetId: previousOutfitId});
 
-            if (previousOutfitIndex++ < previousOutfitIds.length) {
+            if (previousOutfitIndex < previousOutfitIds.length) {
                 // remove previous product.
-                previousOutfitId = previousOutfitIds[previousOutfitIndex];
+                previousOutfitId = previousOutfitIds[previousOutfitIndex++];
             } else {
                 previousOutfitId = 0;
             }
