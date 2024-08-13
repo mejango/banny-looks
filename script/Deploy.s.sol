@@ -68,9 +68,9 @@ contract DeployScript is Script, Sphinx {
     BannyverseRevnetConfig bannyverseConfig;
 
     uint32 PREMINT_CHAIN_ID = 1;
-    bytes32 SALT = "BANNY_PROJECT_";
-    bytes32 SUCKER_SALT = "BANNY_PROJECT_SUCKER_";
-    bytes32 RESOLVER_SALT = "BANNY_PROJECT_RESOLVER_";
+    bytes32 SALT = "_BANNY_PROJECT";
+    bytes32 SUCKER_SALT = "_BANNY_PROJECT_SUCKER";
+    bytes32 RESOLVER_SALT = "_BANNY_PROJECT_RESOLVER";
 
     address OPERATOR;
     address TRUSTED_FORWARDER = 0xB2b5841DBeF766d4b521221732F9B618fCf34A87;
