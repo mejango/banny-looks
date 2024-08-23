@@ -564,7 +564,7 @@ contract Banny721TokenUriResolver is Ownable, ERC2771Context, IJB721TokenUriReso
 
         // Set the previous values if there are previous outfits.
         if (previousOutfitIds.length > 0) {
-            previousOutfitId = previousOutfitIds[previousOutfitIndex];
+            previousOutfitId = previousOutfitIds[0];
             previousOutfitProductCategory = _productOfTokenId(hook, previousOutfitId).category;
         }
 
@@ -620,9 +620,9 @@ contract Banny721TokenUriResolver is Ownable, ERC2771Context, IJB721TokenUriReso
                     _transferFrom({hook: hook, from: address(this), to: _msgSender(), assetId: previousOutfitId});
                 }
 
-                if (previousOutfitIndex < previousOutfitIds.length) {
-                    // remove previous product.
-                    previousOutfitId = previousOutfitIds[previousOutfitIndex++];
+                if (++previousOutfitIndex < previousOutfitIds.length) {
+                    // set the next previous outfit.
+                    previousOutfitId = previousOutfitIds[previousOutfitIndex];
                     // Get the next previous outfit.
                     previousOutfitProductCategory = _productOfTokenId(hook, previousOutfitId).category;
                 } else {
@@ -649,9 +649,9 @@ contract Banny721TokenUriResolver is Ownable, ERC2771Context, IJB721TokenUriReso
             // slither-disable-next-line reentrancy-no-eth
             _transferFrom({hook: hook, from: address(this), to: _msgSender(), assetId: previousOutfitId});
 
-            if (previousOutfitIndex < previousOutfitIds.length) {
+            if (++previousOutfitIndex < previousOutfitIds.length) {
                 // remove previous product.
-                previousOutfitId = previousOutfitIds[previousOutfitIndex++];
+                previousOutfitId = previousOutfitIds[previousOutfitIndex];
             } else {
                 previousOutfitId = 0;
             }
