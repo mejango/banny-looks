@@ -1052,7 +1052,9 @@ contract Banny721TokenUriResolver is
                     previousOutfitProductCategory = 0;
                 }
             }
-            if (previousOutfitId != outfitId) {
+
+            // If the outfit is not already being worn by the banny, transfer it to this contract.
+            if (_wearerOf[hook][outfitId] != nakedBannyId) {
                 // Store the banny that's in the world.
                 _wearerOf[hook][outfitId] = nakedBannyId;
 
