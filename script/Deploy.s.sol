@@ -411,25 +411,25 @@ contract DeployScript is Script, Sphinx {
                 RESOLVER_SALT,
                 type(Banny721TokenUriResolver).creationCode,
                 abi.encode(
-                    OPERATOR,
-                    TRUSTED_FORWARDER,
                     _NAKED_BANNY,
                     _DEFAULT_NECKLACE,
                     _DEFAULT_MOUTH,
                     _DEFAULT_STANDARD_EYES,
-                    _DEFAULT_ALIEN_EYES
+                    _DEFAULT_ALIEN_EYES,
+                    OPERATOR,
+                    TRUSTED_FORWARDER
                 )
             );
             // Deploy it if it has not been deployed yet.
             resolver = !_resolverIsDeployed
                 ? new Banny721TokenUriResolver{salt: RESOLVER_SALT}(
-                    OPERATOR,
-                    TRUSTED_FORWARDER,
                     _NAKED_BANNY,
                     _DEFAULT_NECKLACE,
                     _DEFAULT_MOUTH,
                     _DEFAULT_STANDARD_EYES,
-                    _DEFAULT_ALIEN_EYES
+                    _DEFAULT_ALIEN_EYES,
+                    OPERATOR,
+                    TRUSTED_FORWARDER
                 )
                 : Banny721TokenUriResolver(_resolver);
         }
