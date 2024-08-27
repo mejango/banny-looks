@@ -1054,7 +1054,7 @@ contract Banny721TokenUriResolver is
             }
 
             // If the outfit is not already being worn by the banny, transfer it to this contract.
-            if (_wearerOf[hook][outfitId] != nakedBannyId) {
+            if (wearerOf(hook, outfitId) != nakedBannyId) {
                 // Store the banny that's in the world.
                 _wearerOf[hook][outfitId] = nakedBannyId;
 
