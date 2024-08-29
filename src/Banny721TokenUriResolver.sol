@@ -592,7 +592,7 @@ contract Banny721TokenUriResolver is
     /// @return svg The SVG contents.
     function _layeredSvg(string memory contents) internal pure returns (string memory) {
         return string.concat(
-            '<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg"><style>.o{fill:#050505;}.w{fill:#f9f9f9;}</style>',
+            '<svg width="400" height="400" viewBox="0 0 400 400" fill="white" xmlns="http://www.w3.org/2000/svg"><style>.o{fill:#050505;}.w{fill:#f9f9f9;}</style>',
             contents,
             "</svg>"
         );
