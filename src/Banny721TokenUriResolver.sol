@@ -56,7 +56,7 @@ contract Banny721TokenUriResolver is
     uint8 private constant _WORLD_CATEGORY = 1;
     uint8 private constant _BACKSIDE_CATEGORY = 2;
     uint8 private constant _NECKLACE_CATEGORY = 3;
-    uint8 private constant _HEAD_CATEGORY = 4;
+    uint8 private constant _HEAD_TOP_CATEGORY = 4;
     uint8 private constant _GLASSES_CATEGORY = 5;
     uint8 private constant _MOUTH_CATEGORY = 6;
     uint8 private constant _LEGS_CATEGORY = 7;
@@ -64,8 +64,8 @@ contract Banny721TokenUriResolver is
     uint8 private constant _SUIT_BOTTOM_CATEGORY = 9;
     uint8 private constant _SUIT_TOP_CATEGORY = 10;
     uint8 private constant _HEADTOP_CATEGORY = 11;
-    uint8 private constant _FIST_CATEGORY = 12;
-    uint8 private constant _TOPPING_CATEGORY = 13;
+    uint8 private constant _HAND_CATEGORY = 12;
+    uint8 private constant _SPECIAL_CATEGORY = 13;
 
     uint8 private constant ALIEN_UPC = 1;
     uint8 private constant PINK_UPC = 2;
@@ -234,7 +234,7 @@ contract Banny721TokenUriResolver is
         if (bytes(contents).length == 0) {
             // If the product's category is greater than the last expected category, use the default base URI of the 721
             // contract. Otherwise use the SVG URI.
-            string memory baseUri = product.category > _TOPPING_CATEGORY ? IJB721TiersHook(hook).baseURI() : svgBaseUri;
+            string memory baseUri = product.category > _SPECIAL_CATEGORY ? IJB721TiersHook(hook).baseURI() : svgBaseUri;
 
             // Fallback to returning an IPFS hash if present.
             return JBIpfsDecoder.decode(baseUri, _storeOf(hook).encodedTierIPFSUriOf(hook, tokenId));
@@ -478,7 +478,7 @@ contract Banny721TokenUriResolver is
             return "Mouth";
         } else if (category == _HEADTOP_CATEGORY) {
             return "Head top";
-        } else if (category == _HEAD_CATEGORY) {
+        } else if (category == _HEAD_TOP_CATEGORY) {
             return "Head";
         } else if (category == _SUIT_CATEGORY) {
             return "Suit";
@@ -486,9 +486,9 @@ contract Banny721TokenUriResolver is
             return "Suit top";
         } else if (category == _SUIT_BOTTOM_CATEGORY) {
             return "Suit bottom";
-        } else if (category == _FIST_CATEGORY) {
+        } else if (category == _HAND_CATEGORY) {
             return "Fist";
-        } else if (category == _TOPPING_CATEGORY) {
+        } else if (category == _SPECIAL_CATEGORY) {
             return "Topping";
         }
         return "";
@@ -509,9 +509,7 @@ contract Banny721TokenUriResolver is
     /// @notice The fills for a product.
     /// @param upc The ID of the token whose product's fills are being returned.
     /// @return fills The fills for the product.
-    function _fillsFor(
-        uint256 upc
-    )
+    function _fillsFor(uint256 upc)
         internal
         pure
         returns (
@@ -708,7 +706,7 @@ contract Banny721TokenUriResolver is
                 category = _productOfTokenId(hook, outfitId).category;
             } else {
                 // Set the category to be more than all other categories to force adding defaults.
-                category = _TOPPING_CATEGORY + 1;
+                category = _SPECIAL_CATEGORY + 1;
                 outfitId = 0;
             }
 
@@ -818,7 +816,13 @@ contract Banny721TokenUriResolver is
             revert Banny721TokenUriResolver_OutfitChangesLocked();
         }
 
-        emit DecorateBanny(hook, nakedBannyId, worldId, outfitIds, _msgSender());
+        emit DecorateBanny({
+            hook: hook,
+            nakedBannyId: nakedBannyId,
+            worldId: worldId,
+            outfitIds: outfitIds,
+            caller: _msgSender()
+        });
 
         // Add the world.
         _decorateBannyWithWorld(hook, nakedBannyId, worldId);
@@ -886,7 +890,7 @@ contract Banny721TokenUriResolver is
 
             _customProductNameOf[upc] = name;
 
-            emit SetProductName(upc, name, msg.sender);
+            emit SetProductName({upc: upc, name: name, caller: msg.sender});
         }
     }
 
@@ -896,7 +900,7 @@ contract Banny721TokenUriResolver is
         // Store the base URI.
         svgBaseUri = baseUri;
 
-        emit SetSvgBaseUri(baseUri, msg.sender);
+        emit SetSvgBaseUri({baseUri: baseUri, caller: msg.sender});
     }
 
     /// @notice The owner of this contract can store SVG files for product IDs.
@@ -924,7 +928,7 @@ contract Banny721TokenUriResolver is
             // Store the svg contents.
             _svgContentOf[upc] = svgContent;
 
-            emit SetSvgContent(upc, svgContent, msg.sender);
+            emit SetSvgContent({upc: upc, svgContent: svgContent, caller: msg.sender});
         }
     }
 
@@ -945,7 +949,7 @@ contract Banny721TokenUriResolver is
             // Store the svg contents.
             svgHashOf[upc] = svgHash;
 
-            emit SetSvgHash(upc, svgHash, msg.sender);
+            emit SetSvgHash({upc: upc, svgHash: svgHash, caller: msg.sender});
         }
     }
 
@@ -961,7 +965,7 @@ contract Banny721TokenUriResolver is
     /// outfit category allowed at a time and they must be passed in order.
     function _decorateBannyWithOutfits(address hook, uint256 nakedBannyId, uint256[] memory outfitIds) internal {
         // Keep track of certain outfits being used along the way to prevent conflicting outfits.
-        bool hasHead;
+        bool hasHeadTop;
         bool hasSuit;
 
         // Keep a reference to the category of the last outfit iterated on.
@@ -1007,7 +1011,7 @@ contract Banny721TokenUriResolver is
             uint256 outfitProductCategory = _productOfTokenId(hook, outfitId).category;
 
             // The product's category must be a known category.
-            if (outfitProductCategory < _BACKSIDE_CATEGORY || outfitProductCategory > _TOPPING_CATEGORY) {
+            if (outfitProductCategory < _BACKSIDE_CATEGORY || outfitProductCategory > _SPECIAL_CATEGORY) {
                 revert Banny721TokenUriResolver_UnrecognizedCategory();
             }
 
@@ -1016,15 +1020,15 @@ contract Banny721TokenUriResolver is
                 revert Banny721TokenUriResolver_UnorderedCategories();
             }
 
-            if (outfitProductCategory == _HEAD_CATEGORY) {
-                hasHead = true;
+            if (outfitProductCategory == _HEAD_TOP_CATEGORY) {
+                hasHeadTop = true;
             } else if (outfitProductCategory == _SUIT_CATEGORY) {
                 hasSuit = true;
             } else if (
                 (
                     outfitProductCategory == _GLASSES_CATEGORY || outfitProductCategory == _MOUTH_CATEGORY
                         || outfitProductCategory == _HEADTOP_CATEGORY
-                ) && hasHead
+                ) && hasHeadTop
             ) {
                 revert Banny721TokenUriResolver_HeadAlreadyAdded();
             } else if (
