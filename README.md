@@ -1,4 +1,4 @@
-# Bannyverse
+# Banny Looks
 
 ## Install
 
