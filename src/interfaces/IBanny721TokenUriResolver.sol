@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 interface IBanny721TokenUriResolver {
     event DecorateBanny(
-        address indexed hook, uint256 indexed nakedBannyId, uint256 worldId, uint256[] outfitIds, address caller
+        address indexed hook, uint256 indexed nakedBannyId, uint256 indexed worldId, uint256[] outfitIds, address caller
     );
     event SetProductName(uint256 indexed upc, string name, address caller);
     event SetSvgBaseUri(string baseUri, address caller);

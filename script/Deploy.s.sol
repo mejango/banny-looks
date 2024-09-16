@@ -178,30 +178,30 @@ contract DeployScript is Script, Sphinx {
         stageConfigurations[0] = REVStageConfig({
             startsAtOrAfter: uint40(block.timestamp),
             mintConfigs: mintConfs,
-            splitPercent: 2000, // 20%
+            splitPercent: 5000, // 50%
             initialIssuance: uint112(1000 * decimalMultiplier),
-            issuanceDecayFrequency: 90 days,
-            issuanceDecayPercent: JBConstants.MAX_DECAY_PERCENT / 2,
-            cashOutTaxRate: 6000 // 0.6
+            issuanceDecayFrequency: 60 days,
+            issuanceDecayPercent: 380_000_000, // 38%,
+            cashOutTaxRate: 3000 // 0.3
         });
         stageConfigurations[1] = REVStageConfig({
-            startsAtOrAfter: uint40(stageConfigurations[0].startsAtOrAfter + 720 days),
+            startsAtOrAfter: uint40(stageConfigurations[0].startsAtOrAfter + 600 days),
             mintConfigs: new REVMintConfig[](0),
-            splitPercent: 2000, // 20%
+            splitPercent: 5000, // 50%
             initialIssuance: 0, // inherit from previous cycle.
-            issuanceDecayFrequency: 180 days,
-            issuanceDecayPercent: JBConstants.MAX_DECAY_PERCENT / 2,
-            cashOutTaxRate: 6000 // 0.6
+            issuanceDecayFrequency: 120 days,
+            issuanceDecayPercent: 380_000_000, // 38%
+            cashOutTaxRate: 3000 // 0.3
         });
 
         stageConfigurations[2] = REVStageConfig({
-            startsAtOrAfter: uint40(stageConfigurations[1].startsAtOrAfter + (20 * 365 days)),
+            startsAtOrAfter: uint40(stageConfigurations[1].startsAtOrAfter + (6000 days)),
             mintConfigs: new REVMintConfig[](0),
             splitPercent: 0,
             initialIssuance: 1, // this is a special number that is as close to max price as we can get.
             issuanceDecayFrequency: 0,
             issuanceDecayPercent: 0,
-            cashOutTaxRate: 6000 // 0.6
+            cashOutTaxRate: 1000 // 0.1
         });
 
         // The project's revnet configuration
