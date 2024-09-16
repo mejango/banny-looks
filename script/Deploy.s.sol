@@ -72,7 +72,7 @@ contract DeployScript is Script, Sphinx {
     bytes32 SUCKER_SALT = "_BANNY_PROJECT_SUCKER_SALT_";
     bytes32 RESOLVER_SALT = "_BANNY_PROJECT_RESOLVER_SALT_";
 
-    address OPERATOR;
+    address OPERATOR = 0x823b92d6a4b2AED4b15675c7917c9f922ea8ADAD;
     address TRUSTED_FORWARDER = 0xB2b5841DBeF766d4b521221732F9B618fCf34A87;
 
     function configureSphinx() public override {
