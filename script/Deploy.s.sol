@@ -71,9 +71,13 @@ contract DeployScript is Script, Sphinx {
     string PROJECT_URI = "ipfs://QmUpbbnjHdzh6fT4qtqty24beVb2USX27eyyLT7KmtMoNr";
     string BASE_URI = "ipfs://";
     string CONTRACT_URI = "";
-    uint256 TIME_UNTIL_START = 1 days;
+    uint32 NATIVE_CURRENCY = uint32(uint160(JBConstants.NATIVE_TOKEN));
+    uint8 DECIMALS = 18;
+    uint256 DECIMAL_MULTIPLIER = 10 ** DECIMALS;
+    uint24 NAKED_BANNY_CATEGORY = 0;
     address OPERATOR = 0x823b92d6a4b2AED4b15675c7917c9f922ea8ADAD;
     address TRUSTED_FORWARDER = 0xB2b5841DBeF766d4b521221732F9B618fCf34A87;
+    uint256 TIME_UNTIL_START = 1 days;
 
     function configureSphinx() public override {
         // TODO: Update to contain revnet devs.
@@ -133,12 +137,6 @@ contract DeployScript is Script, Sphinx {
     }
 
     function getBannyverseRevnetConfig() internal view returns (BannyverseRevnetConfig memory) {
-        // Define constants
-        uint32 nativeCurrency = uint32(uint160(JBConstants.NATIVE_TOKEN));
-        uint8 decimals = 18;
-        uint256 decimalMultiplier = 10 ** decimals;
-        uint24 nakedBannyCategory = 0;
-
         // The terminals that the project will accept funds through.
         JBTerminalConfig[] memory terminalConfigurations = new JBTerminalConfig[](2);
         JBAccountingContext[] memory accountingContextsToAccept = new JBAccountingContext[](1);
@@ -146,8 +144,8 @@ contract DeployScript is Script, Sphinx {
         // Accept the chain's native currency through the multi terminal.
         accountingContextsToAccept[0] = JBAccountingContext({
             token: JBConstants.NATIVE_TOKEN,
-            decimals: 18,
-            currency: nativeCurrency
+            decimals: DECIMALS,
+            currency: NATIVE_CURRENCY 
         });
 
         terminalConfigurations[0] =
@@ -160,7 +158,7 @@ contract DeployScript is Script, Sphinx {
 
         REVAutoMint[] memory mintConfs = new REVAutoMint[](1);
         mintConfs[0] =
-            REVAutoMint({chainId: PREMINT_CHAIN_ID, count: uint104(88_500 * decimalMultiplier), beneficiary: OPERATOR});
+            REVAutoMint({chainId: PREMINT_CHAIN_ID, count: uint104(88_500 * DECIMAL_MULTIPLIER), beneficiary: OPERATOR});
 
         // The project's revnet stage configurations.
         REVStageConfig[] memory stageConfigurations = new REVStageConfig[](3);
@@ -168,7 +166,7 @@ contract DeployScript is Script, Sphinx {
             startsAtOrAfter: uint40(block.timestamp + TIME_UNTIL_START),
             autoMints: mintConfs,
             splitPercent: 5000, // 50%
-            initialIssuance: uint112(1000 * decimalMultiplier),
+            initialIssuance: uint112(1000 * DECIMAL_MULTIPLIER),
             issuanceDecayFrequency: 60 days,
             issuanceDecayPercent: 380_000_000, // 38%,
             cashOutTaxRate: 1000, // 0.1
@@ -199,7 +197,7 @@ contract DeployScript is Script, Sphinx {
         // The project's revnet configuration
         REVConfig memory revnetConfiguration = REVConfig({
             description: REVDescription(NAME, SYMBOL, PROJECT_URI, ERC20_SALT),
-            baseCurrency: nativeCurrency,
+            baseCurrency: NATIVE_CURRENCY,
             splitOperator: OPERATOR,
             stageConfigurations: stageConfigurations,
             loanSources: new REVLoanSource[](0),
@@ -222,13 +220,13 @@ contract DeployScript is Script, Sphinx {
         JB721TierConfig[] memory tiers = new JB721TierConfig[](4);
 
         tiers[0] = JB721TierConfig({
-            price: uint104(1 * (10 ** decimals)),
+            price: uint104(1 * (10 ** DECIMALS)),
             initialSupply: 100,
             votingUnits: 0,
             reserveFrequency: 0,
             reserveBeneficiary: address(0),
             encodedIPFSUri: bytes32(""),
-            category: nakedBannyCategory,
+            category: NAKED_BANNY_CATEGORY,
             allowOwnerMint: false,
             useReserveBeneficiaryAsDefault: false,
             transfersPausable: false,
@@ -236,13 +234,13 @@ contract DeployScript is Script, Sphinx {
             cannotBeRemoved: true
         });
         tiers[1] = JB721TierConfig({
-            price: uint104(1 * (10 ** (decimals - 1))),
+            price: uint104(1 * (10 ** (DECIMALS - 1))),
             initialSupply: 1000,
             votingUnits: 0,
             reserveFrequency: 0,
             reserveBeneficiary: address(0),
             encodedIPFSUri: bytes32(""),
-            category: nakedBannyCategory,
+            category: NAKED_BANNY_CATEGORY,
             allowOwnerMint: false,
             useReserveBeneficiaryAsDefault: false,
             transfersPausable: false,
@@ -250,13 +248,13 @@ contract DeployScript is Script, Sphinx {
             cannotBeRemoved: true
         });
         tiers[2] = JB721TierConfig({
-            price: uint104(1 * (10 ** (decimals - 2))),
+            price: uint104(1 * (10 ** (DECIMALS - 2))),
             initialSupply: 10_000,
             votingUnits: 0,
             reserveFrequency: 0,
             reserveBeneficiary: address(0),
             encodedIPFSUri: bytes32(""),
-            category: nakedBannyCategory,
+            category: NAKED_BANNY_CATEGORY,
             allowOwnerMint: false,
             useReserveBeneficiaryAsDefault: false,
             transfersPausable: false,
@@ -264,13 +262,13 @@ contract DeployScript is Script, Sphinx {
             cannotBeRemoved: true
         });
         tiers[3] = JB721TierConfig({
-            price: uint104(1 * (10 ** (decimals - 4))),
+            price: uint104(1 * (10 ** (DECIMALS - 4))),
             initialSupply: 999_999_999, // MAX
             votingUnits: 0,
             reserveFrequency: 0,
             reserveBeneficiary: address(0),
             encodedIPFSUri: bytes32(""),
-            category: nakedBannyCategory,
+            category: NAKED_BANNY_CATEGORY,
             allowOwnerMint: false,
             useReserveBeneficiaryAsDefault: false,
             transfersPausable: false,
@@ -333,8 +331,8 @@ contract DeployScript is Script, Sphinx {
                     contractUri: CONTRACT_URI,
                     tiersConfig: JB721InitTiersConfig({
                         tiers: tiers,
-                        currency: nativeCurrency,
-                        decimals: decimals,
+                        currency: NATIVE_CURRENCY,
+                        decimals: DECIMALS,
                         prices: IJBPrices(address(0))
                     }),
                     reserveBeneficiary: address(0),
