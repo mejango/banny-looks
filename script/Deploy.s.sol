@@ -147,7 +147,7 @@ contract DeployScript is Script, Sphinx {
         accountingContextsToAccept[0] = JBAccountingContext({
             token: JBConstants.NATIVE_TOKEN,
             decimals: 18,
-            currency: uint32(uint160(JBConstants.NATIVE_TOKEN))
+            currency: nativeCurrency
         });
 
         terminalConfigurations[0] =
