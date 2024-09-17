@@ -20,14 +20,14 @@
     "dependencies": {
         "@bananapus/721-hook": "^0.0.22",
         "@bananapus/buyback-hook": "^0.0.18",
-        "@bananapus/core": "^0.0.25",
+        "@bananapus/core": "^0.0.31",
         "@bananapus/ownable": "^0.0.6",
         "@bananapus/permission-ids": "^0.0.12",
         "@bananapus/suckers": "^0.0.20",
         "@bananapus/swap-terminal": "^0.0.18",
         "@croptop/core": "^0.0.15",
         "@openzeppelin/contracts": "^5.0.2",
-        "@rev-net/core": "^0.0.32"
+        "@rev-net/core": "^0.0.33"
     },
     "devDependencies": {
         "@sphinx-labs/plugins": "0.33.0"

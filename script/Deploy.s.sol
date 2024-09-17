@@ -13,10 +13,11 @@ import {JBPermissionIds} from "@bananapus/permission-ids/src/JBPermissionIds.sol
 import {IJBPrices} from "@bananapus/core/src/interfaces/IJBPrices.sol";
 import {JBPermissionsData} from "@bananapus/core/src/structs/JBPermissionsData.sol";
 import {JBConstants} from "@bananapus/core/src/libraries/JBConstants.sol";
+import {REVLoanSource} from "@rev-net/core/src/structs/REVLoanSource.sol";
 import {JBAccountingContext} from "@bananapus/core/src/structs/JBAccountingContext.sol";
 import {JBTerminalConfig} from "@bananapus/core/src/structs/JBTerminalConfig.sol";
 import {REVStageConfig} from "@rev-net/core/src/structs/REVStageConfig.sol";
-import {REVMintConfig} from "@rev-net/core/src/structs/REVMintConfig.sol";
+import {REVAutoMint} from "@rev-net/core/src/structs/REVAutoMint.sol";
 import {REVConfig} from "@rev-net/core/src/structs/REVConfig.sol";
 import {REVCroptopAllowedPost} from "@rev-net/core/src/structs/REVCroptopAllowedPost.sol";
 import {REVBuybackPoolConfig} from "@rev-net/core/src/structs/REVBuybackPoolConfig.sol";
@@ -44,9 +45,6 @@ struct BannyverseRevnetConfig {
     REVBuybackHookConfig buybackHookConfiguration;
     REVSuckerDeploymentConfig suckerDeploymentConfiguration;
     REVDeploy721TiersHookConfig hookConfiguration;
-    JBPayHookSpecification[] otherPayHooksSpecifications;
-    uint16 extraHookMetadata;
-    REVCroptopAllowedPost[] allowedPosts;
 }
 
 contract DeployScript is Script, Sphinx {
@@ -166,42 +164,42 @@ contract DeployScript is Script, Sphinx {
             accountingContextsToAccept: new JBAccountingContext[](0)
         });
 
-        REVMintConfig[] memory mintConfs = new REVMintConfig[](1);
-        mintConfs[0] = REVMintConfig({
-            chainId: PREMINT_CHAIN_ID,
-            count: uint104(88_500 * decimalMultiplier),
-            beneficiary: OPERATOR
-        });
+        REVAutoMint[] memory mintConfs = new REVAutoMint[](1);
+        mintConfs[0] =
+            REVAutoMint({chainId: PREMINT_CHAIN_ID, count: uint104(88_500 * decimalMultiplier), beneficiary: OPERATOR});
 
         // The project's revnet stage configurations.
         REVStageConfig[] memory stageConfigurations = new REVStageConfig[](3);
         stageConfigurations[0] = REVStageConfig({
             startsAtOrAfter: uint40(block.timestamp),
-            mintConfigs: mintConfs,
+            autoMints: mintConfs,
             splitPercent: 5000, // 50%
             initialIssuance: uint112(1000 * decimalMultiplier),
             issuanceDecayFrequency: 60 days,
             issuanceDecayPercent: 380_000_000, // 38%,
-            cashOutTaxRate: 1000 // 0.1
+            cashOutTaxRate: 1000, // 0.1
+            extraMetadata: 0
         });
         stageConfigurations[1] = REVStageConfig({
             startsAtOrAfter: uint40(stageConfigurations[0].startsAtOrAfter + 600 days),
-            mintConfigs: new REVMintConfig[](0),
+            autoMints: new REVAutoMint[](0),
             splitPercent: 5000, // 50%
             initialIssuance: 0, // inherit from previous cycle.
             issuanceDecayFrequency: 150 days,
             issuanceDecayPercent: 380_000_000, // 38%
-            cashOutTaxRate: 1000 // 0.1
+            cashOutTaxRate: 1000, // 0.1
+            extraMetadata: 0
         });
 
         stageConfigurations[2] = REVStageConfig({
             startsAtOrAfter: uint40(stageConfigurations[1].startsAtOrAfter + (6000 days)),
-            mintConfigs: new REVMintConfig[](0),
+            autoMints: new REVAutoMint[](0),
             splitPercent: 0,
             initialIssuance: 1, // this is a special number that is as close to max price as we can get.
             issuanceDecayFrequency: 0,
             issuanceDecayPercent: 0,
-            cashOutTaxRate: 1000 // 0.1
+            cashOutTaxRate: 1000, // 0.1
+            extraMetadata: 0
         });
 
         // The project's revnet configuration
@@ -209,7 +207,10 @@ contract DeployScript is Script, Sphinx {
             description: REVDescription(name, symbol, projectUri, SALT),
             baseCurrency: nativeCurrency,
             splitOperator: OPERATOR,
-            stageConfigurations: stageConfigurations
+            stageConfigurations: stageConfigurations,
+            loanSources: new REVLoanSource[](0),
+            loans: address(0),
+            allowCrosschainSuckerExtension: true
         });
 
         // The project's buyback hook configuration.
@@ -283,37 +284,6 @@ contract DeployScript is Script, Sphinx {
             cannotBeRemoved: true
         });
 
-        // The project's allowed croptop posts.
-        REVCroptopAllowedPost[] memory allowedPosts = new REVCroptopAllowedPost[](4);
-        allowedPosts[0] = REVCroptopAllowedPost({
-            category: 100,
-            minimumPrice: uint104(10 ** (decimals - 3)),
-            minimumTotalSupply: 10_000,
-            maximumTotalSupply: 999_999_999,
-            allowedAddresses: new address[](0)
-        });
-        allowedPosts[1] = REVCroptopAllowedPost({
-            category: 101,
-            minimumPrice: uint104(10 ** (decimals - 1)),
-            minimumTotalSupply: 100,
-            maximumTotalSupply: 999_999_999,
-            allowedAddresses: new address[](0)
-        });
-        allowedPosts[2] = REVCroptopAllowedPost({
-            category: 102,
-            minimumPrice: uint104(10 ** decimals),
-            minimumTotalSupply: 10,
-            maximumTotalSupply: 999_999_999,
-            allowedAddresses: new address[](0)
-        });
-        allowedPosts[3] = REVCroptopAllowedPost({
-            category: 103,
-            minimumPrice: uint104(10 ** (decimals + 2)),
-            minimumTotalSupply: 10,
-            maximumTotalSupply: 999_999_999,
-            allowedAddresses: new address[](0)
-        });
-
         // Organize the instructions for how this project will connect to other chains.
         JBTokenMapping[] memory tokenMappings = new JBTokenMapping[](1);
         tokenMappings[0] = JBTokenMapping({
@@ -325,7 +295,7 @@ contract DeployScript is Script, Sphinx {
 
         JBSuckerDeployerConfig[] memory suckerDeployerConfigurations;
         if (block.chainid == 1 || block.chainid == 11_155_111) {
-            suckerDeployerConfigurations = new JBSuckerDeployerConfig[](2);
+            suckerDeployerConfigurations = new JBSuckerDeployerConfig[](3);
             // OP
             suckerDeployerConfigurations[0] =
                 JBSuckerDeployerConfig({deployer: suckers.optimismDeployer, mappings: tokenMappings});
@@ -333,8 +303,8 @@ contract DeployScript is Script, Sphinx {
             suckerDeployerConfigurations[1] =
                 JBSuckerDeployerConfig({deployer: suckers.baseDeployer, mappings: tokenMappings});
 
-            // suckerDeployerConfigurations[2] =
-            //     JBSuckerDeployerConfig({deployer: suckers.arbitrumDeployer, mappings: tokenMappings});
+            suckerDeployerConfigurations[2] =
+                JBSuckerDeployerConfig({deployer: suckers.arbitrumDeployer, mappings: tokenMappings});
         } else {
             suckerDeployerConfigurations = new JBSuckerDeployerConfig[](1);
             // L2 -> Mainnet
@@ -384,10 +354,7 @@ contract DeployScript is Script, Sphinx {
                 splitOperatorCanAdjustTiers: true,
                 splitOperatorCanUpdateMetadata: true,
                 splitOperatorCanMint: true
-            }),
-            otherPayHooksSpecifications: new JBPayHookSpecification[](0),
-            extraHookMetadata: 0,
-            allowedPosts: allowedPosts
+            })
         });
     }
 
@@ -438,16 +405,14 @@ contract DeployScript is Script, Sphinx {
         bannyverseConfig.hookConfiguration.baseline721HookConfiguration.tokenUriResolver = resolver;
 
         // Deploy the $BANNY Revnet.
-        revnet.croptop_deployer.deployFor({
+        revnet.basic_deployer.deployWith721sFor({
             revnetId: 0,
             configuration: bannyverseConfig.configuration,
             terminalConfigurations: bannyverseConfig.terminalConfigurations,
             buybackHookConfiguration: bannyverseConfig.buybackHookConfiguration,
             suckerDeploymentConfiguration: bannyverseConfig.suckerDeploymentConfiguration,
-            hookConfiguration: bannyverseConfig.hookConfiguration,
-            otherPayHooksSpecifications: bannyverseConfig.otherPayHooksSpecifications,
-            extraHookMetadata: bannyverseConfig.extraHookMetadata,
-            allowedPosts: bannyverseConfig.allowedPosts
+            tiered721HookConfiguration: bannyverseConfig.hookConfiguration,
+            allowedPosts: new REVCroptopAllowedPost[](0)
         });
     }
 
