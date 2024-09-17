@@ -1,38 +1,35 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.23;
 
-import "@bananapus/core/script/helpers/CoreDeploymentLib.sol";
 import "@bananapus/721-hook/script/helpers/Hook721DeploymentLib.sol";
+import "@bananapus/buyback-hook/script/helpers/BuybackDeploymentLib.sol";
+import "@bananapus/core/script/helpers/CoreDeploymentLib.sol";
 import "@bananapus/suckers/script/helpers/SuckerDeploymentLib.sol";
+import "@bananapus/swap-terminal/script/helpers/SwapTerminalDeploymentLib.sol";
 import "@croptop/core/script/helpers/CroptopDeploymentLib.sol";
 import "@rev-net/core/script/helpers/RevnetCoreDeploymentLib.sol";
-import "@bananapus/buyback-hook/script/helpers/BuybackDeploymentLib.sol";
-import "@bananapus/swap-terminal/script/helpers/SwapTerminalDeploymentLib.sol";
 
-import {JBPermissionIds} from "@bananapus/permission-ids/src/JBPermissionIds.sol";
+import {IJB721TokenUriResolver} from "@bananapus/721-hook/src/interfaces/IJB721TokenUriResolver.sol";
+import {JB721InitTiersConfig} from "@bananapus/721-hook/src/structs/JB721InitTiersConfig.sol";
+import {JB721TierConfig} from "@bananapus/721-hook/src/structs/JB721TierConfig.sol";
+import {JB721TiersHookFlags} from "@bananapus/721-hook/src/structs/JB721TiersHookFlags.sol";
+import {JBDeploy721TiersHookConfig} from "@bananapus/721-hook/src/structs/JBDeploy721TiersHookConfig.sol";
 import {IJBPrices} from "@bananapus/core/src/interfaces/IJBPrices.sol";
-import {JBPermissionsData} from "@bananapus/core/src/structs/JBPermissionsData.sol";
 import {JBConstants} from "@bananapus/core/src/libraries/JBConstants.sol";
-import {REVLoanSource} from "@rev-net/core/src/structs/REVLoanSource.sol";
 import {JBAccountingContext} from "@bananapus/core/src/structs/JBAccountingContext.sol";
 import {JBTerminalConfig} from "@bananapus/core/src/structs/JBTerminalConfig.sol";
-import {REVStageConfig} from "@rev-net/core/src/structs/REVStageConfig.sol";
+import {JBTokenMapping} from "@bananapus/suckers/src/structs/JBTokenMapping.sol";
 import {REVAutoMint} from "@rev-net/core/src/structs/REVAutoMint.sol";
 import {REVConfig} from "@rev-net/core/src/structs/REVConfig.sol";
 import {REVCroptopAllowedPost} from "@rev-net/core/src/structs/REVCroptopAllowedPost.sol";
-import {REVBuybackPoolConfig} from "@rev-net/core/src/structs/REVBuybackPoolConfig.sol";
 import {REVBuybackHookConfig} from "@rev-net/core/src/structs/REVBuybackHookConfig.sol";
-import {JB721TierConfig} from "@bananapus/721-hook/src/structs/JB721TierConfig.sol";
-import {JBTokenMapping} from "@bananapus/suckers/src/structs/JBTokenMapping.sol";
-import {JBSuckerDeployerConfig} from "@bananapus/suckers/src/structs/JBSuckerDeployerConfig.sol";
-import {REVSuckerDeploymentConfig} from "@rev-net/core/src/structs/REVSuckerDeploymentConfig.sol";
-import {JBPayHookSpecification} from "@bananapus/core/src/structs/JBPayHookSpecification.sol";
-import {JB721InitTiersConfig} from "@bananapus/721-hook/src/structs/JB721InitTiersConfig.sol";
-import {JB721TiersHookFlags} from "@bananapus/721-hook/src/structs/JB721TiersHookFlags.sol";
-import {REVDescription} from "@rev-net/core/src/structs/REVDescription.sol";
+import {REVBuybackPoolConfig} from "@rev-net/core/src/structs/REVBuybackPoolConfig.sol";
 import {REVDeploy721TiersHookConfig} from "@rev-net/core/src/structs/REVDeploy721TiersHookConfig.sol";
-import {JBDeploy721TiersHookConfig} from "@bananapus/721-hook/src/structs/JBDeploy721TiersHookConfig.sol";
-import {IJB721TokenUriResolver} from "@bananapus/721-hook/src/interfaces/IJB721TokenUriResolver.sol";
+import {REVDescription} from "@rev-net/core/src/structs/REVDescription.sol";
+import {REVLoanSource} from "@rev-net/core/src/structs/REVLoanSource.sol";
+import {REVStageConfig} from "@rev-net/core/src/structs/REVStageConfig.sol";
+import {REVSuckerDeploymentConfig} from "@rev-net/core/src/structs/REVSuckerDeploymentConfig.sol";
+import {JBSuckerDeployerConfig} from "@bananapus/suckers/src/structs/JBSuckerDeployerConfig.sol";
 
 import {Sphinx} from "@sphinx-labs/contracts/SphinxPlugin.sol";
 import {Script} from "forge-std/Script.sol";
@@ -65,10 +62,15 @@ contract DeployScript is Script, Sphinx {
 
     BannyverseRevnetConfig bannyverseConfig;
 
-    uint32 PREMINT_CHAIN_ID = 1;
+    uint32 PREMINT_CHAIN_ID = 11_155_111;
     bytes32 SALT = "_BANNY_PROJECT_SALT_";
     bytes32 SUCKER_SALT = "_BANNY_PROJECT_SUCKER_SALT_";
     bytes32 RESOLVER_SALT = "_BANNY_PROJECT_RESOLVER_SALT_";
+    string NAME = "Banny Network";
+    string SYMBOL = "BAN";
+    string PROJECT_URI = "ipfs://QmUpbbnjHdzh6fT4qtqty24beVb2USX27eyyLT7KmtMoNr";
+    string BASE_URI = "ipfs://";
+    string CONTRACT_URI = "";
 
     address OPERATOR = 0x823b92d6a4b2AED4b15675c7917c9f922ea8ADAD;
     address TRUSTED_FORWARDER = 0xB2b5841DBeF766d4b521221732F9B618fCf34A87;
@@ -81,38 +83,35 @@ contract DeployScript is Script, Sphinx {
     }
 
     function run() public {
+        // Get the deployment addresses for the 721 hook contracts for this chain.
+        buybackHook = BuybackDeploymentLib.getDeployment(
+            vm.envOr("NANA_BUYBACK_HOOK_DEPLOYMENT_PATH", string("node_modules/@bananapus/buyback-hook/deployments/"))
+        );
         // Get the deployment addresses for the nana CORE for this chain.
         // We want to do this outside of the `sphinx` modifier.
         core = CoreDeploymentLib.getDeployment(
             vm.envOr("NANA_CORE_DEPLOYMENT_PATH", string("node_modules/@bananapus/core/deployments/"))
-        );
-        // Get the deployment addresses for the suckers contracts for this chain.
-        suckers = SuckerDeploymentLib.getDeployment(
-            vm.envOr("NANA_SUCKERS_DEPLOYMENT_PATH", string("node_modules/@bananapus/suckers/deployments/"))
         );
         // Get the deployment addresses for the 721 hook contracts for this chain.
         croptop = CroptopDeploymentLib.getDeployment(
             vm.envOr("CROPTOP_CORE_DEPLOYMENT_PATH", string("node_modules/@croptop/core/deployments/"))
         );
         // Get the deployment addresses for the 721 hook contracts for this chain.
-        revnet = RevnetCoreDeploymentLib.getDeployment(
-            vm.envOr("REVNET_CORE_DEPLOYMENT_PATH", string("node_modules/@rev-net/core/deployments/"))
-        );
-        // Get the deployment addresses for the 721 hook contracts for this chain.
         hook = Hook721DeploymentLib.getDeployment(
             vm.envOr("NANA_721_DEPLOYMENT_PATH", string("node_modules/@bananapus/721-hook/deployments/"))
         );
         // Get the deployment addresses for the 721 hook contracts for this chain.
-        buybackHook = BuybackDeploymentLib.getDeployment(
-            vm.envOr("NANA_BUYBACK_HOOK_DEPLOYMENT_PATH", string("node_modules/@bananapus/buyback-hook/deployments/"))
+        revnet = RevnetCoreDeploymentLib.getDeployment(
+            vm.envOr("REVNET_CORE_DEPLOYMENT_PATH", string("node_modules/@rev-net/core/deployments/"))
+        );
+        // Get the deployment addresses for the suckers contracts for this chain.
+        suckers = SuckerDeploymentLib.getDeployment(
+            vm.envOr("NANA_SUCKERS_DEPLOYMENT_PATH", string("node_modules/@bananapus/suckers/deployments/"))
         );
         // Get the deployment addresses for the 721 hook contracts for this chain.
         swapTerminal = SwapTerminalDeploymentLib.getDeployment(
             vm.envOr("NANA_SWAP_TERMINAL_DEPLOYMENT_PATH", string("node_modules/@bananapus/swap-terminal/deployments/"))
         );
-
-        // Set the operator to be this safe.
-        OPERATOR = safeAddress();
 
         bannyverseConfig = getBannyverseRevnetConfig();
 
@@ -122,12 +121,12 @@ contract DeployScript is Script, Sphinx {
         // Because of the cross-chain allowing components of nana-core, all chains require the same start_time,
         // for this reason we can't rely on the simulations block.time and we need a shared timestamp across all
         // simulations.
-        uint256 _realTimestamp = vm.envUint("START_TIME");
-        if (_realTimestamp <= block.timestamp - 1 days) {
+        uint256 realTimestamp = vm.envUint("START_TIME");
+        if (realTimestamp <= block.timestamp - 1 days) {
             revert("Something went wrong while setting the 'START_TIME' environment variable.");
         }
 
-        vm.warp(_realTimestamp);
+        vm.warp(realTimestamp);
 
         // Perform the deployment transactions.
         deploy();
@@ -135,11 +134,6 @@ contract DeployScript is Script, Sphinx {
 
     function getBannyverseRevnetConfig() internal view returns (BannyverseRevnetConfig memory) {
         // Define constants
-        string memory name = "Banny Network";
-        string memory symbol = "BAN";
-        string memory projectUri = "ipfs://QmUpbbnjHdzh6fT4qtqty24beVb2USX27eyyLT7KmtMoNr";
-        string memory baseUri = "ipfs://";
-        string memory contractUri = "";
         uint32 nativeCurrency = uint32(uint160(JBConstants.NATIVE_TOKEN));
         uint8 decimals = 18;
         uint256 decimalMultiplier = 10 ** decimals;
@@ -204,7 +198,7 @@ contract DeployScript is Script, Sphinx {
 
         // The project's revnet configuration
         REVConfig memory revnetConfiguration = REVConfig({
-            description: REVDescription(name, symbol, projectUri, SALT),
+            description: REVDescription(NAME, SYMBOL, PROJECT_URI, SALT),
             baseCurrency: nativeCurrency,
             splitOperator: OPERATOR,
             stageConfigurations: stageConfigurations,
@@ -331,12 +325,12 @@ contract DeployScript is Script, Sphinx {
             suckerDeploymentConfiguration: suckerDeploymentConfiguration,
             hookConfiguration: REVDeploy721TiersHookConfig({
                 baseline721HookConfiguration: JBDeploy721TiersHookConfig({
-                    name: name,
-                    symbol: symbol,
+                    name: NAME,
+                    symbol: SYMBOL,
                     rulesets: core.rulesets,
-                    baseUri: baseUri,
+                    baseUri: BASE_URI,
                     tokenUriResolver: IJB721TokenUriResolver(address(0)), // This will be replaced once we know the address.
-                    contractUri: contractUri,
+                    contractUri: CONTRACT_URI,
                     tiersConfig: JB721InitTiersConfig({
                         tiers: tiers,
                         currency: nativeCurrency,
