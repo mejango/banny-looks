@@ -63,7 +63,7 @@ contract DeployScript is Script, Sphinx {
     BannyverseRevnetConfig bannyverseConfig;
 
     uint32 PREMINT_CHAIN_ID = 11_155_111;
-    bytes32 SALT = "_BANNY_PROJECT_SALT_";
+    bytes32 ERC20_SALT = "_BANNY_ERC20_SALT_";
     bytes32 SUCKER_SALT = "_BANNY_PROJECT_SUCKER_SALT_";
     bytes32 RESOLVER_SALT = "_BANNY_PROJECT_RESOLVER_SALT_";
     string NAME = "Banny Network";
@@ -198,7 +198,7 @@ contract DeployScript is Script, Sphinx {
 
         // The project's revnet configuration
         REVConfig memory revnetConfiguration = REVConfig({
-            description: REVDescription(NAME, SYMBOL, PROJECT_URI, SALT),
+            description: REVDescription(NAME, SYMBOL, PROJECT_URI, ERC20_SALT),
             baseCurrency: nativeCurrency,
             splitOperator: OPERATOR,
             stageConfigurations: stageConfigurations,
