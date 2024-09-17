@@ -182,16 +182,16 @@ contract DeployScript is Script, Sphinx {
             initialIssuance: uint112(1000 * decimalMultiplier),
             issuanceDecayFrequency: 60 days,
             issuanceDecayPercent: 380_000_000, // 38%,
-            cashOutTaxRate: 3000 // 0.3
+            cashOutTaxRate: 1000 // 0.1
         });
         stageConfigurations[1] = REVStageConfig({
             startsAtOrAfter: uint40(stageConfigurations[0].startsAtOrAfter + 600 days),
             mintConfigs: new REVMintConfig[](0),
             splitPercent: 5000, // 50%
             initialIssuance: 0, // inherit from previous cycle.
-            issuanceDecayFrequency: 120 days,
+            issuanceDecayFrequency: 150 days,
             issuanceDecayPercent: 380_000_000, // 38%
-            cashOutTaxRate: 3000 // 0.3
+            cashOutTaxRate: 1000 // 0.1
         });
 
         stageConfigurations[2] = REVStageConfig({
