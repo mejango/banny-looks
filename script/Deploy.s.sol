@@ -137,9 +137,9 @@ contract DeployScript is Script, Sphinx {
 
     function getBannyverseRevnetConfig() internal view returns (BannyverseRevnetConfig memory) {
         // Define constants
-        string memory name = "Bannyverse";
-        string memory symbol = "BANNY";
-        string memory projectUri = "ipfs://QmWkFkmgevwWJno9UrAZSmYz6Y17EC78X1xSc1KimwSYts";
+        string memory name = "Banny Network";
+        string memory symbol = "BAN";
+        string memory projectUri = "ipfs://QmUpbbnjHdzh6fT4qtqty24beVb2USX27eyyLT7KmtMoNr";
         string memory baseUri = "ipfs://";
         string memory contractUri = "";
         uint32 nativeCurrency = uint32(uint160(JBConstants.NATIVE_TOKEN));
