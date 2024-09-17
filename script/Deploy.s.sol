@@ -71,7 +71,7 @@ contract DeployScript is Script, Sphinx {
     string PROJECT_URI = "ipfs://QmUpbbnjHdzh6fT4qtqty24beVb2USX27eyyLT7KmtMoNr";
     string BASE_URI = "ipfs://";
     string CONTRACT_URI = "";
-
+    uint256 TIME_UNTIL_START = 1 days;
     address OPERATOR = 0x823b92d6a4b2AED4b15675c7917c9f922ea8ADAD;
     address TRUSTED_FORWARDER = 0xB2b5841DBeF766d4b521221732F9B618fCf34A87;
 
@@ -122,7 +122,7 @@ contract DeployScript is Script, Sphinx {
         // for this reason we can't rely on the simulations block.time and we need a shared timestamp across all
         // simulations.
         uint256 realTimestamp = vm.envUint("START_TIME");
-        if (realTimestamp <= block.timestamp - 1 days) {
+        if (realTimestamp <= block.timestamp - TIME_UNTIL_START) {
             revert("Something went wrong while setting the 'START_TIME' environment variable.");
         }
 
@@ -165,7 +165,7 @@ contract DeployScript is Script, Sphinx {
         // The project's revnet stage configurations.
         REVStageConfig[] memory stageConfigurations = new REVStageConfig[](3);
         stageConfigurations[0] = REVStageConfig({
-            startsAtOrAfter: uint40(block.timestamp),
+            startsAtOrAfter: uint40(block.timestamp + TIME_UNTIL_START),
             autoMints: mintConfs,
             splitPercent: 5000, // 50%
             initialIssuance: uint112(1000 * decimalMultiplier),
