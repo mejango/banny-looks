@@ -30,6 +30,7 @@ import {REVLoanSource} from "@rev-net/core/src/structs/REVLoanSource.sol";
 import {REVStageConfig} from "@rev-net/core/src/structs/REVStageConfig.sol";
 import {REVSuckerDeploymentConfig} from "@rev-net/core/src/structs/REVSuckerDeploymentConfig.sol";
 import {JBSuckerDeployerConfig} from "@bananapus/suckers/src/structs/JBSuckerDeployerConfig.sol";
+import {IJBTerminal} from "@bananapus/core/src/interfaces/IJBTerminal.sol";
 
 import {Sphinx} from "@sphinx-labs/contracts/SphinxPlugin.sol";
 import {Script} from "forge-std/Script.sol";
@@ -142,17 +143,14 @@ contract DeployScript is Script, Sphinx {
         JBAccountingContext[] memory accountingContextsToAccept = new JBAccountingContext[](1);
 
         // Accept the chain's native currency through the multi terminal.
-        accountingContextsToAccept[0] = JBAccountingContext({
-            token: JBConstants.NATIVE_TOKEN,
-            decimals: DECIMALS,
-            currency: NATIVE_CURRENCY 
-        });
+        accountingContextsToAccept[0] =
+            JBAccountingContext({token: JBConstants.NATIVE_TOKEN, decimals: DECIMALS, currency: NATIVE_CURRENCY});
 
         terminalConfigurations[0] =
             JBTerminalConfig({terminal: core.terminal, accountingContextsToAccept: accountingContextsToAccept});
 
         terminalConfigurations[1] = JBTerminalConfig({
-            terminal: swapTerminal.swap_terminal,
+            terminal: IJBTerminal(address(swapTerminal.swap_terminal)),
             accountingContextsToAccept: new JBAccountingContext[](0)
         });
 
@@ -194,16 +192,23 @@ contract DeployScript is Script, Sphinx {
             extraMetadata: 0
         });
 
-        // The project's revnet configuration
-        REVConfig memory revnetConfiguration = REVConfig({
-            description: REVDescription(NAME, SYMBOL, PROJECT_URI, ERC20_SALT),
-            baseCurrency: NATIVE_CURRENCY,
-            splitOperator: OPERATOR,
-            stageConfigurations: stageConfigurations,
-            loanSources: new REVLoanSource[](0),
-            loans: address(0),
-            allowCrosschainSuckerExtension: true
-        });
+        REVConfig memory revnetConfiguration;
+        {
+            // Thr projects loan configuration.
+            REVLoanSource[] memory _loanSources = new REVLoanSource[](1);
+            _loanSources[0] = REVLoanSource({token: JBConstants.NATIVE_TOKEN, terminal: core.terminal});
+
+            // The project's revnet configuration
+            revnetConfiguration = REVConfig({
+                description: REVDescription(NAME, SYMBOL, PROJECT_URI, ERC20_SALT),
+                baseCurrency: NATIVE_CURRENCY,
+                splitOperator: OPERATOR,
+                stageConfigurations: stageConfigurations,
+                loanSources: _loanSources,
+                loans: address(revnet.loans),
+                allowCrosschainSuckerExtension: true
+            });
+        }
 
         // The project's buyback hook configuration.
         REVBuybackPoolConfig[] memory buybackPoolConfigurations = new REVBuybackPoolConfig[](1);
@@ -227,6 +232,8 @@ contract DeployScript is Script, Sphinx {
             reserveBeneficiary: address(0),
             encodedIPFSUri: bytes32(""),
             category: NAKED_BANNY_CATEGORY,
+            discountPercent: 0,
+            cannotIncreaseDiscountPercent: true,
             allowOwnerMint: false,
             useReserveBeneficiaryAsDefault: false,
             transfersPausable: false,
@@ -241,6 +248,8 @@ contract DeployScript is Script, Sphinx {
             reserveBeneficiary: address(0),
             encodedIPFSUri: bytes32(""),
             category: NAKED_BANNY_CATEGORY,
+            discountPercent: 0,
+            cannotIncreaseDiscountPercent: true,
             allowOwnerMint: false,
             useReserveBeneficiaryAsDefault: false,
             transfersPausable: false,
@@ -255,6 +264,8 @@ contract DeployScript is Script, Sphinx {
             reserveBeneficiary: address(0),
             encodedIPFSUri: bytes32(""),
             category: NAKED_BANNY_CATEGORY,
+            discountPercent: 0,
+            cannotIncreaseDiscountPercent: true,
             allowOwnerMint: false,
             useReserveBeneficiaryAsDefault: false,
             transfersPausable: false,
@@ -269,6 +280,8 @@ contract DeployScript is Script, Sphinx {
             reserveBeneficiary: address(0),
             encodedIPFSUri: bytes32(""),
             category: NAKED_BANNY_CATEGORY,
+            discountPercent: 0,
+            cannotIncreaseDiscountPercent: true,
             allowOwnerMint: false,
             useReserveBeneficiaryAsDefault: false,
             transfersPausable: false,
@@ -287,7 +300,7 @@ contract DeployScript is Script, Sphinx {
 
         JBSuckerDeployerConfig[] memory suckerDeployerConfigurations;
         if (block.chainid == 1 || block.chainid == 11_155_111) {
-            suckerDeployerConfigurations = new JBSuckerDeployerConfig[](3);
+            suckerDeployerConfigurations = new JBSuckerDeployerConfig[](2);
             // OP
             suckerDeployerConfigurations[0] =
                 JBSuckerDeployerConfig({deployer: suckers.optimismDeployer, mappings: tokenMappings});
@@ -295,8 +308,8 @@ contract DeployScript is Script, Sphinx {
             suckerDeployerConfigurations[1] =
                 JBSuckerDeployerConfig({deployer: suckers.baseDeployer, mappings: tokenMappings});
 
-            suckerDeployerConfigurations[2] =
-                JBSuckerDeployerConfig({deployer: suckers.arbitrumDeployer, mappings: tokenMappings});
+            // suckerDeployerConfigurations[2] =
+            //     JBSuckerDeployerConfig({deployer: suckers.arbitrumDeployer, mappings: tokenMappings});
         } else {
             suckerDeployerConfigurations = new JBSuckerDeployerConfig[](1);
             // L2 -> Mainnet
@@ -325,7 +338,6 @@ contract DeployScript is Script, Sphinx {
                 baseline721HookConfiguration: JBDeploy721TiersHookConfig({
                     name: NAME,
                     symbol: SYMBOL,
-                    rulesets: core.rulesets,
                     baseUri: BASE_URI,
                     tokenUriResolver: IJB721TokenUriResolver(address(0)), // This will be replaced once we know the address.
                     contractUri: CONTRACT_URI,
@@ -345,7 +357,8 @@ contract DeployScript is Script, Sphinx {
                 }),
                 splitOperatorCanAdjustTiers: true,
                 splitOperatorCanUpdateMetadata: true,
-                splitOperatorCanMint: true
+                splitOperatorCanMint: true,
+                splitOperatorCanIncreaseDiscountPercent: true
             })
         });
     }
