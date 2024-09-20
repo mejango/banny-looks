@@ -523,7 +523,7 @@ contract Banny721TokenUriResolver is
         )
     {
         if (upc == ALIEN_UPC) {
-            return ("67d757", "30a220", "217a15", "none", "e483ef", "dc2fef", "dc2fef");
+            return ("67d757", "30a220", "217a15", "09490f", "e483ef", "dc2fef", "dc2fef");
         } else if (upc == PINK_UPC) {
             return ("ffd8c5", "ff96a9", "fe588b", "c92f45", "ffd8c5", "ff96a9", "fe588b");
         } else if (upc == ORANGE_UPC) {
