@@ -6,6 +6,7 @@ import {JB721TiersHook} from "@bananapus/721-hook/src/JB721TiersHook.sol";
 
 import "./helpers/BannyverseDeploymentLib.sol";
 import "@rev-net/core/script/helpers/RevnetCoreDeploymentLib.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 
 import {Sphinx} from "@sphinx-labs/contracts/SphinxPlugin.sol";
 import {Script} from "forge-std/Script.sol";
@@ -904,15 +905,35 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
 
-        hook.adjustTiers(products, new uint256[](0));
-
         uint256[] memory productIds = new uint256[](45);
         for (uint256 i; i < 45; i++) {
             productIds[i] = i + 5;
         }
 
-        bannyverse.resolver.setSvgHashsOf(productIds, svgHashes);
-        bannyverse.resolver.setProductNames(productIds, names);
-        bannyverse.resolver.setSvgBaseUri("https://bannyverse.infura-ipfs.io/ipfs/");
+        if (true) {
+            bytes memory adjustTiersData = abi.encodeCall(JB721TiersHook.adjustTiers, (products, new uint256[](0)));
+            vm.writeFile(
+                string.concat("./", vm.toString(block.chainid), "-adjustTiers.hex.txt"), vm.toString(adjustTiersData)
+            );
+
+            bytes memory setSvgHashData =
+                abi.encodeCall(Banny721TokenUriResolver.setSvgHashsOf, (productIds, svgHashes));
+
+            vm.writeFile(
+                string.concat("./", vm.toString(block.chainid), "-setSvgHashOf.hex.txt"), vm.toString(setSvgHashData)
+            );
+
+            bytes memory setProductNamesData =
+                abi.encodeCall(Banny721TokenUriResolver.setProductNames, (productIds, names));
+            vm.writeFile(
+                string.concat("./", vm.toString(block.chainid), "-setProductNames.hex.txt"),
+                vm.toString(setProductNamesData)
+            );
+        } else {
+            hook.adjustTiers(products, new uint256[](0));
+            bannyverse.resolver.setSvgHashsOf(productIds, svgHashes);
+            bannyverse.resolver.setProductNames(productIds, names);
+            bannyverse.resolver.setSvgBaseUri("https://bannyverse.infura-ipfs.io/ipfs/");
+        }
     }
 }
