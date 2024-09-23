@@ -49,14 +49,11 @@ library BannyverseDeploymentLib {
         );
 
         // TODO: Update the following after every deploy.
-        deployment.revnetId = 4;
-        // if (keccak256(abi.encode(network_name)) == keccak256(abi.encode("sepolia"))) {
-        //     deployment.revnetId = 7;
-        // } else if (keccak256(abi.encode(network_name)) == keccak256(abi.encode("optimism_sepolia"))) {
-        //     deployment.revnetId = 7;
-        // } else {
-        //     deployment.revnetId = 2;
-        // }
+        if (keccak256(abi.encode(network_name)) == keccak256(abi.encode("sepolia"))) {
+            deployment.revnetId = 23;
+        } else {
+            deployment.revnetId = 5;
+        }
     }
 
     /// @notice Get the address of a contract that was deployed by the Deploy script.
