@@ -78,9 +78,8 @@ contract Banny721TokenUriResolver is
 
     /// @notice The amount of time each naked banny is currently locked for.
     /// @custom:param hook The hook address of the collection.
-    /// @custom:param owner The owner of the naked banny.
     /// @custom:param nakedBannyId The ID of the Naked Banny to lock.
-    mapping(address hook => mapping(address owner => mapping(uint256 upc => uint256))) public override outfitLockedUntil;
+    mapping(address hook => mapping(uint256 upc => uint256)) public override outfitLockedUntil;
 
     /// @notice The base of the domain hosting the SVG files that can be lazily uploaded to the contract.
     string public override svgBaseUri;
@@ -222,13 +221,11 @@ contract Banny721TokenUriResolver is
             if (worldId != 0) extraMetadata = string.concat(extraMetadata, '"worldId": ', worldId.toString(), ",");
 
             // If the token has an owner, check if the owner has locked the token.
-            try IERC721(hook).ownerOf(tokenId) returns (address owner) {
-                uint256 lockedUntil = outfitLockedUntil[owner][hook][tokenId];
-                if (lockedUntil > block.timestamp) {
-                    extraMetadata =
-                        string.concat(extraMetadata, '"decorationsLockedUntil": ', lockedUntil.toString(), ",");
-                }
-            } catch {}
+            uint256 lockedUntil = outfitLockedUntil[hook][tokenId];
+            if (lockedUntil > block.timestamp) {
+                extraMetadata =
+                    string.concat(extraMetadata, '"decorationsLockedUntil": ', lockedUntil.toString(), ",");
+            }
         }
 
         if (bytes(contents).length == 0) {
@@ -812,7 +809,7 @@ contract Banny721TokenUriResolver is
         _checkIfSenderIsOwner({hook: hook, upc: nakedBannyId});
 
         // Can't decorate a banny that's locked.
-        if (outfitLockedUntil[_msgSender()][hook][nakedBannyId] > block.timestamp) {
+        if (outfitLockedUntil[hook][nakedBannyId] > block.timestamp) {
             revert Banny721TokenUriResolver_OutfitChangesLocked();
         }
 
@@ -840,7 +837,7 @@ contract Banny721TokenUriResolver is
         _checkIfSenderIsOwner(hook, nakedBannyId);
 
         // Keep a reference to the current lock.
-        uint256 currentLockedUntil = outfitLockedUntil[_msgSender()][hook][nakedBannyId];
+        uint256 currentLockedUntil = outfitLockedUntil[hook][nakedBannyId];
 
         // Calculate the new time at which the lock will expire.
         uint256 newLockUntil = block.timestamp + duration;
@@ -849,7 +846,7 @@ contract Banny721TokenUriResolver is
         if (currentLockedUntil > newLockUntil) revert Banny721TokenUriResolver_CantAccelerateTheLock();
 
         // Set the lock.
-        outfitLockedUntil[_msgSender()][hook][nakedBannyId] = newLockUntil;
+        outfitLockedUntil[hook][nakedBannyId] = newLockUntil;
     }
 
     /// @dev Make sure tokens can be receieved if the transaction was initiated by this contract.
