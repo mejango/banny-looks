@@ -247,9 +247,9 @@ contract Banny721TokenUriResolver is
                     '{"name":"',
                     _fullNameOf({tokenId: tokenId, product: product}),
                     '", "productName": "',
-                    _productNameOf({upc: product.id}),
+                    _productNameOf(product.id),
                     '", "categoryName": "',
-                    _categoryNameOf({category: product.category}),
+                    _categoryNameOf(product.category),
                     '", "tokenId": ',
                     tokenId.toString(),
                     ', "upc": ',
@@ -347,8 +347,8 @@ contract Banny721TokenUriResolver is
 
         return (
             _fullNameOf({tokenId: tokenId, product: product}),
-            _categoryNameOf({category: product.category}),
-            _productNameOf({upc: tokenId})
+            _categoryNameOf(product.category),
+            _productNameOf(tokenId)
         );
     }
 
