@@ -207,12 +207,9 @@ contract Banny721TokenUriResolver is
             // Get a reference to each asset ID currently attached to the Naked Banny.
             (uint256 worldId, uint256[] memory outfitIds) = assetIdsOf({hook: hook, nakedBannyId: tokenId});
 
-            // Keep a reference to the number of outfits
-            uint256 numberOfOutfits = outfitIds.length;
-
             extraMetadata = '"outfitIds": [';
 
-            for (uint256 i; i < numberOfOutfits; i++) {
+            for (uint256 i; i < outfitIds.length; i++) {
                 extraMetadata = string.concat(extraMetadata, outfitIds[i].toString(), ",");
             }
 
@@ -297,11 +294,8 @@ contract Banny721TokenUriResolver is
         // Keep a reference to the outfit IDs currently stored as attached to the Naked Banny.
         uint256[] memory storedOutfitIds = _attachedOutfitIdsOf[hook][nakedBannyId];
 
-        // Keep a reference to the number of outfit IDs currently attached.
-        uint256 numberOfStoredOutfitIds = storedOutfitIds.length;
-
         // Initiate the outfit IDs array with the same number of entries.
-        outfitIds = new uint256[](numberOfStoredOutfitIds);
+        outfitIds = new uint256[](storedOutfitIds.length);
 
         // Keep a reference to the number of included outfits.
         uint256 numberOfIncludedOutfits = 0;
@@ -310,7 +304,7 @@ contract Banny721TokenUriResolver is
         uint256 storedOutfitId;
 
         // Return the outfit's that are still being worn by the naked banny.
-        for (uint256 i; i < numberOfStoredOutfitIds; i++) {
+        for (uint256 i; i < storedOutfitIds.length; i++) {
             // Set the stored outfit ID being iterated on.
             storedOutfitId = storedOutfitIds[i];
 
@@ -688,11 +682,9 @@ contract Banny721TokenUriResolver is
         // default.
         string memory customNecklace;
 
-        // Loop once more to make sure all default outfits are added.
-        uint256 numberOfIterations = numberOfOutfits + 1;
-
         // For each outfit, add the SVG layer if it's owned by the same owner as the Naked Banny being dressed.
-        for (uint256 i; i < numberOfIterations; i++) {
+        // Loop once more to make sure all default outfits are added.
+        for (uint256 i; i < numberOfOutfits + 1; i++) {
             // Keep a reference to the outfit ID being iterated on.
             uint256 outfitId;
 
