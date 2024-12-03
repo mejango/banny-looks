@@ -156,8 +156,11 @@ contract DeployScript is Script, Sphinx {
         });
 
         REVAutoIssuance[] memory mintConfs = new REVAutoIssuance[](1);
-        mintConfs[0] =
-            REVAutoIssuance({chainId: PREMINT_CHAIN_ID, count: uint104(88_500 * DECIMAL_MULTIPLIER), beneficiary: OPERATOR});
+        mintConfs[0] = REVAutoIssuance({
+            chainId: PREMINT_CHAIN_ID,
+            count: uint104(88_500 * DECIMAL_MULTIPLIER),
+            beneficiary: OPERATOR
+        });
 
         // The project's revnet stage configurations.
         REVStageConfig[] memory stageConfigurations = new REVStageConfig[](3);
