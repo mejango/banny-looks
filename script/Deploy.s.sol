@@ -19,7 +19,7 @@ import {JBConstants} from "@bananapus/core/src/libraries/JBConstants.sol";
 import {JBAccountingContext} from "@bananapus/core/src/structs/JBAccountingContext.sol";
 import {JBTerminalConfig} from "@bananapus/core/src/structs/JBTerminalConfig.sol";
 import {JBTokenMapping} from "@bananapus/suckers/src/structs/JBTokenMapping.sol";
-import {REVAutoMint} from "@rev-net/core/src/structs/REVAutoMint.sol";
+import {REVAutoIssuance} from "@rev-net/core/src/structs/REVAutoIssuance.sol";
 import {REVConfig} from "@rev-net/core/src/structs/REVConfig.sol";
 import {REVCroptopAllowedPost} from "@rev-net/core/src/structs/REVCroptopAllowedPost.sol";
 import {REVBuybackHookConfig} from "@rev-net/core/src/structs/REVBuybackHookConfig.sol";
@@ -66,6 +66,7 @@ contract DeployScript is Script, Sphinx {
     uint32 PREMINT_CHAIN_ID = 11_155_111;
     bytes32 ERC20_SALT = "_BAN_ERC20_";
     bytes32 SUCKER_SALT = "_BAN_SUCKER_";
+    bytes32 HOOK_SALT = "_BAN_HOOK_";
     bytes32 RESOLVER_SALT = "_BAN_RESOLVER_";
     string NAME = "Banny Network";
     string SYMBOL = "BAN";
@@ -154,40 +155,40 @@ contract DeployScript is Script, Sphinx {
             accountingContextsToAccept: new JBAccountingContext[](0)
         });
 
-        REVAutoMint[] memory mintConfs = new REVAutoMint[](1);
+        REVAutoIssuance[] memory mintConfs = new REVAutoIssuance[](1);
         mintConfs[0] =
-            REVAutoMint({chainId: PREMINT_CHAIN_ID, count: uint104(88_500 * DECIMAL_MULTIPLIER), beneficiary: OPERATOR});
+            REVAutoIssuance({chainId: PREMINT_CHAIN_ID, count: uint104(88_500 * DECIMAL_MULTIPLIER), beneficiary: OPERATOR});
 
         // The project's revnet stage configurations.
         REVStageConfig[] memory stageConfigurations = new REVStageConfig[](3);
         stageConfigurations[0] = REVStageConfig({
             startsAtOrAfter: uint40(block.timestamp + TIME_UNTIL_START),
-            autoMints: mintConfs,
+            autoIssuances: mintConfs,
             splitPercent: 5000, // 50%
             initialIssuance: uint112(1000 * DECIMAL_MULTIPLIER),
-            issuanceDecayFrequency: 60 days,
-            issuanceDecayPercent: 380_000_000, // 38%,
+            issuanceCutFrequency: 60 days,
+            issuanceCutPercent: 380_000_000, // 38%,
             cashOutTaxRate: 1000, // 0.1
             extraMetadata: 0
         });
         stageConfigurations[1] = REVStageConfig({
             startsAtOrAfter: uint40(stageConfigurations[0].startsAtOrAfter + 600 days),
-            autoMints: new REVAutoMint[](0),
+            autoIssuances: new REVAutoIssuance[](0),
             splitPercent: 5000, // 50%
             initialIssuance: 0, // inherit from previous cycle.
-            issuanceDecayFrequency: 150 days,
-            issuanceDecayPercent: 380_000_000, // 38%
+            issuanceCutFrequency: 150 days,
+            issuanceCutPercent: 380_000_000, // 38%
             cashOutTaxRate: 1000, // 0.1
             extraMetadata: 0
         });
 
         stageConfigurations[2] = REVStageConfig({
             startsAtOrAfter: uint40(stageConfigurations[1].startsAtOrAfter + (6000 days)),
-            autoMints: new REVAutoMint[](0),
+            autoIssuances: new REVAutoIssuance[](0),
             splitPercent: 0,
             initialIssuance: 1, // this is a special number that is as close to max price as we can get.
-            issuanceDecayFrequency: 0,
-            issuanceDecayPercent: 0,
+            issuanceCutFrequency: 0,
+            issuanceCutPercent: 0,
             cashOutTaxRate: 1000, // 0.1
             extraMetadata: 0
         });
@@ -205,8 +206,7 @@ contract DeployScript is Script, Sphinx {
                 splitOperator: OPERATOR,
                 stageConfigurations: stageConfigurations,
                 loanSources: _loanSources,
-                loans: address(revnet.loans),
-                allowCrosschainSuckerExtension: true
+                loans: address(revnet.loans)
             });
         }
 
@@ -355,6 +355,7 @@ contract DeployScript is Script, Sphinx {
                         preventOverspending: false
                     })
                 }),
+                salt: HOOK_SALT,
                 splitOperatorCanAdjustTiers: true,
                 splitOperatorCanUpdateMetadata: true,
                 splitOperatorCanMint: true,
