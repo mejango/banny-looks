@@ -317,14 +317,14 @@ contract Drop1Script is Script, Sphinx {
         });
         // Flops
         names[14] = "Flops";
-        svgHashes[14] = bytes32(0x4cfff364895473bd9e138859d11a0974c986ed5f0769e81023b084891a678641);
+        svgHashes[14] = bytes32(0x6f3fd7e83771bc0765a9394efac4993dc76d5f8584364188c10b8290350ada0a);
         products[14] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 1))),
             initialSupply: 30,
             votingUnits: 0,
             reserveFrequency: 10,
             reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0xaa45eb559a686dd61653a2980decb55767d053d68c45e631e3912d13fdba9be9),
+            encodedIPFSUri: bytes32(0x344a9f345f9720471dec07e1a9e4e9ab856943ab456dcd701b68d8a06b52a336),
             category: 7,
             discountPercent: 0,
             cannotIncreaseDiscountPercent: false,
@@ -868,14 +868,52 @@ contract Drop1Script is Script, Sphinx {
         });
         // Dagger
         names[43] = "Dagger";
-        svgHashes[43] = bytes32(0xcb3bc383475808e8949861811434cfc233fa8c5b6f6d75e19371e84a25a77171);
+        svgHashes[43] = bytes32(0xaf60de81f2609b847b7d6e97ef6c09c9e3d91cabe6f955bd8828f342f1558738);
         products[43] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 3))),
             initialSupply: 150,
             votingUnits: 0,
+            reserveFrequency: 50,
+            reserveBeneficiary: address(0),
+            encodedIPFSUri: bytes32(0x867d8d8b9da0b5d8a00024d548e5f6e33562d521dff8c245764b6206003d1970),
+            category: 12,
+            discountPercent: 0,
+            cannotIncreaseDiscountPercent: false,
+            allowOwnerMint: false,
+            useReserveBeneficiaryAsDefault: false,
+            transfersPausable: false,
+            useVotingUnits: false,
+            cannotBeRemoved: false
+        });
+        // Ice Cube
+        names[44] = "Ice Cube";
+        svgHashes[44] = bytes32(0x032b50792f9929066168187acd5eeb101f8528f538ef850913c81dc4b6452842);
+        products[44] = JB721TierConfig({
+            price: uint104(1 * (10 ** (decimals - 2))),
+            initialSupply: 150,
+            votingUnits: 0,
+            reserveFrequency: 15,
+            reserveBeneficiary: address(0),
+            encodedIPFSUri: bytes32(0xf7c17eff468f5dd227b991d773b7a36b93cd997751547f9908a4bf33e31ba701),
+            category: 12,
+            discountPercent: 0,
+            cannotIncreaseDiscountPercent: false,
+            allowOwnerMint: false,
+            useReserveBeneficiaryAsDefault: false,
+            transfersPausable: false,
+            useVotingUnits: false,
+            cannotBeRemoved: false
+        });
+        // Duct Tape
+        names[45] = "Duct Tape";
+        svgHashes[45] = bytes32(0x962ce657908ee4fb58b3e2d1f77109b36428e7a4446d6127bcb6c06aa2360637);
+        products[45] = JB721TierConfig({
+            price: uint104((10 ** (decimals + 2))),
+            initialSupply: 1,
+            votingUnits: 0,
             reserveFrequency: 0,
             reserveBeneficiary: address(0),
-            encodedIPFSUri: bytes32(0x8e6b0c2a12f9bcf9c5ac4ef89b888a2ac893b153c4c68932657848e92e60f259),
+            encodedIPFSUri: bytes32(0x876078bdfb8cdcc4359bb946274a9964e84877beac0ecd59fbf293c3bc2457c9),
             category: 12,
             discountPercent: 0,
             cannotIncreaseDiscountPercent: false,
@@ -886,9 +924,9 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
         // Mouthstraw
-        names[44] = "Wheat Straw";
-        svgHashes[44] = bytes32(0x112b8217bb82aebc91e80c935244dce8aa30d4d8df5f98382054b97037dc0c94);
-        products[44] = JB721TierConfig({
+        names[46] = "Wheat Straw";
+        svgHashes[46] = bytes32(0x112b8217bb82aebc91e80c935244dce8aa30d4d8df5f98382054b97037dc0c94);
+        products[46] = JB721TierConfig({
             price: uint104(1 * (10 ** decimals)),
             initialSupply: 15,
             votingUnits: 0,
@@ -905,8 +943,8 @@ contract Drop1Script is Script, Sphinx {
             cannotBeRemoved: false
         });
 
-        uint256[] memory productIds = new uint256[](45);
-        for (uint256 i; i < 45; i++) {
+        uint256[] memory productIds = new uint256[](47);
+        for (uint256 i; i < 47; i++) {
             productIds[i] = i + 5;
         }
 
