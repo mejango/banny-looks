@@ -65,7 +65,10 @@ contract Banny721TokenUriResolver is
     uint8 private constant _SUIT_TOP_CATEGORY = 10;
     uint8 private constant _HEADTOP_CATEGORY = 11;
     uint8 private constant _HAND_CATEGORY = 12;
-    uint8 private constant _SPECIAL_CATEGORY = 13;
+    uint8 private constant _SPECIAL_SUIT_CATEGORY = 13;
+    uint8 private constant _SPECIAL_LEGS_CATEGORY = 14;
+    uint8 private constant _SPECIAL_HEAD_CATEGORY = 15;
+    uint8 private constant _SPECIAL_BODY_CATEGORY = 16;
 
     uint8 private constant ALIEN_UPC = 1;
     uint8 private constant PINK_UPC = 2;
@@ -227,7 +230,7 @@ contract Banny721TokenUriResolver is
         if (bytes(contents).length == 0) {
             // If the product's category is greater than the last expected category, use the default base URI of the 721
             // contract. Otherwise use the SVG URI.
-            string memory baseUri = product.category > _SPECIAL_CATEGORY ? IJB721TiersHook(hook).baseURI() : svgBaseUri;
+            string memory baseUri = product.category > _SPECIAL_BODY_CATEGORY ? IJB721TiersHook(hook).baseURI() : svgBaseUri;
 
             // Fallback to returning an IPFS hash if present.
             return JBIpfsDecoder.decode(baseUri, _storeOf(hook).encodedTierIPFSUriOf({hook: hook, tokenId: tokenId}));
@@ -342,7 +345,7 @@ contract Banny721TokenUriResolver is
         return (
             _fullNameOf({tokenId: tokenId, product: product}),
             _categoryNameOf(product.category),
-            _productNameOf(tokenId)
+            _productNameOf(product.id)
         );
     }
 
@@ -484,8 +487,14 @@ contract Banny721TokenUriResolver is
             return "Suit bottom";
         } else if (category == _HAND_CATEGORY) {
             return "Fist";
-        } else if (category == _SPECIAL_CATEGORY) {
-            return "Topping";
+        } else if (category == _SPECIAL_SUIT_CATEGORY) {
+            return "Special Suit";
+        } else if (category == _SPECIAL_LEGS_CATEGORY) {
+            return "Special Legs";
+        } else if (category == _SPECIAL_HEAD_CATEGORY) {
+            return "Special Head";
+        } else if (category == _SPECIAL_BODY_CATEGORY) {
+            return "Special Body";
         }
         return "";
     }
@@ -700,7 +709,7 @@ contract Banny721TokenUriResolver is
                 category = _productOfTokenId({hook: hook, tokenId: outfitId}).category;
             } else {
                 // Set the category to be more than all other categories to force adding defaults.
-                category = _SPECIAL_CATEGORY + 1;
+                category = _SPECIAL_BODY_CATEGORY + 1;
                 outfitId = 0;
             }
 
@@ -996,7 +1005,7 @@ contract Banny721TokenUriResolver is
             uint256 outfitProductCategory = _productOfTokenId({hook: hook, tokenId: outfitId}).category;
 
             // The product's category must be a known category.
-            if (outfitProductCategory < _BACKSIDE_CATEGORY || outfitProductCategory > _SPECIAL_CATEGORY) {
+            if (outfitProductCategory < _BACKSIDE_CATEGORY || outfitProductCategory > _SPECIAL_BODY_CATEGORY) {
                 revert Banny721TokenUriResolver_UnrecognizedCategory();
             }
 
