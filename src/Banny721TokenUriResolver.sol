@@ -56,7 +56,7 @@ contract Banny721TokenUriResolver is
     uint8 private constant _WORLD_CATEGORY = 1;
     uint8 private constant _BACKSIDE_CATEGORY = 2;
     uint8 private constant _NECKLACE_CATEGORY = 3;
-    uint8 private constant _HEAD_TOP_CATEGORY = 4;
+    uint8 private constant _HEAD_CATEGORY = 4;
     uint8 private constant _GLASSES_CATEGORY = 5;
     uint8 private constant _MOUTH_CATEGORY = 6;
     uint8 private constant _LEGS_CATEGORY = 7;
@@ -464,28 +464,40 @@ contract Banny721TokenUriResolver is
             return "World";
         } else if (category == _BACKSIDE_CATEGORY) {
             return "Backside";
-        } else if (category == _LEGS_CATEGORY) {
-            return "Legs";
         } else if (category == _NECKLACE_CATEGORY) {
             return "Necklace";
+        } else if (category == _HEAD_CATEGORY) {
+            return "Head";
         } else if (category == _GLASSES_CATEGORY) {
             return "Glasses";
         } else if (category == _MOUTH_CATEGORY) {
             return "Mouth";
-        } else if (category == _HEADTOP_CATEGORY) {
-            return "Head top";
-        } else if (category == _HEAD_TOP_CATEGORY) {
-            return "Head";
+        } else if (category == _LEGS_CATEGORY) {
+            return "Legs";
         } else if (category == _SUIT_CATEGORY) {
             return "Suit";
-        } else if (category == _SUIT_TOP_CATEGORY) {
-            return "Suit top";
         } else if (category == _SUIT_BOTTOM_CATEGORY) {
             return "Suit bottom";
+        } else if (category == _SUIT_TOP_CATEGORY) {
+            return "Suit top";
+        } else if (category == _HEADTOP_CATEGORY) {
+            return "Head top";
         } else if (category == _HAND_CATEGORY) {
+<<<<<<< Updated upstream
             return "Fist";
         } else if (category == _SPECIAL_CATEGORY) {
             return "Topping";
+=======
+            return "Hand";
+        } else if (category == _SPECIAL_SUIT_CATEGORY) {
+            return "Special Suit";
+        } else if (category == _SPECIAL_LEGS_CATEGORY) {
+            return "Special Legs";
+        } else if (category == _SPECIAL_HEAD_CATEGORY) {
+            return "Special Head";
+        } else if (category == _SPECIAL_BODY_CATEGORY) {
+            return "Special Body";
+>>>>>>> Stashed changes
         }
         return "";
     }

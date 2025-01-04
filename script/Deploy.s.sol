@@ -68,9 +68,9 @@ contract DeployScript is Script, Sphinx {
     bytes32 SUCKER_SALT = "_BAN_SUCKER_";
     bytes32 HOOK_SALT = "_BAN_HOOK_";
     bytes32 RESOLVER_SALT = "_BAN_RESOLVER_";
-    string NAME = "Banny Network";
+    string NAME = "Banny's Network";
     string SYMBOL = "BAN";
-    string PROJECT_URI = "ipfs://QmUpbbnjHdzh6fT4qtqty24beVb2USX27eyyLT7KmtMoNr";
+    string PROJECT_URI = "ipfs://QmYhChmNyhyoYceTMV7vmSYARoZbsZTuE2bD8K3YDRDXvU";
     string BASE_URI = "ipfs://";
     string CONTRACT_URI = "";
     uint32 NATIVE_CURRENCY = uint32(uint160(JBConstants.NATIVE_TOKEN));
@@ -168,7 +168,7 @@ contract DeployScript is Script, Sphinx {
             startsAtOrAfter: uint40(block.timestamp + TIME_UNTIL_START),
             autoIssuances: mintConfs,
             splitPercent: 5000, // 50%
-            initialIssuance: uint112(1000 * DECIMAL_MULTIPLIER),
+            initialIssuance: uint112(3285714 * (DECIMAL_MULTIPLIER - 2)), // 6900 $BAN for 0.42 ETH
             issuanceCutFrequency: 60 days,
             issuanceCutPercent: 380_000_000, // 38%,
             cashOutTaxRate: 1000, // 0.1
