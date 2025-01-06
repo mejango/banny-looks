@@ -983,10 +983,13 @@ contract Banny721TokenUriResolver is
             // Set the outfit ID being iterated on.
             uint256 outfitId = outfitIds[i];
 
+            // Keep a reference to the outfit's owner.
+            address owner = IERC721(hook).ownerOf(outfitId);
+
             // Check if the call is being made either by the outfit's owner or the owner of the naked banny currently
             // wearing it.
             if (
-                _msgSender() != IERC721(hook).ownerOf(outfitId)
+                _msgSender() != owner
                     && _msgSender() != IERC721(hook).ownerOf(wearerOf(hook, outfitId))
             ) {
                 revert Banny721TokenUriResolver_UnauthorizedOutfit();
@@ -1049,7 +1052,7 @@ contract Banny721TokenUriResolver is
 
                 // Transfer the outfit to this contract.
                 // slither-disable-next-line reentrancy-no-eth
-                _transferFrom({hook: hook, from: _msgSender(), to: address(this), assetId: outfitId});
+                if (owner != address(this)) _transferFrom({hook: hook, from: _msgSender(), to: address(this), assetId: outfitId});
             }
 
             // Keep a reference to the last outfit's category.
