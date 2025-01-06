@@ -8,6 +8,7 @@ import {IJB721TokenUriResolver} from "@bananapus/721-hook/src/interfaces/IJB721T
 import {JB721Tier} from "@bananapus/721-hook/src/structs/JB721Tier.sol";
 import {JBIpfsDecoder} from "@bananapus/721-hook/src/libraries/JBIpfsDecoder.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import {ERC2771Context} from "@openzeppelin/contracts/metatx/ERC2771Context.sol";
 import {IERC721Receiver} from "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import {Context} from "@openzeppelin/contracts/utils/Context.sol";
@@ -20,6 +21,7 @@ import {IBanny721TokenUriResolver} from "./interfaces/IBanny721TokenUriResolver.
 contract Banny721TokenUriResolver is
     Ownable,
     ERC2771Context,
+    ReentrancyGuard,
     IJB721TokenUriResolver,
     IBanny721TokenUriResolver,
     IERC721Receiver
@@ -801,6 +803,7 @@ contract Banny721TokenUriResolver is
         uint256[] calldata outfitIds
     )
         external
+        nonReentrant
         override
     {
         _checkIfSenderIsOwner({hook: hook, upc: nakedBannyId});
