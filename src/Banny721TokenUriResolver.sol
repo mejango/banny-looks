@@ -51,6 +51,12 @@ contract Banny721TokenUriResolver is
     /// @notice Just a kind reminder to our readers.
     /// @dev Used in 721 token ID generation.
     uint256 private constant _ONE_BILLION = 1_000_000_000;
+<<<<<<< Updated upstream
+=======
+
+    /// @notice The duration that naked Bannys can be locked for.
+    uint256 private constant _LOCK_DURATION = 7 days;
+>>>>>>> Stashed changes
 
     uint8 private constant _NAKED_CATEGORY = 0;
     uint8 private constant _WORLD_CATEGORY = 1;
@@ -1086,11 +1092,11 @@ contract Banny721TokenUriResolver is
         if (worldId != previousWorldId) {
             // Add the world if needed.
             if (worldId != 0) {
+                // Keep a reference to the world's owner.
+                address owner = IERC721(hook).ownerOf(worldId);
+
                 // Check if the call is being made by the world's owner, or the owner of a naked banny using it.
-                if (
-                    _msgSender() != IERC721(hook).ownerOf(worldId)
-                        && _msgSender() != IERC721(hook).ownerOf(userOf(hook, worldId))
-                ) {
+                if (_msgSender() != owner && _msgSender() != IERC721(hook).ownerOf(userOf(hook, worldId))) {
                     revert Banny721TokenUriResolver_UnauthorizedWorld();
                 }
 
@@ -1106,8 +1112,10 @@ contract Banny721TokenUriResolver is
                 // Store the banny that's in the world.
                 _userOf[hook][worldId] = nakedBannyId;
 
-                // Transfer the world to this contract.
-                _transferFrom({hook: hook, from: _msgSender(), to: address(this), assetId: worldId});
+                // Transfer the world to this contract if it's not already owned by this contract.
+                if (owner != address(this)) {
+                    _transferFrom({hook: hook, from: _msgSender(), to: address(this), assetId: worldId});
+                }
             } else {
                 _attachedWorldIdOf[hook][nakedBannyId] = 0;
             }
