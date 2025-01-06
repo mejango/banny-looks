@@ -1094,6 +1094,12 @@ contract Banny721TokenUriResolver is
                     revert Banny721TokenUriResolver_UnauthorizedWorld();
                 }
 
+                // Keep a reference to the current naked banny wearing the world.
+                uint256 currentNakedBannyId = userOf(hook, worldId);
+
+                // If the world is already being worn by a banny, remove it.
+                if (currentNakedBannyId != 0) _attachedWorldIdOf[hook][currentNakedBannyId] = 0;
+
                 // Get the world's product info.
                 JB721Tier memory worldProduct = _productOfTokenId({hook: hook, tokenId: worldId});
 
