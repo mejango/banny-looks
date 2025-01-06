@@ -51,12 +51,6 @@ contract Banny721TokenUriResolver is
     /// @notice Just a kind reminder to our readers.
     /// @dev Used in 721 token ID generation.
     uint256 private constant _ONE_BILLION = 1_000_000_000;
-<<<<<<< Updated upstream
-=======
-
-    /// @notice The duration that naked Bannys can be locked for.
-    uint256 private constant _LOCK_DURATION = 7 days;
->>>>>>> Stashed changes
 
     uint8 private constant _NAKED_CATEGORY = 0;
     uint8 private constant _WORLD_CATEGORY = 1;
