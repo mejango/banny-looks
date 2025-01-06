@@ -1085,7 +1085,7 @@ contract Banny721TokenUriResolver is
         uint256 previousWorldId = _attachedWorldIdOf[hook][nakedBannyId];
 
         // If the world is changing, add the lateset world and transfer the old one back to the owner.
-        if (worldId != previousWorldId) {
+        if (worldId != previousWorldId || userOf(hook, previousWorldId) != nakedBannyId) {
             // Add the world if needed.
             if (worldId != 0) {
                 // Check if the call is being made by the world's owner, or the owner of a naked banny using it.
@@ -1115,7 +1115,7 @@ contract Banny721TokenUriResolver is
             }
 
             // If there's a previous world, transfer it back to the owner.
-            if (previousWorldId != 0 && wearerOf({ hook: hook, outfitId: previousWorldId }) == 0) {
+            if (previousWorldId != 0 && userOf({ hook: hook, outfitId: previousWorldId }) == 0) {
                 // Transfer the previous world to the owner of the banny.
                 _transferFrom({hook: hook, from: address(this), to: _msgSender(), assetId: previousWorldId});
             }
