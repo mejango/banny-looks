@@ -1025,8 +1025,8 @@ contract Banny721TokenUriResolver is
 
             // Remove all previous assets up to and including the current category being iterated on.
             while (previousOutfitProductCategory <= outfitProductCategory && previousOutfitProductCategory != 0) {
-                if (previousOutfitId != outfitId) {
-                    // Transfer the previous outfit to the owner of the banny.
+                // Transfer the previous outfit to the owner of the banny if its not being worn.
+                if (previousOutfitId != outfitId && wearerOf({ hook: hook, outfitId: previousOutfitId }) != nakedBannyId) {
                     // slither-disable-next-line reentrancy-no-eth
                     _transferFrom({hook: hook, from: address(this), to: _msgSender(), assetId: previousOutfitId});
                 }
@@ -1058,9 +1058,11 @@ contract Banny721TokenUriResolver is
 
         // Remove and transfer out any remaining assets no longer being worn.
         while (previousOutfitId != 0) {
-            // Transfer the previous world to the owner of the banny.
-            // slither-disable-next-line reentrancy-no-eth
-            _transferFrom({hook: hook, from: address(this), to: _msgSender(), assetId: previousOutfitId});
+            // Transfer the previous outfit to the owner of the banny if its not being worn.
+            if (wearerOf({ hook: hook, outfitId: previousOutfitId }) != nakedBannyId) {
+                // slither-disable-next-line reentrancy-no-eth
+                _transferFrom({hook: hook, from: address(this), to: _msgSender(), assetId: previousOutfitId});
+            }
 
             if (++previousOutfitIndex < previousOutfitIds.length) {
                 // remove previous product.
@@ -1094,12 +1096,6 @@ contract Banny721TokenUriResolver is
                     revert Banny721TokenUriResolver_UnauthorizedWorld();
                 }
 
-                // Keep a reference to the current naked banny wearing the world.
-                uint256 currentNakedBannyId = userOf(hook, worldId);
-
-                // If the world is already being worn by a banny, remove it.
-                if (currentNakedBannyId != 0) _attachedWorldIdOf[hook][currentNakedBannyId] = 0;
-
                 // Get the world's product info.
                 JB721Tier memory worldProduct = _productOfTokenId({hook: hook, tokenId: worldId});
 
@@ -1119,7 +1115,7 @@ contract Banny721TokenUriResolver is
             }
 
             // If there's a previous world, transfer it back to the owner.
-            if (previousWorldId != 0) {
+            if (previousWorldId != 0 && wearerOf({ hook: hook, outfitId: previousWorldId }) == 0) {
                 // Transfer the previous world to the owner of the banny.
                 _transferFrom({hook: hook, from: address(this), to: _msgSender(), assetId: previousWorldId});
             }
