@@ -53,7 +53,7 @@ interface IBanny721TokenUriResolver {
     )
         external;
 
-    function lockOutfitChangesFor(address hook, uint256 nakedBannyId, uint256 duration) external;
+    function lockOutfitChangesFor(address hook, uint256 nakedBannyId) external;
 
     function setSvgContentsOf(uint256[] memory upcs, string[] calldata svgContents) external;
     function setSvgHashsOf(uint256[] memory upcs, bytes32[] memory svgHashs) external;

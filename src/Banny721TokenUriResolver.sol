@@ -51,6 +51,9 @@ contract Banny721TokenUriResolver is
     /// @notice Just a kind reminder to our readers.
     /// @dev Used in 721 token ID generation.
     uint256 private constant _ONE_BILLION = 1_000_000_000;
+    
+    /// @notice The duration that naked Bannys can be locked for.
+    uint256 private constant _LOCK_DURATION = 7 days;
 
     uint8 private constant _NAKED_CATEGORY = 0;
     uint8 private constant _WORLD_CATEGORY = 1;
@@ -837,8 +840,7 @@ contract Banny721TokenUriResolver is
     /// @notice Locks a naked banny ID so that it can't change its outfit for a period of time.
     /// @param hook The hook address of the collection.
     /// @param nakedBannyId The ID of the Naked Banny to lock.
-    /// @param duration The amount of seconds to lock the naked banny for.
-    function lockOutfitChangesFor(address hook, uint256 nakedBannyId, uint256 duration) public override {
+    function lockOutfitChangesFor(address hook, uint256 nakedBannyId) public override {
         // Make sure only the naked banny's owner can lock it.
         _checkIfSenderIsOwner({hook: hook, upc: nakedBannyId});
 
@@ -846,7 +848,7 @@ contract Banny721TokenUriResolver is
         uint256 currentLockedUntil = outfitLockedUntil[hook][nakedBannyId];
 
         // Calculate the new time at which the lock will expire.
-        uint256 newLockUntil = block.timestamp + duration;
+        uint256 newLockUntil = block.timestamp + _LOCK_DURATION;
 
         // Make sure the new lock is at least as big as the current lock.
         if (currentLockedUntil > newLockUntil) revert Banny721TokenUriResolver_CantAccelerateTheLock();
