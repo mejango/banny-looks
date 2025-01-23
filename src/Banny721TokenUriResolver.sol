@@ -994,10 +994,13 @@ contract Banny721TokenUriResolver is
             // Set the outfit ID being iterated on.
             uint256 outfitId = outfitIds[i];
 
+            // Keep a reference to the outfit's owner.
+            address owner = IERC721(hook).ownerOf(outfitId);
+
             // Check if the call is being made either by the outfit's owner or the owner of the naked banny currently
             // wearing it.
             if (
-                _msgSender() != IERC721(hook).ownerOf(outfitId)
+                _msgSender() != owner
                     && _msgSender() != IERC721(hook).ownerOf(wearerOf(hook, outfitId))
             ) {
                 revert Banny721TokenUriResolver_UnauthorizedOutfit();
@@ -1060,7 +1063,7 @@ contract Banny721TokenUriResolver is
 
                 // Transfer the outfit to this contract.
                 // slither-disable-next-line reentrancy-no-eth
-                _transferFrom({hook: hook, from: _msgSender(), to: address(this), assetId: outfitId});
+                if (owner != address(this)) _transferFrom({hook: hook, from: _msgSender(), to: address(this), assetId: outfitId});
             }
 
             // Keep a reference to the last outfit's category.
@@ -1097,11 +1100,11 @@ contract Banny721TokenUriResolver is
         if (worldId != previousWorldId) {
             // Add the world if needed.
             if (worldId != 0) {
+                // Keep a reference to the world's owner.
+                address owner = IERC721(hook).ownerOf(worldId);
+
                 // Check if the call is being made by the world's owner, or the owner of a naked banny using it.
-                if (
-                    _msgSender() != IERC721(hook).ownerOf(worldId)
-                        && _msgSender() != IERC721(hook).ownerOf(userOf(hook, worldId))
-                ) {
+                if (_msgSender() != owner && _msgSender() != IERC721(hook).ownerOf(userOf(hook, worldId))) {
                     revert Banny721TokenUriResolver_UnauthorizedWorld();
                 }
 
@@ -1117,8 +1120,10 @@ contract Banny721TokenUriResolver is
                 // Store the banny that's in the world.
                 _userOf[hook][worldId] = nakedBannyId;
 
-                // Transfer the world to this contract.
-                _transferFrom({hook: hook, from: _msgSender(), to: address(this), assetId: worldId});
+                // Transfer the world to this contract if it's not already owned by this contract.
+                if (owner != address(this)) {
+                    _transferFrom({hook: hook, from: _msgSender(), to: address(this), assetId: worldId});
+                }
             } else {
                 _attachedWorldIdOf[hook][nakedBannyId] = 0;
             }
