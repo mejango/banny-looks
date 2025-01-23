@@ -1026,7 +1026,7 @@ contract Banny721TokenUriResolver is
             // Remove all previous assets up to and including the current category being iterated on.
             while (previousOutfitProductCategory <= outfitProductCategory && previousOutfitProductCategory != 0) {
                 // Transfer the previous outfit to the owner of the banny if its not being worn.
-                if (previousOutfitId != outfitId && wearerOf({ hook: hook, outfitId: previousOutfitId }) != nakedBannyId) {
+                if (previousOutfitId != outfitId) {
                     // slither-disable-next-line reentrancy-no-eth
                     _transferFrom({hook: hook, from: address(this), to: _msgSender(), assetId: previousOutfitId});
                 }
