@@ -1135,7 +1135,7 @@ contract Banny721TokenUriResolver is
             }
 
             // If there's a previous world, transfer it back to the owner.
-            if (previousWorldId != 0 && userOf({ hook: hook, outfitId: previousWorldId }) == 0) {
+            if (previousWorldId != 0 && userOf({ hook: hook, worldId: previousWorldId }) == 0) {
                 // Transfer the previous world to the owner of the banny.
                 _transferFrom({hook: hook, from: address(this), to: _msgSender(), assetId: previousWorldId});
             }
