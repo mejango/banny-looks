@@ -16,6 +16,7 @@ import {JB721TiersHookFlags} from "@bananapus/721-hook/src/structs/JB721TiersHoo
 import {JBDeploy721TiersHookConfig} from "@bananapus/721-hook/src/structs/JBDeploy721TiersHookConfig.sol";
 import {IJBPrices} from "@bananapus/core/src/interfaces/IJBPrices.sol";
 import {JBConstants} from "@bananapus/core/src/libraries/JBConstants.sol";
+import {JBCurrencyIds} from "@bananapus/core/src/libraries/JBCurrencyIds.sol";
 import {JBAccountingContext} from "@bananapus/core/src/structs/JBAccountingContext.sol";
 import {JBTerminalConfig} from "@bananapus/core/src/structs/JBTerminalConfig.sol";
 import {JBTokenMapping} from "@bananapus/suckers/src/structs/JBTokenMapping.sol";
@@ -74,7 +75,7 @@ contract DeployScript is Script, Sphinx {
     string BASE_URI = "ipfs://";
     string CONTRACT_URI = "";
     uint32 NATIVE_CURRENCY = uint32(uint160(JBConstants.NATIVE_TOKEN));
-    uint32 ETH_CURRENCY = 1; //JBCurrencyIds.ETH
+    uint32 ETH_CURRENCY = JBCurrencyIds.ETH;
     uint8 DECIMALS = 18;
     uint256 DECIMAL_MULTIPLIER = 10 ** DECIMALS;
     uint24 NAKED_BANNY_CATEGORY = 0;
