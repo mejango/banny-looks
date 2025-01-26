@@ -16,6 +16,7 @@ import {JB721TiersHookFlags} from "@bananapus/721-hook/src/structs/JB721TiersHoo
 import {JBDeploy721TiersHookConfig} from "@bananapus/721-hook/src/structs/JBDeploy721TiersHookConfig.sol";
 import {IJBPrices} from "@bananapus/core/src/interfaces/IJBPrices.sol";
 import {JBConstants} from "@bananapus/core/src/libraries/JBConstants.sol";
+import {JBCurrencyIds} from "@bananapus/core/src/libraries/JBCurrencyIds.sol";
 import {JBAccountingContext} from "@bananapus/core/src/structs/JBAccountingContext.sol";
 import {JBTerminalConfig} from "@bananapus/core/src/structs/JBTerminalConfig.sol";
 import {JBTokenMapping} from "@bananapus/suckers/src/structs/JBTokenMapping.sol";
@@ -70,10 +71,11 @@ contract DeployScript is Script, Sphinx {
     bytes32 RESOLVER_SALT = "_BAN_RESOLVER_";
     string NAME = "Banny Network";
     string SYMBOL = "BAN";
-    string PROJECT_URI = "ipfs://QmUpbbnjHdzh6fT4qtqty24beVb2USX27eyyLT7KmtMoNr";
+    string PROJECT_URI = "ipfs://QmeycQy87h9fb6D2Po9snV7KuK5FtTiLWVrVcB6DKhfEMC";
     string BASE_URI = "ipfs://";
     string CONTRACT_URI = "";
     uint32 NATIVE_CURRENCY = uint32(uint160(JBConstants.NATIVE_TOKEN));
+    uint32 ETH_CURRENCY = JBCurrencyIds.ETH;
     uint8 DECIMALS = 18;
     uint256 DECIMAL_MULTIPLIER = 10 ** DECIMALS;
     uint24 NAKED_BANNY_CATEGORY = 0;
@@ -158,7 +160,7 @@ contract DeployScript is Script, Sphinx {
         REVAutoIssuance[] memory mintConfs = new REVAutoIssuance[](1);
         mintConfs[0] = REVAutoIssuance({
             chainId: PREMINT_CHAIN_ID,
-            count: uint104(88_500 * DECIMAL_MULTIPLIER),
+            count: uint104(100_000 * DECIMAL_MULTIPLIER),
             beneficiary: OPERATOR
         });
 
@@ -167,7 +169,7 @@ contract DeployScript is Script, Sphinx {
         stageConfigurations[0] = REVStageConfig({
             startsAtOrAfter: uint40(block.timestamp + TIME_UNTIL_START),
             autoIssuances: mintConfs,
-            splitPercent: 5000, // 50%
+            splitPercent: 3800, // 38%
             initialIssuance: uint112(1000 * DECIMAL_MULTIPLIER),
             issuanceCutFrequency: 60 days,
             issuanceCutPercent: 380_000_000, // 38%,
@@ -177,8 +179,8 @@ contract DeployScript is Script, Sphinx {
         stageConfigurations[1] = REVStageConfig({
             startsAtOrAfter: uint40(stageConfigurations[0].startsAtOrAfter + 600 days),
             autoIssuances: new REVAutoIssuance[](0),
-            splitPercent: 5000, // 50%
-            initialIssuance: 0, // inherit from previous cycle.
+            splitPercent: 3800, // 38%
+            initialIssuance: 1, // inherit from previous cycle.
             issuanceCutFrequency: 150 days,
             issuanceCutPercent: 380_000_000, // 38%
             cashOutTaxRate: 1000, // 0.1
@@ -189,7 +191,7 @@ contract DeployScript is Script, Sphinx {
             startsAtOrAfter: uint40(stageConfigurations[1].startsAtOrAfter + (6000 days)),
             autoIssuances: new REVAutoIssuance[](0),
             splitPercent: 0,
-            initialIssuance: 1, // this is a special number that is as close to max price as we can get.
+            initialIssuance: 0, // no more issuance.
             issuanceCutFrequency: 0,
             issuanceCutPercent: 0,
             cashOutTaxRate: 1000, // 0.1
@@ -205,7 +207,7 @@ contract DeployScript is Script, Sphinx {
             // The project's revnet configuration
             revnetConfiguration = REVConfig({
                 description: REVDescription(NAME, SYMBOL, PROJECT_URI, ERC20_SALT),
-                baseCurrency: NATIVE_CURRENCY,
+                baseCurrency: ETH_CURRENCY,
                 splitOperator: OPERATOR,
                 stageConfigurations: stageConfigurations,
                 loanSources: _loanSources,
@@ -346,7 +348,7 @@ contract DeployScript is Script, Sphinx {
                     contractUri: CONTRACT_URI,
                     tiersConfig: JB721InitTiersConfig({
                         tiers: tiers,
-                        currency: NATIVE_CURRENCY,
+                        currency: ETH_CURRENCY,
                         decimals: DECIMALS,
                         prices: IJBPrices(address(0))
                     }),
