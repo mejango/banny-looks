@@ -1133,9 +1133,11 @@ contract Banny721TokenUriResolver is
                 if (worldProduct.id == 0) revert Banny721TokenUriResolver_UnrecognizedWorld();
 
                 // Store the world for the banny.
+                // slither-disable-next-line reentrancy-no-eth
                 _attachedWorldIdOf[hook][nakedBannyId] = worldId;
 
                 // Store the banny that's in the world.
+                // slither-disable-next-line reentrancy-no-eth
                 _userOf[hook][worldId] = nakedBannyId;
 
                 // Transfer the world to this contract if it's not already owned by this contract.
@@ -1143,6 +1145,7 @@ contract Banny721TokenUriResolver is
                     _transferFrom({hook: hook, from: _msgSender(), to: address(this), assetId: worldId});
                 }
             } else {
+                // slither-disable-next-line reentrancy-no-eth
                 _attachedWorldIdOf[hook][nakedBannyId] = 0;
             }
         }
