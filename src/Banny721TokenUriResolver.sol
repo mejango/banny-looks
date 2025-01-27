@@ -1105,8 +1105,18 @@ contract Banny721TokenUriResolver is
         // Keep a reference to the previous world attached.
         uint256 previousWorldId = _attachedWorldIdOf[hook][nakedBannyId];
 
+        // Keep a reference to the user of the previous world.
+        uint256 userOfPreviousWorld = userOf({hook: hook, worldId: previousWorldId});
+
         // If the world is changing, add the lateset world and transfer the old one back to the owner.
-        if (worldId != previousWorldId || userOf({hook: hook, worldId: previousWorldId}) != nakedBannyId) {
+        if (worldId != previousWorldId || userOfPreviousWorld != nakedBannyId) {
+
+            // If there's a previous world worn by this banny, transfer it back to the owner.
+            if (userOfPreviousWorld == nakedBannyId) {
+                // Transfer the previous world to the owner of the banny.
+                _transferFrom({hook: hook, from: address(this), to: _msgSender(), assetId: previousWorldId});
+            }
+
             // Add the world if needed.
             if (worldId != 0) {
                 // Keep a reference to the world's owner.
@@ -1135,12 +1145,6 @@ contract Banny721TokenUriResolver is
                 }
             } else {
                 _attachedWorldIdOf[hook][nakedBannyId] = 0;
-            }
-
-            // If there's a previous world, transfer it back to the owner.
-            if (previousWorldId != 0 && userOf({hook: hook, worldId: previousWorldId}) == 0) {
-                // Transfer the previous world to the owner of the banny.
-                _transferFrom({hook: hook, from: address(this), to: _msgSender(), assetId: previousWorldId});
             }
         }
     }
