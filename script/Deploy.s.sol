@@ -6,7 +6,6 @@ import "@bananapus/buyback-hook/script/helpers/BuybackDeploymentLib.sol";
 import "@bananapus/core/script/helpers/CoreDeploymentLib.sol";
 import "@bananapus/suckers/script/helpers/SuckerDeploymentLib.sol";
 import "@bananapus/swap-terminal/script/helpers/SwapTerminalDeploymentLib.sol";
-import "@croptop/core/script/helpers/CroptopDeploymentLib.sol";
 import "@rev-net/core/script/helpers/RevnetCoreDeploymentLib.sol";
 
 import {IJB721TokenUriResolver} from "@bananapus/721-hook/src/interfaces/IJB721TokenUriResolver.sol";
@@ -53,8 +52,6 @@ contract DeployScript is Script, Sphinx {
     CoreDeployment core;
     /// @notice tracks the deployment of the sucker contracts for the chain we are deploying to.
     SuckerDeployment suckers;
-    /// @notice tracks the deployment of the croptop contracts for the chain we are deploying to.
-    CroptopDeployment croptop;
     /// @notice tracks the deployment of the revnet contracts for the chain we are deploying to.
     RevnetCoreDeployment revnet;
     /// @notice tracks the deployment of the 721 hook contracts for the chain we are deploying to.
@@ -101,10 +98,6 @@ contract DeployScript is Script, Sphinx {
         // We want to do this outside of the `sphinx` modifier.
         core = CoreDeploymentLib.getDeployment(
             vm.envOr("NANA_CORE_DEPLOYMENT_PATH", string("node_modules/@bananapus/core/deployments/"))
-        );
-        // Get the deployment addresses for the 721 hook contracts for this chain.
-        croptop = CroptopDeploymentLib.getDeployment(
-            vm.envOr("CROPTOP_CORE_DEPLOYMENT_PATH", string("node_modules/@croptop/core/deployments/"))
         );
         // Get the deployment addresses for the 721 hook contracts for this chain.
         hook = Hook721DeploymentLib.getDeployment(
