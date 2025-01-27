@@ -1110,7 +1110,6 @@ contract Banny721TokenUriResolver is
 
         // If the world is changing, add the lateset world and transfer the old one back to the owner.
         if (worldId != previousWorldId || userOfPreviousWorld != nakedBannyId) {
-
             // If there's a previous world worn by this banny, transfer it back to the owner.
             if (userOfPreviousWorld == nakedBannyId) {
                 // Transfer the previous world to the owner of the banny.
