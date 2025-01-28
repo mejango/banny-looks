@@ -45,9 +45,9 @@ contract Drop1Script is Script, Sphinx {
         address producer = safeAddress();
         uint256 decimals = 18;
 
-        string[] memory names = new string[](45);
-        bytes32[] memory svgHashes = new bytes32[](45);
-        JB721TierConfig[] memory products = new JB721TierConfig[](45);
+        string[] memory names = new string[](47);
+        bytes32[] memory svgHashes = new bytes32[](47);
+        JB721TierConfig[] memory products = new JB721TierConfig[](47);
 
         // Desk
         names[0] = "Work Station";
