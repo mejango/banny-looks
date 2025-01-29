@@ -78,7 +78,7 @@ contract DeployScript is Script, Sphinx {
     uint8 DECIMALS = 18;
     uint256 DECIMAL_MULTIPLIER = 10 ** DECIMALS;
     uint24 NAKED_BANNY_CATEGORY = 0;
-    address OPERATOR = 0x961d4191965C49537c88F764D88318872CE405bE;
+    address OPERATOR;
     address TRUSTED_FORWARDER = 0xB2b5841DBeF766d4b521221732F9B618fCf34A87;
     uint256 TIME_UNTIL_START = 1 days;
 
@@ -90,6 +90,9 @@ contract DeployScript is Script, Sphinx {
     }
 
     function run() public {
+        // Get the operator address.
+        OPERATOR = safeAddress();
+
         // Get the deployment addresses for the 721 hook contracts for this chain.
         buybackHook = BuybackDeploymentLib.getDeployment(
             vm.envOr("NANA_BUYBACK_HOOK_DEPLOYMENT_PATH", string("node_modules/@bananapus/buyback-hook/deployments/"))
@@ -116,8 +119,6 @@ contract DeployScript is Script, Sphinx {
             vm.envOr("NANA_SWAP_TERMINAL_DEPLOYMENT_PATH", string("node_modules/@bananapus/swap-terminal/deployments/"))
         );
 
-        bannyverseConfig = getBannyverseRevnetConfig();
-
         // Since Juicebox has logic dependent on the timestamp we warp time to create a scenario closer to production.
         // We force simulations to make the assumption that the `START_TIME` has not occured,
         // and is not the current time.
@@ -130,6 +131,8 @@ contract DeployScript is Script, Sphinx {
         }
 
         vm.warp(realTimestamp);
+
+        bannyverseConfig = getBannyverseRevnetConfig();
 
         // Perform the deployment transactions.
         deploy();
