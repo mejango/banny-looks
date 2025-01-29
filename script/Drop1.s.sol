@@ -948,7 +948,7 @@ contract Drop1Script is Script, Sphinx {
             productIds[i] = i + 5;
         }
 
-        if (true) {
+        if (false) {
             bytes memory adjustTiersData = abi.encodeCall(JB721TiersHook.adjustTiers, (products, new uint256[](0)));
             vm.writeFile(
                 string.concat("./", vm.toString(block.chainid), "-adjustTiers.hex.txt"), vm.toString(adjustTiersData)

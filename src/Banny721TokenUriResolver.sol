@@ -61,7 +61,7 @@ contract Banny721TokenUriResolver is
     uint8 private constant _WORLD_CATEGORY = 1;
     uint8 private constant _BACKSIDE_CATEGORY = 2;
     uint8 private constant _NECKLACE_CATEGORY = 3;
-    uint8 private constant _HEAD_TOP_CATEGORY = 4;
+    uint8 private constant _HEAD_CATEGORY = 4;
     uint8 private constant _GLASSES_CATEGORY = 5;
     uint8 private constant _MOUTH_CATEGORY = 6;
     uint8 private constant _LEGS_CATEGORY = 7;
@@ -483,7 +483,7 @@ contract Banny721TokenUriResolver is
             return "Mouth";
         } else if (category == _HEADTOP_CATEGORY) {
             return "Head top";
-        } else if (category == _HEAD_TOP_CATEGORY) {
+        } else if (category == _HEAD_CATEGORY) {
             return "Head";
         } else if (category == _SUIT_CATEGORY) {
             return "Suit";
@@ -968,7 +968,7 @@ contract Banny721TokenUriResolver is
     /// outfit category allowed at a time and they must be passed in order.
     function _decorateBannyWithOutfits(address hook, uint256 nakedBannyId, uint256[] memory outfitIds) internal {
         // Keep track of certain outfits being used along the way to prevent conflicting outfits.
-        bool hasHeadTop;
+        bool hasHead;
         bool hasSuit;
 
         // Keep a reference to the category of the last outfit iterated on.
@@ -1020,15 +1020,15 @@ contract Banny721TokenUriResolver is
                 revert Banny721TokenUriResolver_UnorderedCategories();
             }
 
-            if (outfitProductCategory == _HEAD_TOP_CATEGORY) {
-                hasHeadTop = true;
+            if (outfitProductCategory == _HEAD_CATEGORY) {
+                hasHead = true;
             } else if (outfitProductCategory == _SUIT_CATEGORY) {
                 hasSuit = true;
             } else if (
                 (
                     outfitProductCategory == _GLASSES_CATEGORY || outfitProductCategory == _MOUTH_CATEGORY
                         || outfitProductCategory == _HEADTOP_CATEGORY
-                ) && hasHeadTop
+                ) && hasHead
             ) {
                 revert Banny721TokenUriResolver_HeadAlreadyAdded();
             } else if (
