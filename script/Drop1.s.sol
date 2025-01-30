@@ -54,7 +54,7 @@ contract Drop1Script is Script, Sphinx {
         svgHashes[0] = bytes32(0xab22e30cb6daaac109ea557a14af9b65f680d46cc563a0b25dd42483f9286bf7);
         products[0] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
-            initialSupply: 10_000,
+            initialSupply: 50,
             votingUnits: 0,
             reserveFrequency: 0,
             reserveBeneficiary: address(0),
@@ -73,7 +73,7 @@ contract Drop1Script is Script, Sphinx {
         svgHashes[1] = bytes32(0xf4586c19941b33c66894e8016a6171a16dd0efdbc65983967c4f1c3c3d6a5dc3);
         products[1] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
-            initialSupply: 10_000,
+            initialSupply: 250,
             votingUnits: 0,
             reserveFrequency: 0,
             reserveBeneficiary: address(0),
@@ -110,7 +110,7 @@ contract Drop1Script is Script, Sphinx {
         names[3] = "Bandolph Staff";
         svgHashes[3] = bytes32(0x790e607150e343fd457bb0cefe5fd12cd216b722dabfa19adbee1f1e537fd1c7);
         products[3] = JB721TierConfig({
-            price: uint104(125 * (10 ** (decimals - 2))),
+            price: uint104(125 * (10 ** (decimals - 3))),
             initialSupply: 250,
             votingUnits: 0,
             reserveFrequency: 0,
@@ -130,9 +130,9 @@ contract Drop1Script is Script, Sphinx {
         svgHashes[4] = bytes32(0x5e609d387ea091bc8884a753ddd28dd43b8ed1243b29de6e9354ef1ab109a0b9);
         products[4] = JB721TierConfig({
             price: uint104(125 * (10 ** (decimals - 2))),
-            initialSupply: 150,
+            initialSupply: 12,
             votingUnits: 0,
-            reserveFrequency: 0,
+            reserveFrequency: 12,
             reserveBeneficiary: address(0),
             encodedIPFSUri: bytes32(0xef6478be50575bade53e7ce4c9fb5b399643bcabed94f2111afb63e97fb9fd44),
             category: 3,
@@ -149,7 +149,7 @@ contract Drop1Script is Script, Sphinx {
         svgHashes[5] = bytes32(0x7054504d4eef582f2e3411df719fba9d90e94c2054bf48e2efa175b4f37cc1e9);
         products[5] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 3))),
-            initialSupply: 10_000,
+            initialSupply: 1_000,
             votingUnits: 0,
             reserveFrequency: 0,
             reserveBeneficiary: address(0),
@@ -167,10 +167,10 @@ contract Drop1Script is Script, Sphinx {
         names[6] = "Nerd Glasses";
         svgHashes[6] = bytes32(0x964356f8cbc40b81653a219d94da9d49d0bd5b745aa6bf4db16a14aa81c129ac);
         products[6] = JB721TierConfig({
-            price: uint104(1 * (10 ** (decimals - 1))),
-            initialSupply: 50,
+            price: uint104(1 * (10 ** (decimals - 2))),
+            initialSupply: 100,
             votingUnits: 0,
-            reserveFrequency: 0,
+            reserveFrequency: 25,
             reserveBeneficiary: address(0),
             encodedIPFSUri: bytes32(0x9f76cb495fd79397cba4fe3d377a5aa2fdd63df218f3b3022c6cc8e32478b494),
             category: 5,
@@ -227,7 +227,7 @@ contract Drop1Script is Script, Sphinx {
             price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 250,
             votingUnits: 0,
-            reserveFrequency: 0,
+            reserveFrequency: 50,
             reserveBeneficiary: address(0),
             encodedIPFSUri: bytes32(0x7dc7e556a7ac39c473da85165df3d094c6ed9258003fb7dc3d9a8582bcb0dc7f),
             category: 5,
@@ -265,7 +265,7 @@ contract Drop1Script is Script, Sphinx {
             price: uint104(1 * (10 ** (decimals - 1))),
             initialSupply: 50,
             votingUnits: 0,
-            reserveFrequency: 0,
+            reserveFrequency: 10,
             reserveBeneficiary: address(0),
             encodedIPFSUri: bytes32(0x52815d712399165b921df61795581a8c20ad9acf3502e777e20a782b7bc11d54),
             category: 6,
@@ -319,8 +319,8 @@ contract Drop1Script is Script, Sphinx {
         names[14] = "Flops";
         svgHashes[14] = bytes32(0x6f3fd7e83771bc0765a9394efac4993dc76d5f8584364188c10b8290350ada0a);
         products[14] = JB721TierConfig({
-            price: uint104(1 * (10 ** (decimals - 1))),
-            initialSupply: 30,
+            price: uint104(1 * (10 ** (decimals - 3))),
+            initialSupply: 500,
             votingUnits: 0,
             reserveFrequency: 10,
             reserveBeneficiary: address(0),
@@ -358,9 +358,9 @@ contract Drop1Script is Script, Sphinx {
         svgHashes[16] = bytes32(0xfbb3a6dde059e3e3115c3e83fd675d1739ec29afa62999fa759ed878f48e9aa2);
         products[16] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 1))),
-            initialSupply: 20,
+            initialSupply: 24,
             votingUnits: 0,
-            reserveFrequency: 0,
+            reserveFrequency: 6,
             reserveBeneficiary: address(0),
             encodedIPFSUri: bytes32(0x823466de69eaf605d3a62366e5e9dbd6649a71da146f791f94628d4749a2da55),
             category: 8,
@@ -395,10 +395,10 @@ contract Drop1Script is Script, Sphinx {
         names[18] = "Geisha Gown";
         svgHashes[18] = bytes32(0x5f8c77bc896a90a35580078ee7ea51460b5694aec68db3d749fd1dc0e9b05c6c);
         products[18] = JB721TierConfig({
-            price: uint104(1 * (10 ** (decimals - 1))),
+            price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 100,
             votingUnits: 0,
-            reserveFrequency: 100,
+            reserveFrequency: 50,
             reserveBeneficiary: address(0),
             encodedIPFSUri: bytes32(0xdf7d4084b087b22cc172e1df3a2b465b5386a950e9bcd53ed424014a0a86ee57),
             category: 8,
@@ -414,10 +414,10 @@ contract Drop1Script is Script, Sphinx {
         names[19] = "Baggies";
         svgHashes[19] = bytes32(0x2f0cab70c7d07048ccc7b6855bba39cdd95be15a109c8eaa401d9be6d503ca2a);
         products[19] = JB721TierConfig({
-            price: uint104(15 * (10 ** (decimals - 1))),
+            price: uint104(15 * (10 ** (decimals - 2))),
             initialSupply: 30,
             votingUnits: 0,
-            reserveFrequency: 0,
+            reserveFrequency: 15,
             reserveBeneficiary: address(0),
             encodedIPFSUri: bytes32(0x745b3b4f18aab6ad0d8465d34751ca8eb5b9c267dee6ec8bf63686b508afacf3),
             category: 9,
@@ -474,7 +474,7 @@ contract Drop1Script is Script, Sphinx {
             price: uint104(1 * (10 ** (decimals - 1))),
             initialSupply: 50,
             votingUnits: 0,
-            reserveFrequency: 12,
+            reserveFrequency: 10,
             reserveBeneficiary: address(0),
             encodedIPFSUri: bytes32(0x2b62afa12feb307f005902e6bec09f15f8f5d7ba09d937f1162e5d2f00c21e12),
             category: 10,
@@ -528,7 +528,7 @@ contract Drop1Script is Script, Sphinx {
         names[25] = "Zipper Jacket";
         svgHashes[25] = bytes32(0x7177dfec617d77cf78e8393fe373b68c7bc755edd1541c0decc952e99ec80304);
         products[25] = JB721TierConfig({
-            price: uint104(25 * (10 ** (decimals - 2))),
+            price: uint104(15 * (10 ** (decimals - 2))),
             initialSupply: 25,
             votingUnits: 0,
             reserveFrequency: 25,
@@ -548,7 +548,7 @@ contract Drop1Script is Script, Sphinx {
         svgHashes[26] = bytes32(0x2a69ce643e565cb4fe648dc9b03020b0749ec780748d43153ee4c6770c76adbf);
         products[26] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 3))),
-            initialSupply: 10_000,
+            initialSupply: 1_000,
             votingUnits: 0,
             reserveFrequency: 0,
             reserveBeneficiary: address(0),
@@ -566,10 +566,10 @@ contract Drop1Script is Script, Sphinx {
         names[27] = "Club Beanie";
         svgHashes[27] = bytes32(0x0a8d7c8ff075db0e66638bb51eea732a53641b09b39de68d1cbeafe9099f9b6e);
         products[27] = JB721TierConfig({
-            price: uint104(1 * (10 ** (decimals - 3))),
-            initialSupply: 1000,
+            price: uint104(15 * (10 ** (decimals - 3))),
+            initialSupply: 300,
             votingUnits: 0,
-            reserveFrequency: 0,
+            reserveFrequency: 50,
             reserveBeneficiary: address(0),
             encodedIPFSUri: bytes32(0x9a29e975b191f800744d74b11c580fdd74b2db73c95426af36e28cf00d66da97),
             category: 11,
@@ -607,7 +607,7 @@ contract Drop1Script is Script, Sphinx {
             price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 250,
             votingUnits: 0,
-            reserveFrequency: 0,
+            reserveFrequency: 25,
             reserveBeneficiary: address(0),
             encodedIPFSUri: bytes32(0xc583623dc7a3e61bfc04813f8c975eba8a22aeafe3d741edff1e2c97ac520737),
             category: 11,
@@ -626,7 +626,7 @@ contract Drop1Script is Script, Sphinx {
             price: uint104(1 * (10 ** (decimals - 1))),
             initialSupply: 100,
             votingUnits: 0,
-            reserveFrequency: 100,
+            reserveFrequency: 25,
             reserveBeneficiary: address(0),
             encodedIPFSUri: bytes32(0x58f8e217cfafd0a6feff40f4822790cdc19aba5dd4d4948f4c1bd5e313c90e8d),
             category: 11,
@@ -645,7 +645,7 @@ contract Drop1Script is Script, Sphinx {
             price: uint104(1 * (10 ** (decimals - 2))),
             initialSupply: 500,
             votingUnits: 0,
-            reserveFrequency: 0,
+            reserveFrequency: 10,
             reserveBeneficiary: address(0),
             encodedIPFSUri: bytes32(0x3e67840649fabab6d62f92bad701a6248b77f86ea8fcd66dc88dfbcba1134d85),
             category: 11,
@@ -740,7 +740,7 @@ contract Drop1Script is Script, Sphinx {
             price: uint104(1 * (10 ** (decimals - 3))),
             initialSupply: 500,
             votingUnits: 0,
-            reserveFrequency: 0,
+            reserveFrequency: 100,
             reserveBeneficiary: address(0),
             encodedIPFSUri: bytes32(0x18abc38e7f1c5c014398f705131aac80196dcd0da2b5f02c103e1a549433e8b3),
             category: 12,
@@ -757,9 +757,9 @@ contract Drop1Script is Script, Sphinx {
         svgHashes[37] = bytes32(0x993a2c657f43e19820f3e23677e650705d0c8c6a0ccd88a381aa54d2da7ba047);
         products[37] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 3))),
-            initialSupply: 10_000,
+            initialSupply: 2_000,
             votingUnits: 0,
-            reserveFrequency: 0,
+            reserveFrequency: 100,
             reserveBeneficiary: address(0),
             encodedIPFSUri: bytes32(0xc498a98bea66a8b44297631f136a7326f7a28b882058829588979b186d06baff),
             category: 12,
@@ -775,10 +775,10 @@ contract Drop1Script is Script, Sphinx {
         names[38] = "Constitution";
         svgHashes[38] = bytes32(0xaf0826d8eac1e57789077f43e6f979488da6f619f72f9f0ff50a52ebcca3bfa3);
         products[38] = JB721TierConfig({
-            price: uint104(1 * (10 ** (decimals - 3))),
-            initialSupply: 10_000,
+            price: uint104(1787 * (10 ** (decimals - 6))),
+            initialSupply: 1_000,
             votingUnits: 0,
-            reserveFrequency: 0,
+            reserveFrequency: 100,
             reserveBeneficiary: address(0),
             encodedIPFSUri: bytes32(0x3bd1186293e2d3e4def734a669c348976e1ba0cdc628a19cd5a3b38e0bee28f9),
             category: 12,
@@ -833,9 +833,9 @@ contract Drop1Script is Script, Sphinx {
         svgHashes[41] = bytes32(0xf7017a80e9fa4c3fc052a701c04374176620a8e5befa39b708a51293c4d8f406);
         products[41] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 3))),
-            initialSupply: 5000,
+            initialSupply: 250,
             votingUnits: 0,
-            reserveFrequency: 0,
+            reserveFrequency: 50,
             reserveBeneficiary: address(0),
             encodedIPFSUri: bytes32(0xedf8136f97347d1fee1fc14b1b9cbdb6d170a75c3860a92664c56060712567f3),
             category: 12,
@@ -890,9 +890,9 @@ contract Drop1Script is Script, Sphinx {
         svgHashes[44] = bytes32(0x032b50792f9929066168187acd5eeb101f8528f538ef850913c81dc4b6452842);
         products[44] = JB721TierConfig({
             price: uint104(1 * (10 ** (decimals - 2))),
-            initialSupply: 150,
+            initialSupply: 250,
             votingUnits: 0,
-            reserveFrequency: 15,
+            reserveFrequency: 50,
             reserveBeneficiary: address(0),
             encodedIPFSUri: bytes32(0xf7c17eff468f5dd227b991d773b7a36b93cd997751547f9908a4bf33e31ba701),
             category: 13,
