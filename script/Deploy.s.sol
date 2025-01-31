@@ -64,10 +64,10 @@ contract DeployScript is Script, Sphinx {
     BannyverseRevnetConfig bannyverseConfig;
 
     uint32 PREMINT_CHAIN_ID = 11_155_111;
-    bytes32 ERC20_SALT = "_BAN_ERC20_";
-    bytes32 SUCKER_SALT = "_BAN_SUCKER_";
-    bytes32 HOOK_SALT = "_BAN_HOOK_";
-    bytes32 RESOLVER_SALT = "_BAN_RESOLVER_";
+    bytes32 ERC20_SALT = "_BAN_ERC20";
+    bytes32 SUCKER_SALT = "_BAN_SUCKER";
+    bytes32 HOOK_SALT = "_BAN_HOOK";
+    bytes32 RESOLVER_SALT = "_BAN_RESOLVER";
     string NAME = "Banny Network";
     string SYMBOL = "BAN";
     string PROJECT_URI = "ipfs://QmeycQy87h9fb6D2Po9snV7KuK5FtTiLWVrVcB6DKhfEMC";
@@ -80,7 +80,7 @@ contract DeployScript is Script, Sphinx {
     uint24 NAKED_BANNY_CATEGORY = 0;
     address OPERATOR;
     address TRUSTED_FORWARDER = 0xB2b5841DBeF766d4b521221732F9B618fCf34A87;
-    uint256 TIME_UNTIL_START = 1 days;
+    uint256 TIME_UNTIL_START = 10 minutes;
 
     function configureSphinx() public override {
         // TODO: Update to contain revnet devs.

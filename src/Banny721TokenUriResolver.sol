@@ -218,7 +218,12 @@ contract Banny721TokenUriResolver is
             extraMetadata = '"outfitIds": [';
 
             for (uint256 i; i < outfitIds.length; i++) {
-                extraMetadata = string.concat(extraMetadata, outfitIds[i].toString(), ",");
+                extraMetadata = string.concat(extraMetadata, outfitIds[i].toString());
+
+                // Add a comma if it's not the last outfit.
+                if (i < outfitIds.length - 1) {
+                    extraMetadata = string.concat(extraMetadata, ",");
+                }
             }
 
             extraMetadata = string.concat(extraMetadata, "],");
