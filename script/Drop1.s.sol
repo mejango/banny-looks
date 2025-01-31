@@ -125,7 +125,7 @@ contract Drop1Script is Script, Sphinx {
             useVotingUnits: false,
             cannotBeRemoved: false
         });
-        // Blockchain
+        // Block chain
         names[4] = "Block Chain";
         svgHashes[4] = bytes32(0x5e609d387ea091bc8884a753ddd28dd43b8ed1243b29de6e9354ef1ab109a0b9);
         products[4] = JB721TierConfig({

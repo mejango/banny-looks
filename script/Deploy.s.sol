@@ -361,7 +361,7 @@ contract DeployScript is Script, Sphinx {
                         tiers: tiers,
                         currency: ETH_CURRENCY,
                         decimals: DECIMALS,
-                        prices: IJBPrices(address(0))
+                        prices: core.prices
                     }),
                     reserveBeneficiary: address(0),
                     flags: JB721TiersHookFlags({
