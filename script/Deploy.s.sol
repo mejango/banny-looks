@@ -177,7 +177,7 @@ contract DeployScript is Script, Sphinx {
         stageConfigurations[0] = REVStageConfig({
             startsAtOrAfter: uint40(block.timestamp + TIME_UNTIL_START),
             autoIssuances: mintConfs,
-            splitPercent: 6200, // 62%
+            splitPercent: 3800, // 38%
             splits: splits,
             initialIssuance: uint112(1000 * DECIMAL_MULTIPLIER),
             issuanceCutFrequency: 60 days,
@@ -188,7 +188,7 @@ contract DeployScript is Script, Sphinx {
         stageConfigurations[1] = REVStageConfig({
             startsAtOrAfter: uint40(stageConfigurations[0].startsAtOrAfter + 600 days),
             autoIssuances: new REVAutoIssuance[](0),
-            splitPercent: 6200, // 62%
+            splitPercent: 3800, // 38%
             splits: splits,
             initialIssuance: 1, // inherit from previous cycle.
             issuanceCutFrequency: 150 days,
