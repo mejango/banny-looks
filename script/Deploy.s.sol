@@ -155,13 +155,6 @@ contract DeployScript is Script, Sphinx {
             accountingContextsToAccept: new JBAccountingContext[](0)
         });
 
-        REVAutoIssuance[] memory mintConfs = new REVAutoIssuance[](1);
-        mintConfs[0] = REVAutoIssuance({
-            chainId: PREMINT_CHAIN_ID,
-            count: uint104(100_000 * DECIMAL_MULTIPLIER),
-            beneficiary: OPERATOR
-        });
-
         JBSplit[] memory splits = new JBSplit[](1);
         splits[0] = JBSplit({
             percent: JBConstants.SPLITS_TOTAL_PERCENT,
@@ -172,30 +165,48 @@ contract DeployScript is Script, Sphinx {
             hook: IJBSplitHook(address(0))
         });
 
-        // The project's revnet stage configurations.
-        REVStageConfig[] memory stageConfigurations = new REVStageConfig[](3);
-        stageConfigurations[0] = REVStageConfig({
-            startsAtOrAfter: uint40(block.timestamp + TIME_UNTIL_START),
-            autoIssuances: mintConfs,
-            splitPercent: 3800, // 38%
-            splits: splits,
-            initialIssuance: uint112(1000 * DECIMAL_MULTIPLIER),
-            issuanceCutFrequency: 60 days,
-            issuanceCutPercent: 380_000_000, // 38%,
-            cashOutTaxRate: 1000, // 0.1
-            extraMetadata: 0
-        });
-        stageConfigurations[1] = REVStageConfig({
-            startsAtOrAfter: uint40(stageConfigurations[0].startsAtOrAfter + 600 days),
-            autoIssuances: new REVAutoIssuance[](0),
-            splitPercent: 3800, // 38%
-            splits: splits,
-            initialIssuance: 1, // inherit from previous cycle.
-            issuanceCutFrequency: 150 days,
-            issuanceCutPercent: 380_000_000, // 38%
-            cashOutTaxRate: 1000, // 0.1
-            extraMetadata: 0
-        });
+        {
+            REVAutoIssuance[] memory autoIssuances = new REVAutoIssuance[](1);
+            autoIssuances[0] = REVAutoIssuance({
+                chainId: PREMINT_CHAIN_ID,
+                count: uint104(40_000 * DECIMAL_MULTIPLIER),
+                beneficiary: OPERATOR
+            });
+
+            // The project's revnet stage configurations.
+            REVStageConfig[] memory stageConfigurations = new REVStageConfig[](3);
+            stageConfigurations[0] = REVStageConfig({
+                startsAtOrAfter: uint40(block.timestamp + TIME_UNTIL_START),
+                autoIssuances: autoIssuances,
+                splitPercent: 3800, // 38%
+                splits: splits,
+                initialIssuance: uint112(1000 * DECIMAL_MULTIPLIER),
+                issuanceCutFrequency: 60 days,
+                issuanceCutPercent: 380_000_000, // 38%,
+                cashOutTaxRate: 1000, // 0.1
+                extraMetadata: 4 // Allow adding suckers.
+            });
+        }
+
+        {
+            REVAutoIssuance[] memory autoIssuances = new REVAutoIssuance[](1);
+            autoIssuances[0] = REVAutoIssuance({
+                chainId: PREMINT_CHAIN_ID,
+                count: uint104(100_000 * DECIMAL_MULTIPLIER),
+                beneficiary: OPERATOR
+            });
+            stageConfigurations[1] = REVStageConfig({
+                startsAtOrAfter: uint40(stageConfigurations[0].startsAtOrAfter + 600 days),
+                autoIssuances: autoIssuances,
+                splitPercent: 3800, // 38%
+                splits: splits,
+                initialIssuance: 1, // inherit from previous cycle.
+                issuanceCutFrequency: 150 days,
+                issuanceCutPercent: 380_000_000, // 38%
+                cashOutTaxRate: 1000, // 0.1
+                extraMetadata: 4 // Allow adding suckers.
+            });
+        }
 
         stageConfigurations[2] = REVStageConfig({
             startsAtOrAfter: uint40(stageConfigurations[1].startsAtOrAfter + (6000 days)),
@@ -206,7 +217,7 @@ contract DeployScript is Script, Sphinx {
             issuanceCutFrequency: 0,
             issuanceCutPercent: 0,
             cashOutTaxRate: 1000, // 0.1
-            extraMetadata: 0
+            extraMetadata: 4 // Allow adding suckers.
         });
 
         REVConfig memory revnetConfiguration;
