@@ -18,6 +18,7 @@ contract Drop1Script is Script, Sphinx {
     BannyverseDeployment bannyverse;
 
     JB721TiersHook hook;
+    address reserveBeneficiary;
 
     function configureSphinx() public override {
         // TODO: Update to contain revnet devs.
@@ -27,6 +28,8 @@ contract Drop1Script is Script, Sphinx {
     }
 
     function run() public {
+        reserveBeneficiary = safeAddress();
+
         // Get the deployment addresses for the revnet contracts for this chain.
         revnet = RevnetCoreDeploymentLib.getDeployment(
             vm.envOr("REVNET_CORE_DEPLOYMENT_PATH", string("node_modules/@rev-net/core/deployments/"))
@@ -42,7 +45,6 @@ contract Drop1Script is Script, Sphinx {
     }
 
     function deploy() public sphinx {
-        address producer = safeAddress();
         uint256 decimals = 18;
 
         string[] memory names = new string[](47);
@@ -190,7 +192,7 @@ contract Drop1Script is Script, Sphinx {
             initialSupply: 100,
             votingUnits: 0,
             reserveFrequency: 25,
-            reserveBeneficiary: producer,
+            reserveBeneficiary: reserveBeneficiary,
             encodedIPFSUri: bytes32(0xf01423f9dae3de4adc7e372e6902a351e2c6193a385dde90f5baf37165914831),
             category: 5,
             discountPercent: 0,
