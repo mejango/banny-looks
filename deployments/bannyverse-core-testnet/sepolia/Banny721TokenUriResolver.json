@@ -1,7 +1,7 @@
 {
 	"_format": "sphinx-sol-ct-artifact-1",
 	"merkleRoot": "0xcb3dff7404d8828d724708c17f0683910528192dc8c33bcb8507e1066d104c80",
-	"address": "0x01a5a99fc8aaf370bd11467b4dffac7e5f80f890",
+	"address": "0xE9c2F3f6e33b6daB5457B1C7A513B8B70037EE42",
 	"sourceName": "src/Banny721TokenUriResolver.sol",
 	"contractName": "Banny721TokenUriResolver",
 	"chainId": "0xaa36a7",

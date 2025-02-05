@@ -79,8 +79,8 @@ contract DeployScript is Script, Sphinx {
     uint256 DECIMAL_MULTIPLIER = 10 ** DECIMALS;
     uint24 NAKED_BANNY_CATEGORY = 0;
     address OPERATOR;
-    address TRUSTED_FORWARDER = 0xB2b5841DBeF766d4b521221732F9B618fCf34A87;
-    uint256 TIME_UNTIL_START = 10 minutes;
+    address TRUSTED_FORWARDER;
+    uint256 TIME_UNTIL_START = 3 hours;
 
     function configureSphinx() public override {
         // TODO: Update to contain revnet devs.
@@ -118,6 +118,8 @@ contract DeployScript is Script, Sphinx {
         swapTerminal = SwapTerminalDeploymentLib.getDeployment(
             vm.envOr("NANA_SWAP_TERMINAL_DEPLOYMENT_PATH", string("node_modules/@bananapus/swap-terminal/deployments/"))
         );
+
+        TRUSTED_FORWARDER = core.controller.trustedForwarder();
 
         // Since Juicebox has logic dependent on the timestamp we warp time to create a scenario closer to production.
         // We force simulations to make the assumption that the `START_TIME` has not occured,
@@ -165,6 +167,9 @@ contract DeployScript is Script, Sphinx {
             hook: IJBSplitHook(address(0))
         });
 
+        // The project's revnet stage configurations.
+        REVStageConfig[] memory stageConfigurations = new REVStageConfig[](3);
+
         {
             REVAutoIssuance[] memory autoIssuances = new REVAutoIssuance[](1);
             autoIssuances[0] = REVAutoIssuance({
@@ -173,8 +178,6 @@ contract DeployScript is Script, Sphinx {
                 beneficiary: OPERATOR
             });
 
-            // The project's revnet stage configurations.
-            REVStageConfig[] memory stageConfigurations = new REVStageConfig[](3);
             stageConfigurations[0] = REVStageConfig({
                 startsAtOrAfter: uint40(block.timestamp + TIME_UNTIL_START),
                 autoIssuances: autoIssuances,
