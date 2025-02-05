@@ -52,7 +52,7 @@ library BannyverseDeploymentLib {
         // if (keccak256(abi.encode(network_name)) == keccak256(abi.encode("sepolia"))) {
         //     deployment.revnetId = 9;
         // } else {
-            deployment.revnetId = 4;
+        deployment.revnetId = 4;
         // }
     }
 
